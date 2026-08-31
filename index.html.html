@@ -1,110 +1,104 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MATHA TN - Nền tảng học Toán trực tuyến</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATHA TN - Hệ thống Quản lý Học tập Toán học</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         /* ===== RESET & ROOT ===== */
+        :root {
+            --primary: #5624D0;
+            --primary-dark: #3C1A9E;
+            --primary-light: #F3F0FF;
+            --primary-gradient: linear-gradient(135deg, #5624D0, #3C1A9E);
+            --secondary: #A435F0;
+            --secondary-light: #F8F0FF;
+            --bg-body: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-main: #0F172A;
+            --text-muted: #475569;
+            --text-light: #94A3B8;
+            --border: #E2E8F0;
+            --radius: 12px;
+            --shadow: 0 10px 15px -3px rgba(86, 36, 208, 0.08), 0 4px 6px -2px rgba(86, 36, 208, 0.02);
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
-        :root {
-            --primary: #f97316;
-            --primary-dark: #ea580c;
-            --primary-light: #fef3c7;
-            --primary-gradient: linear-gradient(135deg, #f97316, #ea580c);
-            --secondary: #2563eb;
-            --secondary-light: #dbeafe;
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #0f172a;
-            --muted: #64748b;
-            --border: #e2e8f0;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            --radius: 12px;
-        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.5;
             display: flex;
             flex-direction: column;
+            min-height: 100vh;
         }
+
         .container {
-            max-width: 1200px;
             width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
-        .hidden {
-            display: none !important;
-        }
+
+        .hidden { display: none !important; }
 
         /* ===== BUTTONS ===== */
-        .btn {
+        button, .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 600;
             font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
             border: 1px solid transparent;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s ease;
         }
         .btn-primary {
             background: var(--primary-gradient);
-            color: #fff;
-            border: none;
+            color: #ffffff;
         }
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(249, 115, 22, 0.35);
-        }
-        .btn-secondary {
-            background: var(--secondary);
-            color: #fff;
-            border: none;
-        }
-        .btn-secondary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
+            box-shadow: 0 4px 16px rgba(86, 36, 208, 0.35);
         }
         .btn-outline {
-            background: transparent;
+            background-color: transparent;
             border-color: var(--border);
-            color: var(--text);
+            color: var(--text-main);
         }
         .btn-outline:hover {
-            background: var(--bg);
+            background-color: var(--bg-body);
+            border-color: var(--text-light);
         }
         .btn-sm {
-            padding: 4px 12px;
+            padding: 6px 12px;
             font-size: 12px;
             border-radius: 6px;
         }
-        .btn-danger {
-            background: #fee2e2;
+        .btn-sm.delete-btn {
+            background-color: #fee2e2;
             color: #dc2626;
         }
-        .btn-danger:hover {
-            background: #fca5a5;
+        .btn-sm.delete-btn:hover {
+            background-color: #fca5a5;
         }
-        .btn-warning {
-            background: #fef3c7;
-            color: #d97706;
+        .btn-sm.edit-btn {
+            background-color: var(--primary-light);
+            color: var(--primary);
         }
-        .btn-warning:hover {
-            background: #fde68a;
+        .btn-sm.edit-btn:hover {
+            background-color: #ddd6fe;
         }
         .btn-google {
             background: #fff;
@@ -119,71 +113,65 @@
         }
 
         /* ===== HEADER ===== */
-        header {
-            background: #fff;
+        .header {
+            background-color: #ffffff;
             border-bottom: 1px solid var(--border);
-            padding: 12px 0;
             position: sticky;
             top: 0;
             z-index: 100;
         }
-        .header-inner {
+        .header .container {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 12px;
+            height: 70px;
         }
         .brand {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             cursor: pointer;
         }
-        .brand img {
+        .brand-icon {
             width: 40px;
             height: 40px;
-            border-radius: 10px;
-            object-fit: cover;
-        }
-        .brand-text .name {
-            font-size: 22px;
-            font-weight: 900;
-            line-height: 1.1;
             background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .brand-text .sub {
-            font-size: 10px;
-            font-weight: 500;
-            color: var(--muted);
+        .brand-name {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-main);
             display: block;
-            -webkit-text-fill-color: var(--muted);
+        }
+        .brand-name em { color: var(--primary); font-style: normal; }
+        .brand-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            display: block;
         }
         .nav {
             display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
+            gap: 24px;
         }
         .nav a {
             text-decoration: none;
-            color: var(--muted);
+            color: var(--text-muted);
             font-weight: 500;
             font-size: 14px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: color 0.2s;
         }
-        .nav a:hover,
-        .nav a.active {
+        .nav a:hover, .nav a.active {
             color: var(--primary);
         }
         .actions {
             display: flex;
             align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
+            gap: 12px;
         }
         .search-box {
             position: relative;
@@ -194,7 +182,7 @@
             border: 1px solid var(--border);
             font-size: 13px;
             outline: none;
-            width: 200px;
+            width: 180px;
         }
         .search-box input:focus {
             border-color: var(--primary);
@@ -204,503 +192,263 @@
             left: 10px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--muted);
-            font-size: 14px;
+            color: var(--text-light);
+            font-size: 12px;
         }
 
         /* ===== HERO ===== */
         .hero {
-            padding: 50px 0 40px;
-            background: linear-gradient(135deg, #fef3c7 0%, #fff 50%, #dbeafe 100%);
+            padding: 60px 0;
+            background: linear-gradient(180deg, var(--primary-light) 0%, var(--bg-body) 100%);
         }
-        .hero .grid {
+        .hero .container {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 40px;
             align-items: center;
         }
-        .hero h1 {
-            font-size: 42px;
-            font-weight: 900;
-            line-height: 1.15;
-            margin-bottom: 8px;
-        }
-        .hero h1 span {
-            color: var(--primary);
-        }
-        .hero h2 {
-            font-size: 28px;
+        .hero-content h1 {
+            font-size: 36px;
             font-weight: 800;
-            color: var(--secondary);
+            line-height: 1.25;
             margin-bottom: 16px;
         }
-        .hero p {
-            color: var(--muted);
+        .hero-content h1 span { color: var(--primary); }
+        .hero-content p {
+            color: var(--text-muted);
             font-size: 16px;
-            margin-bottom: 20px;
-            max-width: 480px;
+            margin-bottom: 24px;
         }
-        .hero .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 16px;
-        }
-        .hero .tags span {
-            background: #fff;
-            padding: 6px 14px;
+        .hero-buttons { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+        .hero-tags { display: flex; gap: 12px; flex-wrap: wrap; }
+        .hero-tags span {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 4px 10px;
             border-radius: 20px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
-            border: 1px solid var(--border);
-            color: var(--text);
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .hero .tags span:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-        .hero .tags .highlight {
-            background: var(--primary-gradient);
-            color: #fff;
-            border: none;
-        }
-        .hero .tags .highlight:hover {
-            background: var(--primary-dark);
-        }
-        .hero-img img {
-            width: 100%;
-            max-height: 360px;
-            object-fit: cover;
-            border-radius: 20px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
         }
 
-        /* ===== CATEGORIES ===== */
-        .categories {
-            padding: 30px 0;
+        /* ===== HERO IMAGE ===== */
+        .hero-illustration img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            display: block;
         }
-        .categories .grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-        }
-        .category-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
+        .hero-illustration .placeholder-svg {
+            width: 100%;
+            max-height: 400px;
+            border-radius: 24px;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 18px;
+            min-height: 280px;
             padding: 20px;
             text-align: center;
-            transition: 0.2s;
-            box-shadow: var(--shadow);
-        }
-        .category-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-            border-color: var(--primary);
-        }
-        .category-card .icon {
-            font-size: 32px;
-            margin-bottom: 8px;
-        }
-        .category-card h4 {
-            font-size: 16px;
-            font-weight: 700;
-        }
-        .category-card p {
-            font-size: 13px;
-            color: var(--muted);
-            margin: 4px 0 10px;
-        }
-        .category-card .link {
-            color: var(--primary);
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-        }
-        .category-card .link:hover {
-            text-decoration: underline;
         }
 
-        /* ===== FEATURED COURSES ===== */
-        .featured {
-            padding: 40px 0;
-        }
-        .featured .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-        .featured .header h2 {
-            font-size: 24px;
-            font-weight: 800;
-        }
-        .featured .header h2 span {
-            color: var(--primary);
-        }
-        .course-grid {
+        /* ===== FEATURES ===== */
+        .features { padding: 40px 0; }
+        .features-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-        .course-card {
-            background: var(--card);
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            overflow: hidden;
-            transition: 0.2s;
+            padding: 16px 8px;
             box-shadow: var(--shadow);
-        }
-        .course-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-        }
-        .course-card .thumb {
-            position: relative;
-            background: #f1f5f9;
-            height: 140px;
-            overflow: hidden;
-        }
-        .course-card .thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .course-card .thumb .badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 3px 10px;
-            border-radius: 6px;
-            font-size: 10px;
-            font-weight: 700;
-            background: rgba(0, 0, 0, 0.7);
-            color: #fff;
-        }
-        .course-card .body {
-            padding: 14px 16px;
-        }
-        .course-card .body h3 {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-        .course-card .body .teacher {
-            font-size: 13px;
-            color: var(--muted);
-            margin-bottom: 6px;
-        }
-        .course-card .body .teacher strong {
-            color: var(--text);
-        }
-        .course-card .body .rating {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            color: var(--muted);
-            margin-bottom: 6px;
-        }
-        .course-card .body .rating .stars {
-            color: #f59e0b;
-        }
-        .course-card .body .meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            color: var(--muted);
-            padding-top: 10px;
-            border-top: 1px solid var(--border);
-        }
-        .course-card .body .meta .price {
-            font-weight: 700;
-            font-size: 16px;
-            color: var(--primary);
-        }
-        .course-card .body .meta .price .old {
-            font-size: 13px;
-            color: var(--muted);
-            text-decoration: line-through;
-            font-weight: 400;
-            margin-right: 6px;
-        }
-
-        /* ===== FEATURES BOTTOM ===== */
-        .features-bottom {
-            padding: 40px 0;
-            background: var(--card);
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-        }
-        .features-bottom .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
         }
         .feature-item {
-            text-align: center;
-            padding: 16px;
-        }
-        .feature-item .icon {
-            font-size: 40px;
-            margin-bottom: 12px;
-        }
-        .feature-item h4 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-        .feature-item p {
-            font-size: 14px;
-            color: var(--muted);
-        }
-        .feature-item .link {
-            color: var(--primary);
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-block;
-            margin-top: 8px;
-        }
-        .feature-item .link:hover {
-            text-decoration: underline;
-        }
-
-        /* ===== STATS ===== */
-        .stats {
-            padding: 40px 0;
-        }
-        .stats .grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+            display: flex;
             align-items: center;
+            gap: 14px;
+            padding: 12px 18px;
+            border-right: 1px solid var(--border);
         }
-        .stat-item {
-            text-align: center;
-        }
-        .stat-item .number {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--primary);
-        }
-        .stat-item .number .highlight {
-            color: var(--secondary);
-        }
-        .stat-item .label {
-            font-size: 14px;
-            color: var(--muted);
-            margin-top: 4px;
-        }
-        blockquote {
-            grid-column: 1 / -1;
-            text-align: center;
-            font-style: italic;
-            color: var(--muted);
-            font-size: 14px;
-            padding: 16px 20px;
-            background: var(--primary-light);
-            border-radius: var(--radius);
-            margin-top: 8px;
-        }
-        blockquote cite {
-            display: block;
-            font-style: normal;
-            font-weight: 700;
-            font-size: 12px;
-            color: var(--primary-dark);
-            margin-top: 4px;
-        }
+        .feature-item:last-child { border-right: none; }
+        .feature-item .icon { font-size: 34px; color: var(--primary); line-height: 1; flex-shrink: 0; }
+        .feature-item .text h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+        .feature-item .text p { font-size: 12px; color: var(--text-light); line-height: 1.3; }
 
-        /* ===== ADMIN ===== */
-        .admin-dashboard {
-            padding: 40px 0;
-        }
-        .admin-dashboard .header {
+        /* ===== COURSES ===== */
+        .courses { padding: 40px 0; }
+        .courses-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 24px;
             flex-wrap: wrap;
             gap: 12px;
-            margin-bottom: 24px;
         }
-        .admin-dashboard .header h2 {
-            font-size: 22px;
-            font-weight: 800;
-        }
-        .admin-dashboard .header h2 small {
-            font-size: 14px;
-            font-weight: 400;
-            color: var(--muted);
-        }
-        .admin-stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-        .admin-stats .stat {
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 16px;
-            border-radius: var(--radius);
-            text-align: center;
-        }
-        .admin-stats .stat .number {
-            font-size: 24px;
-            font-weight: 800;
+        .section-title { font-size: 20px; font-weight: 700; }
+        .section-title small {
+            font-size: 12px;
+            background: var(--primary-light);
             color: var(--primary);
+            padding: 2px 10px;
+            border-radius: 12px;
+            margin-left: 8px;
         }
-        .admin-stats .stat .label {
-            font-size: 13px;
-            color: var(--muted);
-        }
-        .admin-grid {
+        .courses-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 24px;
         }
-        .admin-card {
-            background: var(--card);
+        .free-courses, .premium-courses {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        .course-card {
+            background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .course-card:hover {
+            transform: translateY(-2px);
             box-shadow: var(--shadow);
         }
-        .admin-card h3 {
-            font-size: 17px;
-            font-weight: 700;
-            margin-bottom: 16px;
+        .course-card .card-body {
+            position: relative;
+            background: #f1f5f9;
+            min-height: 80px;
+            overflow: hidden;
         }
-        .form-group {
-            margin-bottom: 14px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
+        .course-card .card-body img {
             width: 100%;
-            padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: inherit;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            min-height: 120px;
         }
-        .form-group textarea {
-            resize: vertical;
-            height: 60px;
-        }
-        .admin-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border);
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        .admin-item:last-child {
-            border-bottom: none;
-        }
-        .empty-state {
+        .course-card .card-body .placeholder-course {
+            padding: 30px 20px;
             text-align: center;
-            padding: 30px 0;
-            color: var(--muted);
-        }
-
-        /* ===== MODAL ===== */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(15, 23, 42, 0.5);
+            color: var(--text-muted);
+            font-size: 14px;
+            background: var(--primary-light);
+            min-height: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: 0.2s;
         }
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .modal {
-            background: #fff;
-            width: 100%;
-            max-width: 440px;
-            padding: 28px;
-            border-radius: 16px;
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .modal h2 {
-            font-size: 22px;
-            font-weight: 800;
-        }
-        .modal .sub {
-            font-size: 13px;
-            color: var(--muted);
-            margin-bottom: 16px;
-        }
-        .modal .close-btn {
+        .course-card .tag {
             position: absolute;
-            top: 16px;
-            right: 20px;
-            background: none;
-            border: none;
-            font-size: 22px;
-            cursor: pointer;
-            color: var(--muted);
-            transition: 0.2s;
+            top: 12px;
+            right: 12px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
         }
-        .modal .close-btn:hover {
-            transform: rotate(90deg);
-        }
-        .divider {
+        .tag-free { background: #dcfce7; color: #15803d; }
+        .tag-premium { background: var(--primary-light); color: var(--primary); }
+        .course-card .card-footer {
+            padding: 12px 18px;
+            border-top: 1px solid var(--border);
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            margin: 16px 0;
-            color: var(--muted);
-            font-size: 12px;
-        }
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid var(--border);
-        }
-        .divider span {
-            padding: 0 10px;
-        }
-        .error-msg {
-            color: #dc2626;
-            font-size: 12px;
-            display: none;
-            margin-top: 6px;
-        }
-        .error-msg.show {
-            display: block;
+            font-size: 13px;
+            background: #fafafa;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
-        /* ===== LESSON LIST ===== */
-        .lesson-list {
-            list-style: none;
+        /* ===== STATS ===== */
+        .stats { padding: 40px 0; background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            align-items: center;
         }
-        .lesson-list li {
+        .stat-item { display: flex; align-items: center; gap: 12px; }
+        .stat-item .icon { font-size: 24px; }
+        .stat-item .number { font-size: 20px; font-weight: 800; color: var(--primary); }
+        .stat-item .label { font-size: 12px; color: var(--text-muted); }
+        blockquote {
+            grid-column: 1 / -1;
+            margin-top: 20px;
+            text-align: center;
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* ===== ADMIN DASHBOARD ===== */
+        .admin-dashboard { padding: 40px 0; }
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .dashboard-header h2 { font-size: 22px; font-weight: 800; }
+        .dashboard-header h2 small { font-size: 14px; font-weight: 400; color: var(--text-muted); }
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .dash-stat {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: var(--radius);
+        }
+        .dash-stat .number { font-size: 24px; font-weight: 800; color: var(--primary); }
+        .dash-stat .label { font-size: 13px; color: var(--text-muted); }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .dash-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: var(--radius);
+        }
+        .dash-card h3 { font-size: 16px; margin-bottom: 16px; }
+
+        /* ===== FORMS ===== */
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-size: 13px;
+            outline: none;
+            background: #ffffff;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(86, 36, 208, 0.1);
+        }
+        .form-group textarea { resize: vertical; height: 80px; }
+
+        /* ===== LISTS ===== */
+        .doc-list, .lesson-list { list-style: none; }
+        .doc-list li, .lesson-list li {
             padding: 12px;
             border: 1px solid var(--border);
             border-radius: 8px;
@@ -711,372 +459,371 @@
             flex-wrap: wrap;
             gap: 8px;
         }
-        .lesson-list .info .name {
-            font-weight: 600;
-            font-size: 14px;
-            display: block;
-        }
-        .lesson-list .info .meta {
-            font-size: 12px;
-            color: var(--muted);
+        .doc-info .name, .lesson-info .name { font-weight: 600; font-size: 14px; display: block; }
+        .doc-info .meta, .lesson-info .meta { font-size: 12px; color: var(--text-muted); }
+        .doc-info .course-tag { font-size: 10px; background: var(--primary-light); color: var(--primary); padding: 2px 6px; border-radius: 4px; }
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-light);
+            grid-column: 1 / -1;
         }
 
-        /* ===== FOOTER ===== */
-        footer {
-            margin-top: auto;
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal {
+            background: #ffffff;
+            width: 100%;
+            max-width: 440px;
+            padding: 28px;
+            border-radius: 16px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal h2 { font-size: 20px; font-weight: 700; }
+        .modal .subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+        .modal .close-btn {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: none; border: none;
+            font-size: 20px; cursor: pointer; color: var(--text-light);
+            transition: transform 0.2s;
+        }
+        .modal .close-btn:hover { transform: rotate(90deg); }
+        .divider {
+            display: flex;
+            align-items: center;
             text-align: center;
-            padding: 20px 0;
+            margin: 16px 0;
+            color: var(--text-light);
+            font-size: 12px;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border);
+        }
+        .divider span { padding: 0 10px; }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            margin-top: auto;
+            background: #ffffff;
             border-top: 1px solid var(--border);
-            color: var(--muted);
+            padding: 20px 0;
+            text-align: center;
             font-size: 13px;
+            color: var(--text-muted);
         }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) {
-            .course-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .categories .grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .admin-grid {
-                grid-template-columns: 1fr;
-            }
-            .admin-stats {
-                grid-template-columns: 1fr 1fr;
-            }
+            .courses-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: repeat(3, 1fr); }
+            .features-grid .feature-item:nth-child(3) { border-right: none; }
+            .features-grid .feature-item:nth-child(4),
+            .features-grid .feature-item:nth-child(5) { border-top: 1px solid var(--border); border-right: none; }
         }
         @media (max-width: 768px) {
-            .hero .grid {
+            .hero .container, .features-grid, .stats-grid, .dashboard-grid, .dashboard-stats {
                 grid-template-columns: 1fr;
             }
-            .hero-img {
-                order: -1;
-            }
-            .hero h1 {
-                font-size: 32px;
-            }
-            .hero h2 {
-                font-size: 22px;
-            }
-            .features-bottom .grid {
-                grid-template-columns: 1fr;
-            }
-            .stats .grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .header-inner {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .nav {
-                justify-content: center;
-            }
-            .actions {
-                justify-content: center;
-            }
-            .search-box input {
-                width: 100%;
-            }
-            .admin-stats {
-                grid-template-columns: 1fr 1fr;
-            }
-            .course-grid {
-                grid-template-columns: 1fr;
-            }
-            .categories .grid {
-                grid-template-columns: 1fr 1fr;
-            }
+            .hero-illustration { display: none; }
+            .header .container { flex-wrap: wrap; height: auto; padding: 12px; gap: 10px; }
+            .nav { order: 3; width: 100%; justify-content: center; flex-wrap: wrap; }
+            .search-box input { width: 140px; }
+            .dashboard-stats { grid-template-columns: 1fr 1fr; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .hero-content h1 { font-size: 28px; }
+            .modal { padding: 20px; margin: 10px; }
+            .features-grid .feature-item { border-right: none !important; border-bottom: 1px solid var(--border); }
+            .features-grid .feature-item:last-child { border-bottom: none; }
         }
         @media (max-width: 500px) {
-            .stats .grid {
-                grid-template-columns: 1fr;
-            }
-            .admin-stats {
-                grid-template-columns: 1fr;
-            }
-            .hero h1 {
-                font-size: 26px;
-            }
-            .brand-text .name {
-                font-size: 18px;
-            }
-            .brand img {
-                width: 34px;
-                height: 34px;
-            }
-            .categories .grid {
-                grid-template-columns: 1fr;
-            }
+            .courses-header { flex-direction: column; align-items: flex-start; }
+            .dashboard-header { flex-direction: column; align-items: flex-start; }
+            .dashboard-stats { grid-template-columns: 1fr; }
+            .hero-buttons { flex-direction: column; }
+            .hero-buttons button { width: 100%; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .stats-grid .stat-item:last-child { border-bottom: none; }
         }
     </style>
 </head>
 <body>
 
     <!-- ===== HEADER ===== -->
-    <header>
-        <div class="container header-inner">
+    <header class="header">
+        <div class="container">
             <div class="brand" onclick="showSection('home')">
-                <img src="https://ui-avatars.com/api/?name=M&size=40&background=f97316&color=fff&font-size=22&bold=true" alt="MATHA TN" />
-                <div class="brand-text">
-                    <span class="name">MATHA TN</span>
-                    <span class="sub">Nền tảng học Toán trực tuyến</span>
+                <div class="brand-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        <line x1="9" y1="7" x2="15" y2="7"></line>
+                        <line x1="9" y1="11" x2="13" y2="11"></line>
+                    </svg>
+                </div>
+                <div>
+                    <span class="brand-name">MATHA <em>TN</em></span>
+                    <span class="brand-sub">Hệ thống Quản lý Học tập Toán học</span>
                 </div>
             </div>
 
             <nav class="nav">
                 <a class="active" onclick="showSection('home')">Trang chủ</a>
-                <a onclick="scrollToCourses()">Khóa học</a>
-                <a onclick="scrollToStats()">Luyện thi</a>
-                <a>Ngân hàng đề</a>
-                <a>Tài liệu</a>
-                <a>Giới thiệu</a>
-                <a id="navAdmin" class="hidden" onclick="showSection('admin')">👨‍💼 Quản trị</a>
+                <a onclick="scrollToSection('courses-section')">Khóa học</a>
+                <a onclick="scrollToSection('stats-section')">Thống kê</a>
+                <a id="nav-admin" class="hidden" onclick="showSection('admin')">👨‍💼 Quản trị</a>
             </nav>
 
             <div class="actions">
                 <div class="search-box">
                     <span class="icon">🔍</span>
-                    <input type="text" id="globalSearch" placeholder="Tìm kiếm khóa học, chủ đề..." oninput="filterCourses()" />
+                    <input type="text" id="global-search" placeholder="Tìm khóa học..." oninput="filterCourses()" />
                 </div>
-                <div id="authActions">
-                    <button class="btn-outline" onclick="openModal('login-modal')">Đăng nhập</button>
-                    <button class="btn-primary" onclick="openModal('login-modal')">Đăng ký</button>
+                <div id="auth-actions">
+                    <button class="btn-outline" onclick="openModal('login-modal')">🔐 Đăng nhập</button>
                 </div>
-                <div id="userActions" class="hidden">
-                    <span id="userName" style="font-weight:600;font-size:14px;"></span>
-                    <button class="btn-outline btn-sm" onclick="logout()">Đăng xuất</button>
+                <div id="user-actions" class="hidden">
+                    <span id="user-display-name" style="font-weight: 700; font-size: 14px;"></span>
+                    <button class="btn-outline" onclick="logout()">Đăng xuất</button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- ===== MAIN ===== -->
+    <!-- ===== MAIN CONTENT ===== -->
     <main>
-        <!-- ===== HOME ===== -->
-        <div id="sectionHome">
-            <!-- HERO -->
+        <!-- ===== HOME SECTION ===== -->
+        <div id="section-home">
             <section class="hero">
                 <div class="container">
-                    <div class="grid">
-                        <div>
-                            <h1>Học Toán <span>bài bản.</span></h1>
-                            <h2>Hiểu sâu. Làm được bài.</h2>
-                            <p>Nền tảng học Toán chất lượng cao dành cho học sinh THCS, THPT và luyện thi THPT Quốc gia, TSA, HSA.</p>
-                            <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:12px;">
-                                <button class="btn btn-primary" onclick="scrollToCourses()">Bạn muốn học nội dung gì?</button>
+                    <div class="hero-content">
+                        <h1>Chinh phục <span>Toán học</span> cùng MATHA TN</h1>
+                        <p>Nền tảng học tập chuyên sâu dành cho học sinh, sinh viên. Cung cấp tài liệu, bài giảng chất lượng cao và kho đề thi phong phú.</p>
+                        <div class="hero-buttons">
+                            <button class="btn-primary" onclick="scrollToSection('courses-section')">Khám phá khóa học</button>
+                            <button class="btn-outline" onclick="openModal('login-modal')">Đăng nhập Admin</button>
+                        </div>
+                        <div class="hero-tags">
+                            <span>Bài giảng cập nhật</span>
+                            <span>Hỗ trợ trực tuyến</span>
+                            <span>Tài liệu chuẩn hóa</span>
+                        </div>
+                    </div>
+                    <div class="hero-illustration">
+                        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=360&fit=crop" alt="Học sinh học Toán" 
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                        <div class="placeholder-svg" style="display:none;">
+                            📚 Thêm ảnh hoặc sửa đường dẫn<br>
+                            <span style="font-size:14px; color:#94a3b8;">assets/hero-banner.jpg</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FEATURES -->
+            <section class="features">
+                <div class="container">
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <span class="icon">▱</span>
+                            <div class="text">
+                                <h4>Lộ trình rõ ràng</h4>
+                                <p>Hệ thống từ cơ bản đến nâng cao</p>
                             </div>
-                            <div class="tags">
-                                <span class="highlight">Gợi ý: Toán 10</span>
-                                <span>Toán 11</span>
-                                <span>Toán 12</span>
-                                <span>TSA</span>
-                                <span>HSA</span>
-                                <span>Hàm số</span>
-                                <span>Đạo hàm</span>
-                                <span>Tích phân</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="icon">◎</span>
+                            <div class="text">
+                                <h4>Hiệu quả thực tế</h4>
+                                <p>Bài tập chọn lọc, bám sát kỳ thi</p>
                             </div>
                         </div>
-                        <div class="hero-img">
-                            <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=360&fit=crop" alt="Học Toán" />
+                        <div class="feature-item">
+                            <span class="icon">▥</span>
+                            <div class="text">
+                                <h4>Giảng dạy tận tâm</h4>
+                                <p>Dễ hiểu – logic – ứng dụng thực tế</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="icon">♢</span>
+                            <div class="text">
+                                <h4>An toàn &amp; tin cậy</h4>
+                                <p>Nền tảng học tập chất lượng</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="icon">♙</span>
+                            <div class="text">
+                                <h4>Đồng hành cùng bạn</h4>
+                                <p>Học mọi lúc, mọi nơi, trên mọi thiết bị</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- CATEGORIES -->
-            <section class="categories">
+            <!-- COURSES -->
+            <section id="courses-section" class="courses">
                 <div class="container">
-                    <div class="grid">
-                        <div class="category-card">
-                            <div class="icon">📘</div>
-                            <h4>Toán THCS</h4>
-                            <p>Lớp 6, 7, 8, 9</p>
-                            <span class="link">Xem khóa học →</span>
+                    <div class="courses-header">
+                        <div class="section-title">
+                            Khóa học Miễn phí <small id="free-count">0 khóa</small>
                         </div>
-                        <div class="category-card">
-                            <div class="icon">📚</div>
-                            <h4>Toán THPT</h4>
-                            <p>Lớp 10, 11, 12</p>
-                            <span class="link">Xem khóa học →</span>
-                        </div>
-                        <div class="category-card">
-                            <div class="icon">🧠</div>
-                            <h4>Luyện thi TSA</h4>
-                            <p>Đánh giá tư duy</p>
-                            <span class="link">Xem khóa học →</span>
-                        </div>
-                        <div class="category-card">
-                            <div class="icon">🎯</div>
-                            <h4>Luyện thi HSA</h4>
-                            <p>Đánh giá năng lực</p>
-                            <span class="link">Xem khóa học →</span>
+                        <div class="section-title">
+                            Khóa học Premium <small id="premium-count" style="background:var(--primary-light); color:var(--primary);">0 khóa</small>
                         </div>
                     </div>
-                </div>
-            </section>
 
-            <!-- FEATURED COURSES -->
-            <section id="coursesSection" class="featured">
-                <div class="container">
-                    <div class="header">
-                        <h2>Khóa học <span>nổi bật</span></h2>
-                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                            <button class="btn btn-outline btn-sm">Toán 12</button>
-                            <button class="btn btn-outline btn-sm">TSA</button>
-                            <button class="btn btn-outline btn-sm">HSA</button>
-                            <button class="btn btn-outline btn-sm">Toán 11</button>
-                        </div>
-                    </div>
-                    <div id="courseList" class="course-grid">
-                        <!-- Sẽ được JavaScript render -->
-                    </div>
-                </div>
-            </section>
-
-            <!-- FEATURES BOTTOM -->
-            <section class="features-bottom">
-                <div class="container">
-                    <div class="grid">
-                        <div class="feature-item">
-                            <div class="icon">📋</div>
-                            <h4>Lộ trình học cá nhân hóa</h4>
-                            <p>Xây dựng lộ trình phù hợp với năng lực và mục tiêu của bạn.</p>
-                            <span class="link">Tìm hiểu thêm →</span>
-                        </div>
-                        <div class="feature-item">
-                            <div class="icon">📝</div>
-                            <h4>Ngân hàng đề phong phú</h4>
-                            <p>Hơn 10.000+ câu hỏi, đề thi được phân loại rõ ràng theo lớp và chuyên đề.</p>
-                            <span class="link">Làm bài ngay →</span>
-                        </div>
-                        <div class="feature-item">
-                            <div class="icon">📊</div>
-                            <h4>Theo dõi tiến độ học tập</h4>
-                            <p>Thống kê chi tiết kết quả học tập giúp bạn tiến bộ mỗi ngày.</p>
-                            <span class="link">Xem tiến độ →</span>
-                        </div>
+                    <div class="courses-grid">
+                        <div id="free-courses-list" class="free-courses"></div>
+                        <div id="premium-courses-list" class="premium-courses"></div>
                     </div>
                 </div>
             </section>
 
             <!-- STATS -->
-            <section id="statsSection" class="stats">
+            <section id="stats-section" class="stats">
                 <div class="container">
-                    <div class="grid">
+                    <div class="stats-grid">
                         <div class="stat-item">
-                            <div class="number">5.000+</div>
-                            <div class="label">Học viên đã đăng ký</div>
+                            <span class="icon">👥</span>
+                            <div>
+                                <div class="number" id="stat-users">1,250+</div>
+                                <div class="label">Học viên</div>
+                            </div>
                         </div>
                         <div class="stat-item">
-                            <div class="number">120+</div>
-                            <div class="label">Khóa học chất lượng</div>
+                            <span class="icon">📖</span>
+                            <div>
+                                <div class="number" id="stat-courses">0</div>
+                                <div class="label">Khóa học</div>
+                            </div>
                         </div>
                         <div class="stat-item">
-                            <div class="number">10.000+</div>
-                            <div class="label">Câu hỏi &amp; đề thi</div>
+                            <span class="icon">📄</span>
+                            <div>
+                                <div class="number" id="stat-docs">0</div>
+                                <div class="label">Tài liệu & Bài học</div>
+                            </div>
                         </div>
                         <div class="stat-item">
-                            <div class="number">98%</div>
-                            <div class="label">Học viên hài lòng</div>
+                            <span class="icon">⭐</span>
+                            <div>
+                                <div class="number">4.9/5</div>
+                                <div class="label">Đánh giá chất lượng</div>
+                            </div>
                         </div>
                         <blockquote>
-                            "Toán học không khó, chỉ cần có phương pháp đúng đắn."
-                            <cite>— MATHA TN</cite>
+                            "Toán học là vua của các ngành khoa học."
+                            <cite>— Carl Friedrich Gauss</cite>
                         </blockquote>
                     </div>
                 </div>
             </section>
         </div>
 
-        <!-- ===== ADMIN ===== -->
-        <div id="sectionAdmin" class="admin-dashboard hidden">
+        <!-- ===== ADMIN DASHBOARD SECTION ===== -->
+        <div id="section-admin" class="admin-dashboard hidden">
             <div class="container">
-                <div class="header">
+                <div class="dashboard-header">
                     <h2>👨‍💼 Bảng Quản trị Nội dung <small>(Admin Control Panel)</small></h2>
-                    <button class="btn btn-primary" onclick="openModal('add-course-modal')">+ Thêm khóa học mới</button>
+                    <button class="btn-primary" onclick="openModal('add-course-modal')">+ Thêm khóa học mới</button>
                 </div>
 
-                <div class="admin-stats">
-                    <div class="stat">
-                        <div class="number" id="dashTotalCourses">0</div>
-                        <div class="label">Tổng khóa học</div>
+                <div class="dashboard-stats">
+                    <div class="dash-stat">
+                        <div class="number" id="dash-total-courses">0</div>
+                        <div class="label">Tổng số khóa học</div>
                     </div>
-                    <div class="stat">
-                        <div class="number" id="dashFreeCourses">0</div>
-                        <div class="label">Miễn phí</div>
+                    <div class="dash-stat">
+                        <div class="number" id="dash-free-courses">0</div>
+                        <div class="label">Khóa học Miễn phí</div>
                     </div>
-                    <div class="stat">
-                        <div class="number" id="dashPremiumCourses">0</div>
-                        <div class="label">Premium</div>
+                    <div class="dash-stat">
+                        <div class="number" id="dash-premium-courses">0</div>
+                        <div class="label">Khóa học Premium</div>
                     </div>
-                    <div class="stat">
-                        <div class="number" id="dashTotalDocs">0</div>
-                        <div class="label">Tổng bài học</div>
+                    <div class="dash-stat">
+                        <div class="number" id="dash-total-docs">0</div>
+                        <div class="label">Tổng số bài học</div>
                     </div>
                 </div>
 
-                <div class="admin-grid">
-                    <div class="admin-card">
+                <div class="dashboard-grid">
+                    <!-- Quản lý khóa học -->
+                    <div class="dash-card">
                         <h3>📚 Quản lý khóa học</h3>
-                        <form id="courseForm">
+                        <form id="course-form">
                             <div class="form-group">
                                 <label>Tên khóa học</label>
-                                <input type="text" id="courseTitle" placeholder="VD: Hàm số & Đạo hàm" required />
+                                <input type="text" id="course-title" placeholder="VD: Toán 9 nâng cao" required />
                             </div>
                             <div class="form-group">
                                 <label>Loại</label>
-                                <select id="courseType">
+                                <select id="course-type">
                                     <option value="free">Miễn phí</option>
                                     <option value="premium">Premium</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Mô tả</label>
-                                <textarea id="courseDesc" placeholder="Mô tả ngắn..."></textarea>
+                                <textarea id="course-desc" placeholder="Mô tả ngắn về khóa học..."></textarea>
                             </div>
-                            <div class="form-group">
-                                <label>Giá tiền (VNĐ)</label>
-                                <input type="text" id="coursePrice" placeholder="VD: 499.000" />
-                            </div>
-                            <div class="form-group">
-                                <label>Giảng viên</label>
-                                <input type="text" id="courseTeacher" placeholder="VD: Thầy Trịnh Nhưng" />
-                            </div>
-                            <button type="submit" class="btn btn-primary">➕ Thêm khóa học</button>
+                            <button type="submit" class="btn-primary">➕ Thêm khóa học</button>
                         </form>
-                        <hr style="margin:20px 0;border-color:var(--border);" />
-                        <div id="adminCourseList"></div>
+                        <hr style="margin:20px 0; border-color:var(--border);" />
+                        <div id="admin-courses-list"></div>
                     </div>
 
-                    <div class="admin-card">
+                    <!-- Quản lý bài học -->
+                    <div class="dash-card">
                         <h3>📖 Quản lý bài học</h3>
-                        <form id="lessonForm">
+                        <form id="add-lesson-form">
                             <div class="form-group">
                                 <label>Chọn khóa học</label>
-                                <select id="lessonCourseSelect" required></select>
+                                <select id="lesson-course-select" required></select>
                             </div>
                             <div class="form-group">
-                                <label>Tên bài học</label>
-                                <input type="text" id="lessonTitle" placeholder="VD: Bài 1: Định nghĩa đạo hàm" required />
+                                <label>Tên bài học / Tài liệu</label>
+                                <input type="text" id="lesson-title" placeholder="VD: Bài 1: Giải tích nâng cao" required />
                             </div>
                             <div class="form-group">
                                 <label>Loại tài liệu</label>
-                                <select id="lessonType">
+                                <select id="lesson-type">
+                                    <option value="Bài giảng Video">Bài giảng Video</option>
                                     <option value="Tài liệu PDF">Tài liệu PDF</option>
-                                    <option value="Video bài giảng">Video bài giảng</option>
                                     <option value="Bài tập tự luyện">Bài tập tự luyện</option>
                                     <option value="Đề thi thử">Đề thi thử</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Mô tả</label>
-                                <textarea id="lessonDesc" placeholder="Mô tả ngắn..."></textarea>
+                                <label>Mô tả ngắn</label>
+                                <textarea id="lesson-desc" placeholder="Tóm tắt nội dung bài học..."></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary">➕ Thêm bài học</button>
+                            <button type="submit" class="btn-primary">⬆ Tải lên bài học</button>
                         </form>
-                        <hr style="margin:20px 0;border-color:var(--border);" />
-                        <div id="adminLessonList"></div>
+                        <hr style="margin:20px 0; border-color:var(--border);" />
+                        <div id="admin-doc-list"></div>
                     </div>
                 </div>
             </div>
@@ -1084,9 +831,9 @@
     </main>
 
     <!-- ===== FOOTER ===== -->
-    <footer>
+    <footer class="footer">
         <div class="container">
-            © 2026 <strong>MATHA TN</strong>. Nền tảng học toán trực tuyến.
+            <p>© 2026 <strong>MATHA TN</strong>. Bản quyền thuộc về Hệ thống Quản trị Nội dung Học tập Toán học.</p>
         </div>
     </footer>
 
@@ -1097,8 +844,8 @@
         <div class="modal">
             <button class="close-btn" onclick="closeModal('login-modal')">&times;</button>
             <h2>🔐 Đăng nhập</h2>
-            <div class="sub">Truy cập hệ thống học tập MATHA TN</div>
-
+            <div class="subtitle">Truy cập hệ thống học tập MATHA TN</div>
+            
             <button type="button" class="btn btn-google" onclick="loginWithGoogle()">
                 <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
                 Đăng nhập bằng Google
@@ -1109,17 +856,17 @@
             <form onsubmit="handleLogin(event)">
                 <div class="form-group">
                     <label>Tên đăng nhập / Email</label>
-                    <input type="text" id="loginUsername" placeholder="Nhập admin hoặc username..." required />
+                    <input type="text" id="login-username" placeholder="Nhập admin hoặc username..." required />
                 </div>
                 <div class="form-group">
                     <label>Mật khẩu</label>
-                    <input type="password" id="loginPassword" placeholder="Mật khẩu..." required />
+                    <input type="password" id="login-password" placeholder="Mật khẩu..." required />
                 </div>
-                <div id="loginError" class="error-msg">Tài khoản hoặc mật khẩu không chính xác!</div>
-                <button type="submit" class="btn btn-primary" style="width:100%;margin-top:12px;">Đăng nhập</button>
+                <div id="login-error" class="error-msg" style="color:#dc2626;font-size:12px;display:none;margin-top:6px;">Tài khoản hoặc mật khẩu không chính xác!</div>
+                <button type="submit" class="btn-primary" style="margin-top: 12px; width: 100%;">Đăng nhập</button>
             </form>
-
-            <div style="text-align:center;margin-top:16px;font-size:12px;color:var(--muted);">
+            
+            <div style="text-align:center;margin-top:16px;font-size:12px;color:var(--text-light);">
                 👨‍💼 Admin mặc định: <strong>admin</strong> / <strong>admin123</strong>
             </div>
         </div>
@@ -1129,50 +876,42 @@
     <div id="add-course-modal" class="modal-overlay">
         <div class="modal">
             <button class="close-btn" onclick="closeModal('add-course-modal')">&times;</button>
-            <h2 id="courseModalTitle">📚 Thêm Khóa học Mới</h2>
-            <div class="sub">Tạo khóa học mới trong hệ thống</div>
-            <form id="courseModalForm" onsubmit="handleSaveCourse(event)">
-                <input type="hidden" id="courseEditId" value="" />
+            <h2 id="course-modal-title">📚 Thêm Khóa học Mới</h2>
+            <div class="subtitle">Tạo khóa học mới trong hệ thống</div>
+            <form id="course-form-modal" onsubmit="handleSaveCourse(event)">
+                <input type="hidden" id="course-edit-id" value="" />
                 <div class="form-group">
                     <label>Tên khóa học</label>
-                    <input type="text" id="courseModalTitleInput" placeholder="VD: Hàm số & Đạo hàm" required />
+                    <input type="text" id="course-title-input" placeholder="VD: Giải tích hàm" required />
                 </div>
                 <div class="form-group">
-                    <label>Phân loại</label>
-                    <select id="courseModalType">
-                        <option value="free">Miễn phí</option>
-                        <option value="premium">Premium</option>
+                    <label>Phân loại khóa học</label>
+                    <select id="course-type-input">
+                        <option value="free">Miễn phí (Free)</option>
+                        <option value="premium">Premium (VIP)</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Mô tả</label>
-                    <textarea id="courseModalDesc" placeholder="Mô tả tóm tắt..."></textarea>
+                    <label>Mô tả khóa học</label>
+                    <textarea id="course-desc-input" placeholder="Mô tả tóm tắt nội dung khóa học..."></textarea>
                 </div>
-                <div class="form-group">
-                    <label>Giá tiền (VNĐ)</label>
-                    <input type="text" id="courseModalPrice" placeholder="VD: 499.000" />
-                </div>
-                <div class="form-group">
-                    <label>Giảng viên</label>
-                    <input type="text" id="courseModalTeacher" placeholder="VD: Thầy Trịnh Nhưng" />
-                </div>
-                <button type="submit" class="btn btn-primary" style="width:100%;">💾 Lưu khóa học</button>
+                <button type="submit" class="btn-primary" style="margin-top: 12px; width: 100%;">💾 Lưu khóa học</button>
             </form>
         </div>
     </div>
 
-    <!-- View Lessons Modal -->
+    <!-- View Course Lessons Modal -->
     <div id="lessons-modal" class="modal-overlay">
-        <div class="modal" style="max-width:680px;">
+        <div class="modal" style="max-width: 680px;">
             <button class="close-btn" onclick="closeModal('lessons-modal')">&times;</button>
-            <h2 id="modalLessonTitle">📖 Chi tiết khóa học</h2>
-            <div class="sub" id="modalLessonSub">Danh sách bài học và tài liệu</div>
-            <ul class="lesson-list" id="lessonListRender"></ul>
+            <h2 id="modal-course-title">📖 Chi tiết khóa học</h2>
+            <div class="subtitle" id="modal-course-subtitle">Danh sách bài học và tài liệu</div>
+            <ul class="lesson-list" id="course-lessons-render"></ul>
         </div>
     </div>
 
     <!-- ============================================================ -->
-    <!-- FIREBASE + CODE                                              -->
+    <!-- FIREBASE SDK & CODE                                          -->
     <!-- ============================================================ -->
     <script type="importmap">
         {
@@ -1186,7 +925,7 @@
 
     <script type="module">
         // ============================================================
-        // FIREBASE CONFIG
+        // 1. FIREBASE CONFIG (ĐÃ ĐIỀN SẴN)
         // ============================================================
         import { initializeApp } from "firebase/app";
         import {
@@ -1223,146 +962,167 @@
         const provider = new GoogleAuthProvider();
         const db = getFirestore(app);
 
-        const ADMIN_EMAIL = "thaigjabao99@gmail.com"; // Đổi thành email của bạn
+        // 📧 Admin email (đổi thành email của bạn)
+        const ADMIN_EMAIL = "thaigjabao99@gmail.com";
 
         // ============================================================
-        // DOM REFS
+        // 2. DOM REFS
         // ============================================================
-        const $ = id => document.getElementById(id);
-        const homeSection = $('sectionHome');
-        const adminSection = $('sectionAdmin');
-        const authActions = $('authActions');
-        const userActions = $('userActions');
-        const userName = $('userName');
-        const navAdmin = $('navAdmin');
+        const homeSection = document.getElementById('section-home');
+        const adminSection = document.getElementById('section-admin');
+        const authActions = document.getElementById('auth-actions');
+        const userActions = document.getElementById('user-actions');
+        const userDisplayName = document.getElementById('user-display-name');
+        const navAdmin = document.getElementById('nav-admin');
 
-        const courseList = $('courseList');
-        const statCourses = $('statCourses');
-        const statDocs = $('statDocs');
+        const freeCoursesList = document.getElementById('free-courses-list');
+        const premiumCoursesList = document.getElementById('premium-courses-list');
+        const freeCount = document.getElementById('free-count');
+        const premiumCount = document.getElementById('premium-count');
+        const statCourses = document.getElementById('stat-courses');
+        const statDocs = document.getElementById('stat-docs');
 
-        const adminCourseList = $('adminCourseList');
-        const adminLessonList = $('adminLessonList');
-        const lessonCourseSelect = $('lessonCourseSelect');
-        const courseForm = $('courseForm');
-        const lessonForm = $('lessonForm');
+        const adminCoursesList = document.getElementById('admin-courses-list');
+        const adminDocList = document.getElementById('admin-doc-list');
+        const lessonCourseSelect = document.getElementById('lesson-course-select');
+        const courseForm = document.getElementById('course-form');
+        const addLessonForm = document.getElementById('add-lesson-form');
 
-        const loginModal = $('login-modal');
-        const loginError = $('loginError');
-        const lessonListRender = $('lessonListRender');
-        const modalLessonTitle = $('modalLessonTitle');
-        const modalLessonSub = $('modalLessonSub');
+        const loginModal = document.getElementById('login-modal');
+        const loginError = document.getElementById('login-error');
+
+        const courseLessonsRender = document.getElementById('course-lessons-render');
+        const modalCourseTitle = document.getElementById('modal-course-title');
+        const modalCourseSubtitle = document.getElementById('modal-course-subtitle');
 
         // ============================================================
-        // STATE
+        // 3. STATE
         // ============================================================
         let currentUser = null;
         let isAdmin = false;
-        let courses = [];
-        let lessons = [];
+        let coursesData = [];
+        let lessonsData = [];
 
         // ============================================================
-        // RENDER
+        // 4. RENDER HÀM
         // ============================================================
-        function renderCourses(filter = '') {
-            const filtered = courses.filter(c =>
-                c.title.toLowerCase().includes(filter.toLowerCase()) ||
-                (c.desc && c.desc.toLowerCase().includes(filter.toLowerCase()))
+        function renderCourses(filterText = '') {
+            const filtered = coursesData.filter(c =>
+                c.title.toLowerCase().includes(filterText.toLowerCase()) ||
+                (c.desc && c.desc.toLowerCase().includes(filterText.toLowerCase()))
             );
+            const free = filtered.filter(c => c.type === 'free');
+            const premium = filtered.filter(c => c.type === 'premium');
 
-            courseList.innerHTML = filtered.length ? filtered.map(c => courseCardHTML(c)).join('') :
-                `<div class="empty-state" style="grid-column:1/-1;">📭 Chưa có khóa học nào.</div>`;
+            freeCount.textContent = `${free.length} khóa`;
+            premiumCount.textContent = `${premium.length} khóa`;
 
-            statCourses.textContent = courses.length;
-            statDocs.textContent = lessons.length;
+            freeCoursesList.innerHTML = free.length ?
+                free.map(c => createCourseCardHTML(c)).join('') :
+                `<div class="empty-state">📭 Chưa có khóa học miễn phí.</div>`;
+            premiumCoursesList.innerHTML = premium.length ?
+                premium.map(c => createCourseCardHTML(c)).join('') :
+                `<div class="empty-state">📭 Chưa có khóa học Premium.</div>`;
 
-            // Admin lists
-            adminCourseList.innerHTML = courses.length ? courses.map(c =>
-                `<div class="admin-item">
-                    <span><strong>${c.title}</strong> (${c.type}) - ${c.price || 'Miễn phí'}</span>
-                    <div>
-                        <button class="btn btn-warning btn-sm" onclick="editCourse('${c.id}')">Sửa</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteCourse('${c.id}')">Xóa</button>
-                    </div>
-                </div>`
-            ).join('') : `<div class="empty-state">Chưa có khóa học.</div>`;
-
-            adminLessonList.innerHTML = lessons.length ? lessons.map(l => {
-                const course = courses.find(c => c.id === l.courseId);
-                return `<div class="admin-item">
-                    <span><strong>${l.title}</strong> (${course ? course.title : 'N/A'})</span>
-                    <div>
-                        <button class="btn btn-warning btn-sm" onclick="editLesson('${l.id}')">Sửa</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteLesson('${l.id}')">Xóa</button>
-                    </div>
-                </div>`;
-            }).join('') : `<div class="empty-state">Chưa có bài học.</div>`;
-
-            lessonCourseSelect.innerHTML = courses.map(c =>
-                `<option value="${c.id}">${c.title}</option>`
-            ).join('');
-
-            $('dashTotalCourses').textContent = courses.length;
-            $('dashFreeCourses').textContent = courses.filter(c => c.type === 'free').length;
-            $('dashPremiumCourses').textContent = courses.filter(c => c.type === 'premium').length;
-            $('dashTotalDocs').textContent = lessons.length;
+            statCourses.textContent = coursesData.length;
+            statDocs.textContent = lessonsData.length;
         }
 
-        function courseCardHTML(course) {
-            const count = lessons.filter(l => l.courseId === course.id).length;
+        function createCourseCardHTML(course) {
+            const count = lessonsData.filter(l => l.courseId === course.id).length;
             const isPremium = course.type === 'premium';
-            const imgUrl = `https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=140&fit=crop`;
-            const price = course.price ? course.price : (isPremium ? '499.000đ' : 'Miễn phí');
-            const oldPrice = isPremium ? '699.000đ' : '';
-            const teacher = course.teacher || 'Thầy Trịnh Nhưng';
-            const rating = (4.5 + Math.random() * 0.5).toFixed(1);
-            const reviews = Math.floor(50 + Math.random() * 100);
+            const tagClass = isPremium ? 'tag-premium' : 'tag-free';
+            const tagText = isPremium ? 'PREMIUM' : 'MIỄN PHÍ';
+            const adminActions = isAdmin ? `
+                <button class="btn-sm edit-btn" onclick="editCourse('${course.id}')">✏️</button>
+                <button class="btn-sm delete-btn" onclick="deleteCourse('${course.id}')">🗑</button>
+            ` : '';
+
+            const imageSrc = `https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=140&fit=crop`;
 
             return `
                 <div class="course-card">
-                    <div class="thumb">
-                        <img src="${imgUrl}" alt="${course.title}" />
-                        <span class="badge">${isPremium ? 'PREMIUM' : 'FREE'}</span>
-                    </div>
-                    <div class="body">
-                        <h3>${course.title}</h3>
-                        <div class="teacher"><strong>${teacher}</strong></div>
-                        <div class="rating">
-                            <span class="stars">⭐ ${rating}</span>
-                            <span>(${reviews} đánh giá)</span>
+                    <div class="card-body">
+                        <img src="${imageSrc}" alt="${course.title}" 
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                        <div class="placeholder-course" style="display:none;">
+                            📚 ${course.title}<br>
+                            <span style="font-size:12px;color:#94a3b8;">Thêm ảnh</span>
                         </div>
-                        <div style="font-size:13px;color:var(--muted);margin-bottom:6px;">${count} bài học</div>
-                        <div class="meta">
-                            <span class="price">${oldPrice ? `<span class="old">${oldPrice}</span>` : ''} ${price}</span>
-                            <button class="btn btn-primary btn-sm" onclick="viewLessons('${course.id}')">Vào học</button>
-                            ${isAdmin ? `
-                                <button class="btn btn-warning btn-sm" onclick="editCourse('${course.id}')">✏️</button>
-                                <button class="btn btn-danger btn-sm" onclick="deleteCourse('${course.id}')">🗑</button>
-                            ` : ''}
+                        <span class="tag ${tagClass}">${tagText}</span>
+                    </div>
+                    <div style="padding: 14px 18px; flex:1;">
+                        <p style="font-size: 13px; color: var(--text-muted);">${course.desc || 'Chưa có mô tả.'}</p>
+                    </div>
+                    <div class="card-footer">
+                        <div><strong>${count}</strong> bài học</div>
+                        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                            ${adminActions}
+                            <button class="btn-sm" onclick="viewCourseLessons('${course.id}')">📖 Vào học</button>
                         </div>
                     </div>
                 </div>
             `;
         }
 
-        function viewLessons(courseId) {
-            const course = courses.find(c => c.id === courseId);
+        function renderAdminCourses() {
+            if (!coursesData.length) {
+                adminCoursesList.innerHTML = `<div class="empty-state">Chưa có khóa học nào.</div>`;
+                return;
+            }
+            adminCoursesList.innerHTML = coursesData.map(c =>
+                `<div class="admin-item">
+                    <span><strong>${c.title}</strong> (${c.type})</span>
+                    <div>
+                        <button class="btn-sm edit-btn" onclick="editCourse('${c.id}')">Sửa</button>
+                        <button class="btn-sm delete-btn" onclick="deleteCourse('${c.id}')">Xóa</button>
+                    </div>
+                </div>`
+            ).join('');
+        }
+
+        function renderAdminLessons() {
+            if (!lessonsData.length) {
+                adminDocList.innerHTML = `<div class="empty-state">Chưa có bài học nào.</div>`;
+                return;
+            }
+            adminDocList.innerHTML = lessonsData.map(l => {
+                const course = coursesData.find(c => c.id === l.courseId);
+                return `<div class="admin-item">
+                    <span><strong>${l.title}</strong> (${course ? course.title : 'N/A'})</span>
+                    <div>
+                        <button class="btn-sm edit-btn" onclick="editLesson('${l.id}')">Sửa</button>
+                        <button class="btn-sm delete-btn" onclick="deleteLesson('${l.id}')">Xóa</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function renderLessonSelect() {
+            lessonCourseSelect.innerHTML = coursesData.map(c =>
+                `<option value="${c.id}">${c.title}</option>`
+            ).join('');
+        }
+
+        function viewCourseLessons(courseId) {
+            const course = coursesData.find(c => c.id === courseId);
             if (!course) return;
-            modalLessonTitle.textContent = '📖 ' + course.title;
-            modalLessonSub.textContent = `Danh sách bài học (${course.type.toUpperCase()})`;
-            const list = lessons.filter(l => l.courseId === courseId);
-            if (!list.length) {
-                lessonListRender.innerHTML = `<div class="empty-state">📭 Khóa học này chưa có bài học nào.</div>`;
+            modalCourseTitle.textContent = '📖 ' + course.title;
+            modalCourseSubtitle.textContent = `Danh sách bài học (${course.type.toUpperCase()})`;
+            const lessons = lessonsData.filter(l => l.courseId === courseId);
+            if (!lessons.length) {
+                courseLessonsRender.innerHTML = `<li style="text-align:center;color:var(--text-light);padding:20px;">📭 Khóa học này chưa có bài học nào.</li>`;
             } else {
-                lessonListRender.innerHTML = list.map(l =>
+                courseLessonsRender.innerHTML = lessons.map(l =>
                     `<li>
-                        <div class="info">
+                        <div class="lesson-info">
                             <span class="name">📄 ${l.title}</span>
                             <span class="meta">Dạng: <strong>${l.type}</strong></span>
-                            <span class="meta">${l.desc || ''}</span>
+                            <span class="desc">${l.desc || ''}</span>
                         </div>
-                        <div style="display:flex;gap:6px;">
-                            <button class="btn btn-primary btn-sm" onclick="alert('Mở bài học: ${l.title}')">Xem</button>
-                            ${isAdmin ? `<button class="btn btn-danger btn-sm" onclick="deleteLesson('${l.id}')">🗑</button>` : ''}
+                        <div class="lesson-actions" style="display:flex; gap:6px;">
+                            <button class="btn-sm" onclick="alert('📖 Mở bài học: ${l.title}')">Xem</button>
+                            ${isAdmin ? `<button class="btn-sm delete-btn" onclick="deleteLesson('${l.id}')">🗑</button>` : ''}
                         </div>
                     </li>`
                 ).join('');
@@ -1371,101 +1131,106 @@
         }
 
         // ============================================================
-        // CRUD
+        // 5. CRUD TRÊN FIRESTORE
         // ============================================================
         function listenData() {
-            onSnapshot(query(collection(db, 'courses'), orderBy('createdAt', 'asc')), (snap) => {
-                courses = [];
-                snap.forEach(d => courses.push({ id: d.id, ...d.data() }));
-                if (currentUser) renderCourses(document.getElementById('globalSearch').value);
+            const qCourses = query(collection(db, 'courses'), orderBy('createdAt', 'asc'));
+            onSnapshot(qCourses, (snapshot) => {
+                coursesData = [];
+                snapshot.forEach(doc => coursesData.push({ id: doc.id, ...doc.data() }));
+                if (currentUser) {
+                    renderCourses();
+                    renderAdminCourses();
+                    renderLessonSelect();
+                    document.getElementById('dash-total-courses').textContent = coursesData.length;
+                    document.getElementById('dash-free-courses').textContent = coursesData.filter(c => c.type === 'free').length;
+                    document.getElementById('dash-premium-courses').textContent = coursesData.filter(c => c.type === 'premium').length;
+                }
             });
 
-            onSnapshot(query(collection(db, 'lessons'), orderBy('createdAt', 'asc')), (snap) => {
-                lessons = [];
-                snap.forEach(d => lessons.push({ id: d.id, ...d.data() }));
-                if (currentUser) renderCourses(document.getElementById('globalSearch').value);
+            const qLessons = query(collection(db, 'lessons'), orderBy('createdAt', 'asc'));
+            onSnapshot(qLessons, (snapshot) => {
+                lessonsData = [];
+                snapshot.forEach(doc => lessonsData.push({ id: doc.id, ...doc.data() }));
+                if (currentUser) {
+                    renderCourses();
+                    renderAdminLessons();
+                    document.getElementById('dash-total-docs').textContent = lessonsData.length;
+                }
             });
         }
 
         window.addCourse = async function(e) {
             e.preventDefault();
-            const title = $('courseTitle').value.trim();
-            const type = $('courseType').value;
-            const desc = $('courseDesc').value.trim();
-            const price = $('coursePrice').value.trim();
-            const teacher = $('courseTeacher').value.trim();
+            const title = document.getElementById('course-title').value.trim();
+            const type = document.getElementById('course-type').value;
+            const desc = document.getElementById('course-desc').value.trim();
             if (!title) return alert('Vui lòng nhập tên khóa học');
             try {
-                await addDoc(collection(db, 'courses'), { title, type, desc, price, teacher, createdAt: new Date() });
-                $('courseTitle').value = '';
-                $('courseDesc').value = '';
-                $('coursePrice').value = '';
-                $('courseTeacher').value = '';
+                await addDoc(collection(db, 'courses'), { title, type, desc, createdAt: new Date() });
+                document.getElementById('course-title').value = '';
+                document.getElementById('course-desc').value = '';
                 alert('✅ Thêm khóa học thành công!');
             } catch (err) { alert('❌ Lỗi: ' + err.message); }
         };
 
         window.deleteCourse = async function(id) {
-            if (!confirm('Xóa khóa học và tất cả bài học?')) return;
+            if (!confirm('Xóa khóa học này và tất cả bài học?')) return;
             try {
-                const toDelete = lessons.filter(l => l.courseId === id);
-                for (let l of toDelete) await deleteDoc(doc(db, 'lessons', l.id));
+                const lessons = lessonsData.filter(l => l.courseId === id);
+                for (let l of lessons) await deleteDoc(doc(db, 'lessons', l.id));
                 await deleteDoc(doc(db, 'courses', id));
-                alert('✅ Đã xóa.');
+                alert('✅ Đã xóa khóa học và bài học.');
             } catch (err) { alert('❌ Lỗi: ' + err.message); }
         };
 
         window.editCourse = function(id) {
-            const c = courses.find(c => c.id === id);
-            if (!c) return;
-            $('courseModalTitle').textContent = '✏️ Chỉnh sửa Khóa học';
-            $('courseEditId').value = id;
-            $('courseModalTitleInput').value = c.title;
-            $('courseModalType').value = c.type;
-            $('courseModalDesc').value = c.desc || '';
-            $('courseModalPrice').value = c.price || '';
-            $('courseModalTeacher').value = c.teacher || '';
+            const course = coursesData.find(c => c.id === id);
+            if (!course) return;
+            document.getElementById('course-title-input').value = course.title;
+            document.getElementById('course-type-input').value = course.type;
+            document.getElementById('course-desc-input').value = course.desc || '';
+            document.getElementById('course-edit-id').value = id;
+            document.getElementById('course-modal-title').textContent = '✏️ Chỉnh sửa Khóa học';
             openModal('add-course-modal');
         };
 
         window.handleSaveCourse = async function(e) {
             e.preventDefault();
-            const id = $('courseEditId').value;
-            const title = $('courseModalTitleInput').value.trim();
-            const type = $('courseModalType').value;
-            const desc = $('courseModalDesc').value.trim();
-            const price = $('courseModalPrice').value.trim();
-            const teacher = $('courseModalTeacher').value.trim();
+            const editId = document.getElementById('course-edit-id').value;
+            const title = document.getElementById('course-title-input').value.trim();
+            const type = document.getElementById('course-type-input').value;
+            const desc = document.getElementById('course-desc-input').value.trim();
             if (!title) return alert('Vui lòng nhập tên khóa học');
+
             try {
-                if (id) {
-                    await updateDoc(doc(db, 'courses', id), { title, type, desc, price, teacher });
+                if (editId) {
+                    await updateDoc(doc(db, 'courses', editId), { title, type, desc });
                     alert('✅ Cập nhật thành công!');
                 } else {
-                    await addDoc(collection(db, 'courses'), { title, type, desc, price, teacher, createdAt: new Date() });
+                    await addDoc(collection(db, 'courses'), { title, type, desc, createdAt: new Date() });
                     alert('✅ Thêm khóa học thành công!');
                 }
+                document.getElementById('course-edit-id').value = '';
+                document.getElementById('course-title-input').value = '';
+                document.getElementById('course-desc-input').value = '';
                 closeModal('add-course-modal');
-                $('courseModalTitleInput').value = '';
-                $('courseModalDesc').value = '';
-                $('courseModalPrice').value = '';
-                $('courseModalTeacher').value = '';
-                $('courseEditId').value = '';
             } catch (err) { alert('❌ Lỗi: ' + err.message); }
         };
 
-        window.addLesson = async function(e) {
+        window.handleAddLesson = async function(e) {
             e.preventDefault();
-            const courseId = $('lessonCourseSelect').value;
-            const title = $('lessonTitle').value.trim();
-            const type = $('lessonType').value;
-            const desc = $('lessonDesc').value.trim();
+            const courseId = document.getElementById('lesson-course-select').value;
+            const title = document.getElementById('lesson-title').value.trim();
+            const type = document.getElementById('lesson-type').value;
+            const desc = document.getElementById('lesson-desc').value.trim();
             if (!courseId) return alert('Vui lòng chọn khóa học');
             if (!title) return alert('Vui lòng nhập tên bài học');
+
             try {
                 await addDoc(collection(db, 'lessons'), { courseId, title, type, desc, createdAt: new Date() });
-                $('lessonTitle').value = '';
-                $('lessonDesc').value = '';
+                document.getElementById('lesson-title').value = '';
+                document.getElementById('lesson-desc').value = '';
                 alert('✅ Thêm bài học thành công!');
             } catch (err) { alert('❌ Lỗi: ' + err.message); }
         };
@@ -1479,48 +1244,51 @@
         };
 
         window.editLesson = function(id) {
-            const l = lessons.find(l => l.id === id);
-            if (!l) return;
-            $('lessonTitle').value = l.title;
-            $('lessonType').value = l.type || 'Tài liệu PDF';
-            $('lessonDesc').value = l.desc || '';
-            const sel = $('lessonCourseSelect');
-            for (let opt of sel.options) {
-                if (opt.value === l.courseId) { opt.selected = true; break; }
+            const lesson = lessonsData.find(l => l.id === id);
+            if (!lesson) return;
+            document.getElementById('lesson-title').value = lesson.title;
+            document.getElementById('lesson-type').value = lesson.type || 'Tài liệu PDF';
+            document.getElementById('lesson-desc').value = lesson.desc || '';
+            const select = document.getElementById('lesson-course-select');
+            for (let opt of select.options) {
+                if (opt.value === lesson.courseId) { opt.selected = true; break; }
             }
-            const oldSubmit = lessonForm.onsubmit;
-            lessonForm.onsubmit = async (e) => {
+            const oldSubmit = addLessonForm.onsubmit;
+            addLessonForm.onsubmit = async (e) => {
                 e.preventDefault();
                 const updated = {
-                    courseId: $('lessonCourseSelect').value,
-                    title: $('lessonTitle').value.trim(),
-                    type: $('lessonType').value,
-                    desc: $('lessonDesc').value.trim()
+                    courseId: document.getElementById('lesson-course-select').value,
+                    title: document.getElementById('lesson-title').value.trim(),
+                    type: document.getElementById('lesson-type').value,
+                    desc: document.getElementById('lesson-desc').value.trim()
                 };
                 try {
                     await updateDoc(doc(db, 'lessons', id), updated);
                     alert('✅ Cập nhật bài học thành công!');
-                    lessonForm.onsubmit = oldSubmit;
-                    $('lessonTitle').value = '';
-                    $('lessonDesc').value = '';
+                    addLessonForm.onsubmit = oldSubmit;
+                    document.getElementById('lesson-title').value = '';
+                    document.getElementById('lesson-desc').value = '';
                 } catch (err) { alert('❌ Lỗi: ' + err.message); }
             };
-            lessonForm.dispatchEvent(new Event('submit'));
+            addLessonForm.dispatchEvent(new Event('submit'));
         };
 
         // ============================================================
-        // AUTH
+        // 6. AUTHENTICATION
         // ============================================================
         window.loginWithGoogle = async function() {
             try {
                 await signInWithPopup(auth, provider);
-            } catch (err) { alert('Đăng nhập Google thất bại: ' + err.message); }
+            } catch (err) {
+                console.error(err);
+                alert('Đăng nhập Google thất bại: ' + err.message);
+            }
         };
 
         window.handleLogin = function(e) {
             e.preventDefault();
-            const username = $('loginUsername').value.trim();
-            const password = $('loginPassword').value.trim();
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value.trim();
             if (username === 'admin' && password === 'admin123') {
                 const fake = { displayName: 'Quản trị viên', email: 'admin@matha.com', uid: 'admin_uid' };
                 localStorage.setItem('matha_fake_admin', JSON.stringify(fake));
@@ -1560,7 +1328,7 @@
             if (user) {
                 authActions.classList.add('hidden');
                 userActions.classList.remove('hidden');
-                userName.textContent = '👋 ' + (user.displayName || user.email) + (isAdmin ? ' (Admin)' : '');
+                userDisplayName.textContent = '👋 ' + (user.displayName || user.email) + (isAdmin ? ' (Admin)' : '');
                 if (isAdmin) {
                     navAdmin.classList.remove('hidden');
                     adminSection.classList.remove('hidden');
@@ -1568,25 +1336,29 @@
                     navAdmin.classList.add('hidden');
                     adminSection.classList.add('hidden');
                 }
-                if (!courses.length && !lessons.length) listenData();
+                if (!coursesData.length && !lessonsData.length) {
+                    listenData();
+                }
             } else {
                 authActions.classList.remove('hidden');
                 userActions.classList.add('hidden');
                 navAdmin.classList.add('hidden');
                 adminSection.classList.add('hidden');
-                courses = [];
-                lessons = [];
+                coursesData = [];
+                lessonsData = [];
                 renderCourses();
+                renderAdminCourses();
+                renderAdminLessons();
             }
         }
 
         // ============================================================
-        // NAVIGATION
+        // 7. NAVIGATION
         // ============================================================
         window.showSection = function(section) {
             if (section === 'admin') {
                 if (!currentUser || !isAdmin) {
-                    alert('⚠️ Bạn cần đăng nhập với quyền Admin!');
+                    alert('⚠️ Bạn cần đăng nhập với quyền Quản trị viên (Admin)!');
                     openModal('login-modal');
                     return;
                 }
@@ -1603,33 +1375,29 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        window.scrollToCourses = function() {
+        window.scrollToSection = function(id) {
             showSection('home');
-            setTimeout(() => document.getElementById('coursesSection').scrollIntoView({ behavior: 'smooth' }), 100);
-        };
-        window.scrollToStats = function() {
-            showSection('home');
-            setTimeout(() => document.getElementById('statsSection').scrollIntoView({ behavior: 'smooth' }), 100);
-        };
-
-        window.filterCourses = function() {
-            renderCourses(document.getElementById('globalSearch').value);
+            setTimeout(() => {
+                document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
         };
 
         // ============================================================
-        // MODAL
+        // 8. MODAL CONTROLS
         // ============================================================
         window.openModal = function(id) {
             if (id === 'add-course-modal') {
-                $('courseModalTitle').textContent = '📚 Thêm Khóa học Mới';
-                $('courseEditId').value = '';
-                $('courseModalForm').reset();
+                document.getElementById('course-modal-title').textContent = '📚 Thêm Khóa học Mới';
+                document.getElementById('course-edit-id').value = '';
+                document.getElementById('course-form-modal').reset();
             }
             document.getElementById(id).classList.add('active');
         };
+
         window.closeModal = function(id) {
             document.getElementById(id).classList.remove('active');
         };
+
         window.onclick = function(e) {
             if (e.target.classList.contains('modal-overlay')) {
                 e.target.classList.remove('active');
@@ -1637,11 +1405,22 @@
         };
 
         // ============================================================
-        // INIT
+        // 9. SEARCH FILTER
+        // ============================================================
+        window.filterCourses = function() {
+            const text = document.getElementById('global-search').value;
+            renderCourses(text);
+        };
+
+        // ============================================================
+        // 10. EVENT LISTENERS
         // ============================================================
         courseForm.addEventListener('submit', addCourse);
-        lessonForm.addEventListener('submit', addLesson);
+        addLessonForm.addEventListener('submit', handleAddLesson);
 
+        // ============================================================
+        // 11. INIT
+        // ============================================================
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
