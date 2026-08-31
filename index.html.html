@@ -49,7 +49,7 @@
 
         .hidden { display: none !important; }
 
-        /* BUTTONS */
+        /* ===== BUTTONS ===== */
         button, .btn {
             display: inline-flex;
             align-items: center;
@@ -109,7 +109,7 @@
             background: #f8fafc;
         }
 
-        /* HEADER */
+        /* ===== HEADER ===== */
         .header {
             background-color: #ffffff;
             border-bottom: 1px solid var(--border);
@@ -193,7 +193,7 @@
             font-size: 12px;
         }
 
-        /* HERO */
+        /* ===== HERO ===== */
         .hero {
             padding: 60px 0;
             background: linear-gradient(180deg, #FFFFFF 0%, var(--bg-body) 100%);
@@ -227,7 +227,32 @@
             font-weight: 600;
         }
 
-        /* FEATURES */
+        /* ===== HERO IMAGE ===== */
+        .hero-illustration img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            display: block;
+        }
+        .hero-illustration .placeholder-svg {
+            width: 100%;
+            max-height: 400px;
+            border-radius: 24px;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 18px;
+            min-height: 280px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* ===== FEATURES ===== */
         .features { padding: 40px 0; }
         .features-grid {
             display: grid;
@@ -247,7 +272,7 @@
         .feature-item h4 { font-size: 15px; margin-bottom: 4px; }
         .feature-item p { font-size: 13px; color: var(--text-muted); }
 
-        /* COURSES SECTION */
+        /* ===== COURSES ===== */
         .courses { padding: 40px 0; }
         .courses-header {
             display: flex;
@@ -293,11 +318,25 @@
             position: relative;
             background: #f1f5f9;
             min-height: 80px;
+            overflow: hidden;
         }
-        .course-card .card-body svg {
-            display: block;
+        .course-card .card-body img {
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            min-height: 120px;
+        }
+        .course-card .card-body .placeholder-course {
+            padding: 30px 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            background: var(--primary-light);
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .course-card .tag {
             position: absolute;
@@ -322,7 +361,7 @@
             gap: 8px;
         }
 
-        /* STATS */
+        /* ===== STATS ===== */
         .stats { padding: 40px 0; background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
         .stats-grid {
             display: grid;
@@ -343,7 +382,7 @@
             font-size: 14px;
         }
 
-        /* ADMIN DASHBOARD */
+        /* ===== ADMIN DASHBOARD ===== */
         .admin-dashboard { padding: 40px 0; }
         .dashboard-header {
             display: flex;
@@ -382,7 +421,7 @@
         }
         .dash-card h3 { font-size: 16px; margin-bottom: 16px; }
 
-        /* FORMS */
+        /* ===== FORMS ===== */
         .form-group { margin-bottom: 14px; }
         .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; }
         .form-group input, .form-group select, .form-group textarea {
@@ -400,7 +439,7 @@
         }
         .form-group textarea { resize: vertical; height: 80px; }
 
-        /* LISTS */
+        /* ===== LISTS ===== */
         .doc-list, .lesson-list { list-style: none; }
         .doc-list li, .lesson-list li {
             padding: 12px;
@@ -423,7 +462,7 @@
             grid-column: 1 / -1;
         }
 
-        /* MODAL */
+        /* ===== MODAL ===== */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -477,7 +516,7 @@
         }
         .divider span { padding: 0 10px; }
 
-        /* FOOTER */
+        /* ===== FOOTER ===== */
         .footer {
             margin-top: auto;
             background: #ffffff;
@@ -488,7 +527,7 @@
             color: var(--text-muted);
         }
 
-        /* RESPONSIVE */
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) {
             .courses-grid { grid-template-columns: 1fr; }
         }
@@ -496,7 +535,8 @@
             .hero .container, .features-grid, .stats-grid, .dashboard-grid, .dashboard-stats {
                 grid-template-columns: 1fr;
             }
-            .hero-illustration { display: none; }
+            .hero-illustration img { max-height: 260px; }
+            .hero-illustration .placeholder-svg { min-height: 200px; }
             .header .container { flex-wrap: wrap; height: auto; padding: 12px; gap: 10px; }
             .nav { order: 3; width: 100%; justify-content: center; flex-wrap: wrap; }
             .search-box input { width: 140px; }
@@ -511,6 +551,7 @@
             .dashboard-stats { grid-template-columns: 1fr; }
             .hero-buttons { flex-direction: column; }
             .hero-buttons button { width: 100%; }
+            .hero-illustration img { max-height: 200px; }
         }
     </style>
 </head>
@@ -577,17 +618,13 @@
                         </div>
                     </div>
                     <div class="hero-illustration">
-                        <svg viewBox="0 0 500 350" fill="none">
-                            <rect width="500" height="350" rx="24" fill="#078A57" fill-opacity="0.05" />
-                            <circle cx="250" cy="175" r="120" stroke="#078A57" stroke-width="2" stroke-dasharray="6 6" />
-                            <path d="M100 250 C 180 100, 320 300, 400 120" stroke="#078A57" stroke-width="4" fill="none" />
-                            <circle cx="180" cy="180" r="8" fill="#32C989" />
-                            <circle cx="320" cy="225" r="8" fill="#006F46" />
-                            <circle cx="400" cy="120" r="10" fill="#078A57" />
-                            <text x="195" y="175" font-family="Inter" font-weight="700" font-size="14" fill="#078A57">f(x)</text>
-                            <text x="335" y="235" font-family="Inter" font-weight="700" font-size="14" fill="#078A57">∫ dx</text>
-                            <text x="370" y="105" font-family="Inter" font-weight="800" font-size="16" fill="#078A57">lim n→∞</text>
-                        </svg>
+                        <!-- ====== THAY ẢNH Ở ĐÂY ====== -->
+                        <img src="assets/hero-banner.jpg" alt="Học sinh học Toán" 
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                        <div class="placeholder-svg" style="display:none;">
+                            📚 Thêm ảnh vào assets/hero-banner.jpg<br>
+                            <span style="font-size:14px; color:#94a3b8;">Hoặc sửa đường dẫn ảnh trong thẻ &lt;img&gt;</span>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -883,8 +920,7 @@
             deleteDoc,
             onSnapshot,
             query,
-            orderBy,
-            where
+            orderBy
         } from "firebase/firestore";
 
         const firebaseConfig = {
@@ -906,7 +942,7 @@
         const ADMIN_EMAIL = "thaigjabao99@gmail.com";
 
         // ============================================================
-        // 2. DOM REFS (Giao diện cũ)
+        // 2. DOM REFS
         // ============================================================
         const homeSection = document.getElementById('section-home');
         const adminSection = document.getElementById('section-admin');
@@ -922,18 +958,15 @@
         const statCourses = document.getElementById('stat-courses');
         const statDocs = document.getElementById('stat-docs');
 
-        // Admin
         const adminCoursesList = document.getElementById('admin-courses-list');
         const adminDocList = document.getElementById('admin-doc-list');
         const lessonCourseSelect = document.getElementById('lesson-course-select');
         const courseForm = document.getElementById('course-form');
         const addLessonForm = document.getElementById('add-lesson-form');
 
-        // Modal
         const loginModal = document.getElementById('login-modal');
         const loginError = document.getElementById('login-error');
 
-        // Lessons modal
         const courseLessonsRender = document.getElementById('course-lessons-render');
         const modalCourseTitle = document.getElementById('modal-course-title');
         const modalCourseSubtitle = document.getElementById('modal-course-subtitle');
@@ -981,14 +1014,21 @@
                 <button class="btn-sm delete-btn" onclick="deleteCourse('${course.id}')">🗑</button>
             ` : '';
 
+            // ====== ẢNH CHO KHÓA HỌC ======
+            // Bạn có thể thay đổi đường dẫn ảnh theo từng khóa học.
+            // Hiện tại dùng ảnh mặc định với tên theo course.id
+            const imageSrc = `assets/course-${course.id}.jpg`; // hoặc dùng ảnh chung: 'assets/course-default.jpg'
+
             return `
                 <div class="course-card">
                     <div class="card-body">
+                        <img src="${imageSrc}" alt="${course.title}" 
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                        <div class="placeholder-course" style="display:none;">
+                            📚 ${course.title}<br>
+                            <span style="font-size:12px;color:#94a3b8;">Thêm ảnh: assets/course-${course.id}.jpg</span>
+                        </div>
                         <span class="tag ${tagClass}">${tagText}</span>
-                        <svg viewBox="0 0 400 120" fill="none">
-                            <rect width="400" height="120" fill="${course.color || '#078a57'}" fill-opacity="0.12" />
-                            <text x="20" y="70" font-family="Inter" font-weight="800" font-size="20" fill="${course.color || '#078a57'}">${course.title}</text>
-                        </svg>
                     </div>
                     <div style="padding: 14px 18px; flex:1;">
                         <p style="font-size: 13px; color: var(--text-muted);">${course.desc || 'Chưa có mô tả.'}</p>
@@ -1072,18 +1112,15 @@
         // ============================================================
         // 5. CRUD TRÊN FIRESTORE
         // ============================================================
-        // Lắng nghe dữ liệu real-time
         function listenData() {
             const qCourses = query(collection(db, 'courses'), orderBy('createdAt', 'asc'));
             onSnapshot(qCourses, (snapshot) => {
                 coursesData = [];
                 snapshot.forEach(doc => coursesData.push({ id: doc.id, ...doc.data() }));
-                // Cập nhật UI
                 if (currentUser) {
                     renderCourses();
                     renderAdminCourses();
                     renderLessonSelect();
-                    // Cập nhật thống kê admin
                     document.getElementById('dash-total-courses').textContent = coursesData.length;
                     document.getElementById('dash-free-courses').textContent = coursesData.filter(c => c.type === 'free').length;
                     document.getElementById('dash-premium-courses').textContent = coursesData.filter(c => c.type === 'premium').length;
@@ -1095,14 +1132,13 @@
                 lessonsData = [];
                 snapshot.forEach(doc => lessonsData.push({ id: doc.id, ...doc.data() }));
                 if (currentUser) {
-                    renderCourses(); // cập nhật số bài học trên card
+                    renderCourses();
                     renderAdminLessons();
                     document.getElementById('dash-total-docs').textContent = lessonsData.length;
                 }
             });
         }
 
-        // Thêm khóa học
         window.addCourse = async function(e) {
             e.preventDefault();
             const title = document.getElementById('course-title').value.trim();
@@ -1117,7 +1153,6 @@
             } catch (err) { alert('❌ Lỗi: ' + err.message); }
         };
 
-        // Xóa khóa học
         window.deleteCourse = async function(id) {
             if (!confirm('Xóa khóa học này và tất cả bài học?')) return;
             try {
@@ -1128,7 +1163,6 @@
             } catch (err) { alert('❌ Lỗi: ' + err.message); }
         };
 
-        // Sửa khóa học
         window.editCourse = function(id) {
             const course = coursesData.find(c => c.id === id);
             if (!course) return;
@@ -1140,7 +1174,6 @@
             openModal('add-course-modal');
         };
 
-        // Lưu khóa học (thêm hoặc sửa)
         window.handleSaveCourse = async function(e) {
             e.preventDefault();
             const editId = document.getElementById('course-edit-id').value;
@@ -1164,7 +1197,6 @@
             } catch (err) { alert('❌ Lỗi: ' + err.message); }
         };
 
-        // Thêm bài học
         window.handleAddLesson = async function(e) {
             e.preventDefault();
             const courseId = document.getElementById('lesson-course-select').value;
@@ -1182,7 +1214,6 @@
             } catch (err) { alert('❌ Lỗi: ' + err.message); }
         };
 
-        // Xóa bài học
         window.deleteLesson = async function(id) {
             if (!confirm('Xóa bài học này?')) return;
             try {
@@ -1191,19 +1222,16 @@
             } catch (err) { alert('❌ Lỗi: ' + err.message); }
         };
 
-        // Sửa bài học (đơn giản: load lên form admin)
         window.editLesson = function(id) {
             const lesson = lessonsData.find(l => l.id === id);
             if (!lesson) return;
             document.getElementById('lesson-title').value = lesson.title;
             document.getElementById('lesson-type').value = lesson.type || 'Tài liệu PDF';
             document.getElementById('lesson-desc').value = lesson.desc || '';
-            // Chọn khóa học tương ứng
             const select = document.getElementById('lesson-course-select');
             for (let opt of select.options) {
                 if (opt.value === lesson.courseId) { opt.selected = true; break; }
             }
-            // Thay đổi hành động của form
             const oldSubmit = addLessonForm.onsubmit;
             addLessonForm.onsubmit = async (e) => {
                 e.preventDefault();
@@ -1241,30 +1269,22 @@
             const username = document.getElementById('login-username').value.trim();
             const password = document.getElementById('login-password').value.trim();
             if (username === 'admin' && password === 'admin123') {
-                // Đăng nhập thủ công admin (giả lập)
-                const fakeUser = {
-                    displayName: 'Quản trị viên',
-                    email: 'admin@matha.com',
-                    uid: 'admin_uid'
-                };
-                currentUser = fakeUser;
+                const fake = { displayName: 'Quản trị viên', email: 'admin@matha.com', uid: 'admin_uid' };
+                localStorage.setItem('matha_fake_admin', JSON.stringify(fake));
+                currentUser = fake;
                 isAdmin = true;
-                updateUI(currentUser);
+                updateUI(fake);
                 closeModal('login-modal');
                 showSection('admin');
                 alert('👋 Xin chào Admin!');
                 return;
             }
             if (username && password) {
-                // Đăng nhập thường (không admin)
-                const fakeUser = {
-                    displayName: username,
-                    email: username + '@user.com',
-                    uid: 'user_uid'
-                };
-                currentUser = fakeUser;
+                const fake = { displayName: username, email: username + '@user.com', uid: 'user_uid' };
+                localStorage.removeItem('matha_fake_admin');
+                currentUser = fake;
                 isAdmin = false;
-                updateUI(currentUser);
+                updateUI(fake);
                 closeModal('login-modal');
                 showSection('home');
                 alert('👋 Xin chào ' + username + '!');
@@ -1275,9 +1295,8 @@
 
         window.logout = async function() {
             if (!confirm('Bạn có chắc muốn đăng xuất?')) return;
-            try {
-                await signOut(auth);
-            } catch (e) { /* ignore */ }
+            localStorage.removeItem('matha_fake_admin');
+            if (auth.currentUser) await signOut(auth);
             currentUser = null;
             isAdmin = false;
             updateUI(null);
@@ -1296,7 +1315,6 @@
                     navAdmin.classList.add('hidden');
                     adminSection.classList.add('hidden');
                 }
-                // Lắng nghe dữ liệu lần đầu
                 if (!coursesData.length && !lessonsData.length) {
                     listenData();
                 }
@@ -1305,7 +1323,6 @@
                 userActions.classList.add('hidden');
                 navAdmin.classList.add('hidden');
                 adminSection.classList.add('hidden');
-                // Xóa dữ liệu cũ
                 coursesData = [];
                 lessonsData = [];
                 renderCourses();
@@ -1383,7 +1400,6 @@
         // ============================================================
         // 11. INIT
         // ============================================================
-        // Kiểm tra auth state từ Firebase
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
@@ -1392,7 +1408,6 @@
                 if (isAdmin) showSection('admin');
                 else showSection('home');
             } else {
-                // Kiểm tra localStorage có user admin giả lập không
                 const stored = localStorage.getItem('matha_fake_admin');
                 if (stored) {
                     const fake = JSON.parse(stored);
@@ -1409,52 +1424,10 @@
             }
         });
 
-        // Lưu fake admin vào localStorage khi đăng nhập thủ công
-        const origHandleLogin = window.handleLogin;
-        window.handleLogin = function(e) {
-            e.preventDefault();
-            const username = document.getElementById('login-username').value.trim();
-            const password = document.getElementById('login-password').value.trim();
-            if (username === 'admin' && password === 'admin123') {
-                const fake = { displayName: 'Quản trị viên', email: 'admin@matha.com', uid: 'admin_uid' };
-                localStorage.setItem('matha_fake_admin', JSON.stringify(fake));
-                currentUser = fake;
-                isAdmin = true;
-                updateUI(fake);
-                closeModal('login-modal');
-                showSection('admin');
-                alert('👋 Xin chào Admin!');
-                return;
-            }
-            if (username && password) {
-                const fake = { displayName: username, email: username + '@user.com', uid: 'user_uid' };
-                localStorage.removeItem('matha_fake_admin');
-                currentUser = fake;
-                isAdmin = false;
-                updateUI(fake);
-                closeModal('login-modal');
-                showSection('home');
-                alert('👋 Xin chào ' + username + '!');
-                return;
-            }
-            loginError.style.display = 'block';
-        };
-
-        // Ghi đè logout để xóa fake admin
-        const origLogout = window.logout;
-        window.logout = async function() {
-            if (!confirm('Bạn có chắc muốn đăng xuất?')) return;
-            localStorage.removeItem('matha_fake_admin');
-            if (auth.currentUser) await signOut(auth);
-            currentUser = null;
-            isAdmin = false;
-            updateUI(null);
-            showSection('home');
-        };
-
         console.log('🚀 MATHA TN đã sẵn sàng!');
         console.log('👑 Admin Google: ' + ADMIN_EMAIL);
         console.log('🔑 Admin mặc định: admin / admin123');
+        console.log('📸 Để thêm ảnh: đặt file ảnh vào thư mục assets/ và cập nhật đường dẫn trong HTML.');
     </script>
 </body>
 </html>
