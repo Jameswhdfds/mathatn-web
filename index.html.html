@@ -10,12 +10,10 @@
     <style>
         /* ===== RESET & ROOT ===== */
         :root {
-            --primary: #5624D0;
-            --primary-dark: #3C1A9E;
-            --primary-light: #F3F0FF;
-            --primary-gradient: linear-gradient(135deg, #5624D0, #3C1A9E);
-            --secondary: #A435F0;
-            --secondary-light: #F8F0FF;
+            --primary: #078A57;
+            --primary-dark: #006F46;
+            --primary-light: #E6F4EE;
+            --secondary: #32C989;
             --bg-body: #F8FAFC;
             --bg-card: #FFFFFF;
             --text-main: #0F172A;
@@ -23,7 +21,7 @@
             --text-light: #94A3B8;
             --border: #E2E8F0;
             --radius: 12px;
-            --shadow: 0 10px 15px -3px rgba(86, 36, 208, 0.08), 0 4px 6px -2px rgba(86, 36, 208, 0.02);
+            --shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.02);
         }
 
         * {
@@ -65,12 +63,11 @@
             transition: all 0.2s ease;
         }
         .btn-primary {
-            background: var(--primary-gradient);
+            background-color: var(--primary);
             color: #ffffff;
         }
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(86, 36, 208, 0.35);
+            background-color: var(--primary-dark);
         }
         .btn-outline {
             background-color: transparent;
@@ -94,11 +91,11 @@
             background-color: #fca5a5;
         }
         .btn-sm.edit-btn {
-            background-color: var(--primary-light);
-            color: var(--primary);
+            background-color: #e0f2fe;
+            color: #0284c7;
         }
         .btn-sm.edit-btn:hover {
-            background-color: #ddd6fe;
+            background-color: #bae6fd;
         }
         .btn-google {
             background: #fff;
@@ -135,7 +132,7 @@
         .brand-icon {
             width: 40px;
             height: 40px;
-            background: var(--primary-gradient);
+            background-color: var(--primary);
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -199,7 +196,7 @@
         /* ===== HERO ===== */
         .hero {
             padding: 60px 0;
-            background: linear-gradient(180deg, var(--primary-light) 0%, var(--bg-body) 100%);
+            background: linear-gradient(180deg, #FFFFFF 0%, var(--bg-body) 100%);
         }
         .hero .container {
             display: grid;
@@ -259,25 +256,21 @@
         .features { padding: 40px 0; }
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 6px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 16px 8px;
-            box-shadow: var(--shadow);
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
         }
         .feature-item {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
             display: flex;
+            gap: 16px;
             align-items: center;
-            gap: 14px;
-            padding: 12px 18px;
-            border-right: 1px solid var(--border);
         }
-        .feature-item:last-child { border-right: none; }
-        .feature-item .icon { font-size: 34px; color: var(--primary); line-height: 1; flex-shrink: 0; }
-        .feature-item .text h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
-        .feature-item .text p { font-size: 12px; color: var(--text-light); line-height: 1.3; }
+        .feature-item .icon { font-size: 28px; }
+        .feature-item h4 { font-size: 15px; margin-bottom: 4px; }
+        .feature-item p { font-size: 13px; color: var(--text-muted); }
 
         /* ===== COURSES ===== */
         .courses { padding: 40px 0; }
@@ -355,7 +348,7 @@
             font-weight: 700;
         }
         .tag-free { background: #dcfce7; color: #15803d; }
-        .tag-premium { background: var(--primary-light); color: var(--primary); }
+        .tag-premium { background: #f3e8ff; color: #6b21a8; }
         .course-card .card-footer {
             padding: 12px 18px;
             border-top: 1px solid var(--border);
@@ -442,7 +435,7 @@
         }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(86, 36, 208, 0.1);
+            box-shadow: 0 0 0 3px rgba(7, 138, 87, 0.1);
         }
         .form-group textarea { resize: vertical; height: 80px; }
 
@@ -461,7 +454,7 @@
         }
         .doc-info .name, .lesson-info .name { font-weight: 600; font-size: 14px; display: block; }
         .doc-info .meta, .lesson-info .meta { font-size: 12px; color: var(--text-muted); }
-        .doc-info .course-tag { font-size: 10px; background: var(--primary-light); color: var(--primary); padding: 2px 6px; border-radius: 4px; }
+        .doc-info .course-tag { font-size: 10px; background: #e2e8f0; padding: 2px 6px; border-radius: 4px; }
         .empty-state {
             text-align: center;
             padding: 30px;
@@ -505,7 +498,9 @@
             font-size: 20px; cursor: pointer; color: var(--text-light);
             transition: transform 0.2s;
         }
-        .modal .close-btn:hover { transform: rotate(90deg); }
+        .modal .close-btn:hover {
+            transform: rotate(90deg);
+        }
         .divider {
             display: flex;
             align-items: center;
@@ -535,16 +530,13 @@
         /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) {
             .courses-grid { grid-template-columns: 1fr; }
-            .features-grid { grid-template-columns: repeat(3, 1fr); }
-            .features-grid .feature-item:nth-child(3) { border-right: none; }
-            .features-grid .feature-item:nth-child(4),
-            .features-grid .feature-item:nth-child(5) { border-top: 1px solid var(--border); border-right: none; }
         }
         @media (max-width: 768px) {
             .hero .container, .features-grid, .stats-grid, .dashboard-grid, .dashboard-stats {
                 grid-template-columns: 1fr;
             }
-            .hero-illustration { display: none; }
+            .hero-illustration img { max-height: 260px; }
+            .hero-illustration .placeholder-svg { min-height: 200px; }
             .header .container { flex-wrap: wrap; height: auto; padding: 12px; gap: 10px; }
             .nav { order: 3; width: 100%; justify-content: center; flex-wrap: wrap; }
             .search-box input { width: 140px; }
@@ -552,8 +544,6 @@
             .dashboard-grid { grid-template-columns: 1fr; }
             .hero-content h1 { font-size: 28px; }
             .modal { padding: 20px; margin: 10px; }
-            .features-grid .feature-item { border-right: none !important; border-bottom: 1px solid var(--border); }
-            .features-grid .feature-item:last-child { border-bottom: none; }
         }
         @media (max-width: 500px) {
             .courses-header { flex-direction: column; align-items: flex-start; }
@@ -561,8 +551,7 @@
             .dashboard-stats { grid-template-columns: 1fr; }
             .hero-buttons { flex-direction: column; }
             .hero-buttons button { width: 100%; }
-            .stats-grid { grid-template-columns: 1fr 1fr; }
-            .stats-grid .stat-item:last-child { border-bottom: none; }
+            .hero-illustration img { max-height: 200px; }
         }
     </style>
 </head>
@@ -571,13 +560,20 @@
     <!-- ===== HEADER ===== -->
     <header class="header">
         <div class="container">
-           <div class="brand" onclick="showSection('home')">
-    <img src="hero-banner.jpg" alt="MATHA TN" style="width:40px; height:40px; border-radius:10px; object-fit:cover;" />
-    <div>
-        <span class="brand-name">MATHA <em>TN</em></span>
-        <span class="brand-sub">Hệ thống Quản lý Học tập Toán học</span>
-    </div>
-</div>
+            <div class="brand" onclick="showSection('home')">
+                <div class="brand-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        <line x1="9" y1="7" x2="15" y2="7"></line>
+                        <line x1="9" y1="11" x2="13" y2="11"></line>
+                    </svg>
+                </div>
+                <div>
+                    <span class="brand-name">MATHA <em>TN</em></span>
+                    <span class="brand-sub">Hệ thống Quản lý Học tập Toán học</span>
+                </div>
+            </div>
 
             <nav class="nav">
                 <a class="active" onclick="showSection('home')">Trang chủ</a>
@@ -622,11 +618,12 @@
                         </div>
                     </div>
                     <div class="hero-illustration">
-                        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=360&fit=crop" alt="Học sinh học Toán" 
+                        <!-- ====== THAY ẢNH Ở ĐÂY ====== -->
+                        <img src="assets/hero-banner.jpg" alt="Học sinh học Toán" 
                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
                         <div class="placeholder-svg" style="display:none;">
-                            📚 Thêm ảnh hoặc sửa đường dẫn<br>
-                            <span style="font-size:14px; color:#94a3b8;">assets/hero-banner.jpg</span>
+                            📚 Thêm ảnh vào assets/hero-banner.jpg<br>
+                            <span style="font-size:14px; color:#94a3b8;">Hoặc sửa đường dẫn ảnh trong thẻ &lt;img&gt;</span>
                         </div>
                     </div>
                 </div>
@@ -637,38 +634,24 @@
                 <div class="container">
                     <div class="features-grid">
                         <div class="feature-item">
-                            <span class="icon">▱</span>
-                            <div class="text">
-                                <h4>Lộ trình rõ ràng</h4>
-                                <p>Hệ thống từ cơ bản đến nâng cao</p>
+                            <div class="icon">📚</div>
+                            <div>
+                                <h4>Kho bài giảng phong phú</h4>
+                                <p>Hệ thống bài giảng từ cơ bản đến nâng cao, bám sát chương trình.</p>
                             </div>
                         </div>
                         <div class="feature-item">
-                            <span class="icon">◎</span>
-                            <div class="text">
-                                <h4>Hiệu quả thực tế</h4>
-                                <p>Bài tập chọn lọc, bám sát kỳ thi</p>
+                            <div class="icon">⚡</div>
+                            <div>
+                                <h4>Học tập linh hoạt</h4>
+                                <p>Truy cập nội dung mọi lúc, mọi nơi trên nhiều thiết bị khác nhau.</p>
                             </div>
                         </div>
                         <div class="feature-item">
-                            <span class="icon">▥</span>
-                            <div class="text">
-                                <h4>Giảng dạy tận tâm</h4>
-                                <p>Dễ hiểu – logic – ứng dụng thực tế</p>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <span class="icon">♢</span>
-                            <div class="text">
-                                <h4>An toàn &amp; tin cậy</h4>
-                                <p>Nền tảng học tập chất lượng</p>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <span class="icon">♙</span>
-                            <div class="text">
-                                <h4>Đồng hành cùng bạn</h4>
-                                <p>Học mọi lúc, mọi nơi, trên mọi thiết bị</p>
+                            <div class="icon">🎯</div>
+                            <div>
+                                <h4>Quản lý tiến độ</h4>
+                                <p>Theo dõi sát sao quá trình học tập và hoàn thành các học phần.</p>
                             </div>
                         </div>
                     </div>
@@ -683,7 +666,7 @@
                             Khóa học Miễn phí <small id="free-count">0 khóa</small>
                         </div>
                         <div class="section-title">
-                            Khóa học Premium <small id="premium-count" style="background:var(--primary-light); color:var(--primary);">0 khóa</small>
+                            Khóa học Premium <small id="premium-count" style="background:#f3e8ff; color:#6949b1;">0 khóa</small>
                         </div>
                     </div>
 
@@ -699,28 +682,28 @@
                 <div class="container">
                     <div class="stats-grid">
                         <div class="stat-item">
-                            <span class="icon">👥</span>
+                            <div class="icon">👥</div>
                             <div>
                                 <div class="number" id="stat-users">1,250+</div>
                                 <div class="label">Học viên</div>
                             </div>
                         </div>
                         <div class="stat-item">
-                            <span class="icon">📖</span>
+                            <div class="icon">📖</div>
                             <div>
                                 <div class="number" id="stat-courses">0</div>
                                 <div class="label">Khóa học</div>
                             </div>
                         </div>
                         <div class="stat-item">
-                            <span class="icon">📄</span>
+                            <div class="icon">📄</div>
                             <div>
                                 <div class="number" id="stat-docs">0</div>
                                 <div class="label">Tài liệu & Bài học</div>
                             </div>
                         </div>
                         <div class="stat-item">
-                            <span class="icon">⭐</span>
+                            <div class="icon">⭐</div>
                             <div>
                                 <div class="number">4.9/5</div>
                                 <div class="label">Đánh giá chất lượng</div>
@@ -1031,7 +1014,10 @@
                 <button class="btn-sm delete-btn" onclick="deleteCourse('${course.id}')">🗑</button>
             ` : '';
 
-            const imageSrc = `https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=140&fit=crop`;
+            // ====== ẢNH CHO KHÓA HỌC ======
+            // Bạn có thể thay đổi đường dẫn ảnh theo từng khóa học.
+            // Hiện tại dùng ảnh mặc định với tên theo course.id
+            const imageSrc = `assets/course-${course.id}.jpg`; // hoặc dùng ảnh chung: 'assets/course-default.jpg'
 
             return `
                 <div class="course-card">
@@ -1040,7 +1026,7 @@
                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
                         <div class="placeholder-course" style="display:none;">
                             📚 ${course.title}<br>
-                            <span style="font-size:12px;color:#94a3b8;">Thêm ảnh</span>
+                            <span style="font-size:12px;color:#94a3b8;">Thêm ảnh: assets/course-${course.id}.jpg</span>
                         </div>
                         <span class="tag ${tagClass}">${tagText}</span>
                     </div>
@@ -1304,7 +1290,7 @@
                 alert('👋 Xin chào ' + username + '!');
                 return;
             }
-            loginError.classList.add('show');
+            loginError.style.display = 'block';
         };
 
         window.logout = async function() {
@@ -1441,6 +1427,7 @@
         console.log('🚀 MATHA TN đã sẵn sàng!');
         console.log('👑 Admin Google: ' + ADMIN_EMAIL);
         console.log('🔑 Admin mặc định: admin / admin123');
+        console.log('📸 Để thêm ảnh: đặt file ảnh vào thư mục assets/ và cập nhật đường dẫn trong HTML.');
     </script>
 </body>
 </html>
