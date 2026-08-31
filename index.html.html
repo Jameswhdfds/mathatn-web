@@ -7,7 +7,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <style>
         :root {
             --primary: #078A57;
@@ -77,18 +76,6 @@
         .btn-outline:hover {
             background-color: var(--bg-body);
             border-color: var(--text-light);
-        }
-        .btn-google {
-            background-color: #ffffff;
-            border: 1px solid #cbd5e1;
-            color: #334155;
-            width: 100%;
-            gap: 10px;
-            margin-top: 12px;
-        }
-        .btn-google:hover {
-            background-color: #f8fafc;
-            border-color: #94a3b8;
         }
         .btn-sm {
             padding: 6px 12px;
@@ -481,17 +468,6 @@
         }
         .divider span { padding: 0 10px; }
 
-        .admin-notice {
-            background: #f0f0ff;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            color: #5a4a7a;
-            border-left: 3px solid #8b5cf6;
-            margin-bottom: 16px;
-        }
-        .admin-notice strong { color: #8b5cf6; }
-
         /* FOOTER */
         .footer {
             margin-top: auto;
@@ -505,11 +481,8 @@
 
         /* RESPONSIVE */
         @media (max-width: 992px) {
-            .courses-grid {
-                grid-template-columns: 1fr;
-            }
+            .courses-grid { grid-template-columns: 1fr; }
         }
-
         @media (max-width: 768px) {
             .hero .container, .features-grid, .stats-grid, .dashboard-grid, .dashboard-stats {
                 grid-template-columns: 1fr;
@@ -523,7 +496,6 @@
             .hero-content h1 { font-size: 28px; }
             .modal { padding: 20px; margin: 10px; }
         }
-
         @media (max-width: 500px) {
             .courses-header { flex-direction: column; align-items: flex-start; }
             .dashboard-header { flex-direction: column; align-items: flex-start; }
@@ -781,7 +753,7 @@
             <h2>🔐 Đăng nhập</h2>
             <div class="subtitle">Truy cập hệ thống học tập MATHA TN</div>
             
-            <button type="button" class="btn btn-google" onclick="loginWithGoogle()">
+            <button type="button" class="btn btn-google" onclick="loginWithGoogle()" style="background-color:#ffffff;border:1px solid #cbd5e1;color:#334155;width:100%;gap:10px;margin-top:12px;">
                 <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
                 Đăng nhập bằng Google
             </button>
@@ -846,7 +818,7 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- FIREBASE SDK + CODE                                                -->
+    <!-- FIREBASE SDK + CODE                                          -->
     <!-- ============================================================ -->
     <script type="importmap">
         {
@@ -859,7 +831,7 @@
 
     <script type="module">
         // ============================================================
-        // 🔥 FIREBASE CONFIG (ĐÃ CẬP NHẬT VỚI THÔNG TIN CỦA BẠN)
+        // 🔥 FIREBASE CONFIG
         // ============================================================
         import { initializeApp } from "firebase/app";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
@@ -878,19 +850,17 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        // 📧 Email Admin (THAY ĐỔI THÀNH EMAIL GOOGLE CỦA BẠN)
-        // Nếu bạn muốn dùng email nào làm Admin, sửa dòng này:
+        // 📧 Admin Email (THAY ĐỔI THÀNH EMAIL CỦA BẠN)
         const ADMIN_EMAIL = "admin@gmail.com";
 
         // ============================================================
-        // GLOBAL FUNCTIONS FOR window (để gọi từ onclick trong HTML)
+        // GLOBAL FUNCTIONS
         // ============================================================
         window.loginWithGoogle = async function() {
             try {
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
                 
-                // Kiểm tra xem user có phải Admin không
                 const isAdmin = user.email === ADMIN_EMAIL || user.email.includes("admin") || user.email.includes("quanly");
                 
                 window.currentUser = {
@@ -903,16 +873,18 @@
                 window.saveData();
                 window.updateAuthUI();
                 window.closeModal('login-modal');
-                alert(`✅ Xin chào ${user.displayName || user.email}!`);
                 
-                // Nếu là Admin, chuyển sang trang Admin
+                // Hiển thị thông báo chào mừng trên giao diện thay vì alert
+                // Không dùng alert nữa
+                
                 if (isAdmin) {
                     window.showSection('admin');
+                } else {
+                    window.showSection('home');
                 }
             } catch (error) {
                 console.error("Chi tiết lỗi đăng nhập Google:", error);
                 let errorMsg = "Đăng nhập bằng Google thất bại. ";
-                
                 if (error.code === 'auth/popup-blocked') {
                     errorMsg += "Trình duyệt đã chặn cửa sổ bật lên. Vui lòng cho phép popup cho trang này.";
                 } else if (error.code === 'auth/unauthorized-domain') {
@@ -924,7 +896,6 @@
                 } else {
                     errorMsg += `Chi tiết: ${error.message}`;
                 }
-                
                 alert("❌ " + errorMsg);
             }
         };
@@ -934,7 +905,7 @@
         };
 
         // ============================================================
-        // DATA MANAGEMENT (localStorage)
+        // DATA MANAGEMENT
         // ============================================================
         const DEFAULT_COURSES = [];
         const DEFAULT_LESSONS = [];
@@ -958,7 +929,7 @@
 
             if (section === 'admin') {
                 if (!currentUser || !currentUser.isAdmin) {
-                    alert('⚠️ Bạn cần đăng nhập với quyền Quản trị viên (Admin) để vào mục này!');
+                    alert('⚠️ Bạn cần đăng nhập với quyền Quản trị viên (Admin)!');
                     openModal('login-modal');
                     return;
                 }
@@ -998,7 +969,7 @@
             document.getElementById('free-count').textContent = `${freeCourses.length} khóa`;
             document.getElementById('premium-count').textContent = `${premiumCourses.length} khóa`;
 
-            const emptyTemplate = '<div class="empty-state"><p>📭 Chưa có khóa học nào được đăng.</p></div>';
+            const emptyTemplate = '<div class="empty-state"><p>📭 Chưa có khóa học nào.</p></div>';
 
             freeContainer.innerHTML = freeCourses.length ? freeCourses.map(c => createCourseCardHTML(c)).join('') : emptyTemplate;
             premiumContainer.innerHTML = premiumCourses.length ? premiumCourses.map(c => createCourseCardHTML(c)).join('') : emptyTemplate;
@@ -1093,7 +1064,7 @@
 
             const adminDocList = document.getElementById('admin-doc-list');
             if (lessons.length === 0) {
-                adminDocList.innerHTML = '<li style="color:var(--text-light);text-align:center;padding:20px;">📭 Chưa có bài học nào được đăng.</li>';
+                adminDocList.innerHTML = '<li style="color:var(--text-light);text-align:center;padding:20px;">📭 Chưa có bài học nào.</li>';
             } else {
                 adminDocList.innerHTML = lessons.map(l => {
                     const parentCourse = courses.find(c => c.id === l.courseId);
@@ -1192,7 +1163,7 @@
         };
 
         // ============================================================
-        // AUTHENTICATION
+        // AUTHENTICATION - QUAN TRỌNG: Cập nhật UI sau đăng nhập
         // ============================================================
         window.updateAuthUI = function() {
             const authActions = document.getElementById('auth-actions');
@@ -1201,23 +1172,29 @@
             const userDisplayName = document.getElementById('user-display-name');
 
             if (currentUser) {
+                // Ẩn nút đăng nhập, hiện thông tin user
                 authActions.classList.add('hidden');
                 userActions.classList.remove('hidden');
                 userDisplayName.textContent = '👋 ' + currentUser.name + (currentUser.isAdmin ? ' (Admin)' : '');
 
+                // Nếu là admin, hiện menu Quản trị
                 if (currentUser.isAdmin) {
                     navAdmin.classList.remove('hidden');
                 } else {
                     navAdmin.classList.add('hidden');
                 }
             } else {
+                // Chưa đăng nhập: hiện nút đăng nhập, ẩn thông tin user
                 authActions.classList.remove('hidden');
                 userActions.classList.add('hidden');
                 navAdmin.classList.add('hidden');
             }
-            renderCourses();
+            renderCourses(); // Cập nhật danh sách khóa học (hiển thị nút sửa/xóa nếu admin)
         };
 
+        // ============================================================
+        // HANDLE LOGIN (form đăng nhập thường)
+        // ============================================================
         window.handleLogin = function(e) {
             e.preventDefault();
             const username = document.getElementById('login-username').value.trim();
@@ -1228,17 +1205,17 @@
             if (username === 'admin' && password === 'admin123') {
                 currentUser = { name: 'Quản trị viên', username: 'admin', isAdmin: true };
                 saveData();
-                updateAuthUI();
+                updateAuthUI();          // <--- Cập nhật header
                 closeModal('login-modal');
                 showSection('admin');
                 return;
             }
             
-            // Tài khoản thường (username bất kỳ)
+            // Tài khoản thường (username bất kỳ, password không cần kiểm tra sâu)
             if (username && password) {
                 currentUser = { name: username, username: username, isAdmin: false };
                 saveData();
-                updateAuthUI();
+                updateAuthUI();          // <--- Cập nhật header
                 closeModal('login-modal');
                 alert(`👋 Xin chào ${username}!`);
                 return;
@@ -1247,12 +1224,15 @@
             errorEl.classList.add('show');
         };
 
+        // ============================================================
+        // LOGOUT
+        // ============================================================
         window.logout = function() {
             if (!confirm('Bạn có chắc muốn đăng xuất?')) return;
             currentUser = null;
             if (window.firebaseSignOut) window.firebaseSignOut();
             saveData();
-            updateAuthUI();
+            updateAuthUI();          // <--- Cập nhật header
             showSection('home');
         };
 
@@ -1272,7 +1252,6 @@
             document.getElementById(id).classList.remove('active');
         };
 
-        // Đóng modal khi click outside
         window.onclick = function(e) {
             if (e.target.classList.contains('modal-overlay')) {
                 e.target.classList.remove('active');
@@ -1282,11 +1261,11 @@
         // ============================================================
         // INIT
         // ============================================================
-        // Kiểm tra session từ localStorage
+        // Kiểm tra session từ localStorage và cập nhật UI
         if (currentUser) {
             updateAuthUI();
             if (currentUser.isAdmin) {
-                // Có thể chuyển sang admin nếu đang ở trang admin
+                // Có thể giữ nguyên hoặc chuyển sang admin tùy ý
             }
         } else {
             updateAuthUI();
@@ -1296,7 +1275,6 @@
         console.log('🚀 MATHA TN đã sẵn sàng!');
         console.log('🔑 Admin mặc định: admin / admin123');
         console.log('📧 Admin Google: ' + ADMIN_EMAIL);
-        
     </script>
 </body>
 </html>
