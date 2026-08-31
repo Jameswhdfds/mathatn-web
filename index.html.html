@@ -6,34 +6,111 @@
     <title>MATHA TN - Học trực tuyến</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
     <style>
-        /* ===== RESET & GLOBAL ===== */
+        /* ===== RESET & ROOT ===== */
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --primary: #078a57;
+            --primary-dark: #065f3c;
+            --primary-light: #e6f4ee;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --radius: 12px;
         }
         body {
             font-family: 'Inter', sans-serif;
-            background: #f8fafc;
-            color: #0f172a;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
         .container {
             max-width: 1200px;
+            width: 100%;
             margin: 0 auto;
             padding: 0 20px;
-            width: 100%;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        .btn-outline {
+            background: transparent;
+            border-color: var(--border);
+            color: var(--text);
+        }
+        .btn-outline:hover {
+            background: var(--bg);
+        }
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+        .btn-danger {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .btn-danger:hover {
+            background: #fca5a5;
+        }
+        .btn-warning {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+        .btn-warning:hover {
+            background: #bae6fd;
+        }
+        .btn-google {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            gap: 10px;
+            font-weight: 600;
+        }
+        .btn-google:hover {
+            background: #f8fafc;
         }
 
         /* ===== HEADER ===== */
         header {
-            background: white;
-            border-bottom: 1px solid #e2e8f0;
-            padding: 16px 0;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            padding: 14px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-inner {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -42,98 +119,49 @@
         }
         .brand {
             font-size: 24px;
-            font-weight: 800;
+            font-weight: 900;
         }
         .brand em {
-            color: #078a57;
+            color: var(--primary);
             font-style: normal;
         }
         .brand small {
-            font-size: 12px;
-            font-weight: 400;
-            color: #64748b;
             display: block;
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--muted);
         }
-        .user-info {
+        .user-area {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        .user-info img {
+        .user-area img {
             width: 36px;
             height: 36px;
             border-radius: 50%;
+            object-fit: cover;
         }
-        .btn {
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            background: transparent;
+        .user-area .name {
             font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .btn-primary {
-            background: #078a57;
-            color: white;
-            border: none;
-        }
-        .btn-primary:hover {
-            background: #065f3c;
-        }
-        .btn-outline {
-            border-color: #cbd5e1;
-        }
-        .btn-outline:hover {
-            background: #f1f5f9;
-        }
-        .btn-sm {
-            padding: 4px 10px;
-            font-size: 12px;
-            border-radius: 6px;
-        }
-        .btn-sm.delete-btn {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-        .btn-sm.delete-btn:hover {
-            background: #fca5a5;
-        }
-        .btn-sm.edit-btn {
-            background: #e0f2fe;
-            color: #0284c7;
-        }
-        .btn-sm.edit-btn:hover {
-            background: #bae6fd;
-        }
-        .view-btn {
-            background: #078a57;
-            color: white;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .view-btn:hover {
-            background: #065f3c;
+            font-size: 14px;
         }
 
-        /* ===== AUTH SECTION ===== */
+        /* ===== AUTH ===== */
         #auth-section {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 60vh;
-            flex-direction: column;
-            gap: 20px;
             text-align: center;
+            gap: 20px;
         }
         #auth-section h2 {
             font-size: 32px;
         }
         #auth-section p {
-            color: #64748b;
+            color: var(--muted);
             max-width: 400px;
         }
 
@@ -141,67 +169,85 @@
         #course-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+            gap: 24px;
             margin-top: 24px;
         }
         .course-card {
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 18px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
             transition: 0.2s;
+            box-shadow: var(--shadow);
             position: relative;
         }
         .course-card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
         }
-        .course-card .course-header {
+        .course-card .top {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
         }
         .course-card h3 {
             font-size: 18px;
+            font-weight: 700;
         }
         .badge {
             font-size: 11px;
-            padding: 2px 10px;
-            border-radius: 12px;
             font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
         }
-        .badge.free {
+        .badge-free {
             background: #dcfce7;
             color: #15803d;
         }
-        .badge.premium {
+        .badge-premium {
             background: #f3e8ff;
             color: #6b21a8;
         }
-        .course-card p {
-            color: #475569;
+        .course-card .desc {
+            color: var(--muted);
             font-size: 14px;
-            margin: 8px 0;
+            margin: 8px 0 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
-        .course-meta {
+        .course-card .meta {
             font-size: 13px;
-            color: #94a3b8;
-            margin-bottom: 12px;
+            color: var(--muted);
+            margin-bottom: 14px;
         }
-        .course-card .btn-sm {
-            margin-top: 4px;
+        .course-card .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         /* ===== COURSE DETAIL ===== */
         #course-detail {
             margin-top: 24px;
         }
-        #course-detail h2 {
-            font-size: 24px;
+        #course-detail .back {
             margin-bottom: 16px;
         }
+        #course-detail h2 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        #course-detail .sub {
+            color: var(--muted);
+            margin-bottom: 20px;
+        }
         .lesson-item {
-            background: white;
-            border: 1px solid #e2e8f0;
+            background: var(--card);
+            border: 1px solid var(--border);
             border-radius: 8px;
             padding: 14px 18px;
             margin-bottom: 10px;
@@ -209,60 +255,54 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
         }
-        .lesson-item h4 {
+        .lesson-item .info h4 {
             font-size: 16px;
+            font-weight: 600;
         }
-        .lesson-type {
+        .lesson-item .info .type {
             font-size: 12px;
-            background: #f1f5f9;
-            padding: 2px 8px;
+            background: var(--bg);
+            padding: 2px 10px;
             border-radius: 12px;
-            color: #475569;
+            color: var(--muted);
         }
-        .lesson-desc {
+        .lesson-item .info .desc {
             font-size: 13px;
-            color: #64748b;
-            margin-top: 4px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+        .lesson-item .actions {
+            display: flex;
+            gap: 6px;
         }
 
         /* ===== ADMIN PANEL ===== */
         #admin-panel {
             margin-top: 40px;
-            border-top: 2px solid #e2e8f0;
+            border-top: 2px solid var(--border);
             padding-top: 24px;
         }
-        #admin-panel h3 {
-            font-size: 20px;
-            margin-bottom: 16px;
-        }
-        .admin-grid {
+        #admin-panel .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 24px;
         }
-        .admin-section {
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
+        .admin-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
             padding: 20px;
+            box-shadow: var(--shadow);
         }
-        .admin-section h4 {
-            margin-bottom: 12px;
-        }
-        .admin-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .admin-item:last-child {
-            border-bottom: none;
+        .admin-card h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
         }
         .form-group {
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
         .form-group label {
             display: block;
@@ -275,81 +315,153 @@
         .form-group textarea {
             width: 100%;
             padding: 8px 12px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border);
             border-radius: 6px;
             font-size: 14px;
+            font-family: inherit;
         }
         .form-group textarea {
             resize: vertical;
             height: 60px;
         }
+        .admin-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .admin-item:last-child {
+            border-bottom: none;
+        }
 
         .empty-state {
             text-align: center;
             padding: 40px 0;
-            color: #94a3b8;
+            color: var(--muted);
             grid-column: 1 / -1;
         }
 
-        #back-btn {
-            margin-bottom: 16px;
+        /* ===== FOOTER ===== */
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 24px 0;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 13px;
         }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .admin-grid {
+            #admin-panel .grid {
                 grid-template-columns: 1fr;
             }
-            header {
+            .header-inner {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: stretch;
             }
-            .user-info {
-                width: 100%;
+            .user-area {
                 justify-content: flex-start;
             }
+            #auth-section h2 {
+                font-size: 26px;
+            }
+        }
+        @media (max-width: 500px) {
+            .course-card .top {
+                flex-direction: column;
+                gap: 6px;
+            }
+            .lesson-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .lesson-item .actions {
+                justify-content: flex-start;
+            }
+        }
+
+        /* Helper */
+        .hidden {
+            display: none !important;
+        }
+        .flex {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .gap-8 {
+            gap: 8px;
+        }
+        .mt-16 {
+            margin-top: 16px;
+        }
+        .mb-16 {
+            margin-bottom: 16px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- HEADER -->
-        <header>
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="container header-inner">
             <div class="brand">
                 MATHA <em>TN</em>
                 <small>Học trực tuyến</small>
             </div>
-            <div id="user-info" class="user-info" style="display:none;">
+            <div id="user-area" class="user-area hidden">
                 <img id="user-avatar" src="" alt="Avatar" />
-                <span id="user-name"></span>
-                <button id="logout-btn" class="btn btn-outline">Đăng xuất</button>
-                <button id="admin-toggle" class="btn btn-outline" style="display:none;">👨‍💼 Quản trị</button>
+                <span id="user-name" class="name"></span>
+                <button id="logout-btn" class="btn btn-outline btn-sm">Đăng xuất</button>
+                <button id="admin-toggle-btn" class="btn btn-outline btn-sm hidden">👨‍💼 Quản trị</button>
             </div>
-            <div id="auth-section" style="display:flex; gap:12px;">
-                <button id="login-btn" class="btn btn-primary">Đăng nhập với Google</button>
+            <div id="auth-area">
+                <button id="login-btn" class="btn btn-google">
+                    <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+                    Đăng nhập với Google
+                </button>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- MAIN CONTENT -->
-        <div id="main-section" style="display:none;">
-            <!-- Danh sách khóa học -->
+    <!-- ===== MAIN ===== -->
+    <main class="container" style="flex:1; padding: 24px 0;">
+
+        <!-- ===== AUTH SECTION ===== -->
+        <div id="auth-section">
+            <h2>📚 Học toán chưa bao giờ dễ dàng đến thế</h2>
+            <p>Đăng nhập bằng Google để bắt đầu hành trình chinh phục toán học cùng hàng ngàn bài giảng chất lượng.</p>
+            <button id="auth-login-btn" class="btn btn-google" style="font-size:16px; padding:12px 32px;">
+                <svg width="22" height="22" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+                Đăng nhập bằng Google
+            </button>
+        </div>
+
+        <!-- ===== MAIN CONTENT (sau login) ===== -->
+        <div id="main-content" class="hidden">
+
+            <!-- Course List -->
             <div id="course-list"></div>
 
-            <!-- Chi tiết khóa học -->
-            <div id="course-detail" style="display:none;">
-                <button id="back-btn" class="btn btn-outline">← Quay lại</button>
+            <!-- Course Detail -->
+            <div id="course-detail" class="hidden">
+                <button id="back-btn" class="btn btn-outline btn-sm">← Quay lại</button>
                 <h2 id="detail-title"></h2>
-                <div id="lesson-list"></div>
+                <div id="detail-lessons"></div>
             </div>
 
             <!-- Admin Panel -->
-            <div id="admin-panel" style="display:none;">
-                <h3>👨‍💼 Quản trị nội dung</h3>
-                <div class="admin-grid">
+            <div id="admin-panel" class="hidden">
+                <h3>👨‍💼 Bảng điều khiển quản trị</h3>
+                <div class="grid">
                     <!-- Quản lý khóa học -->
-                    <div class="admin-section">
+                    <div class="admin-card">
                         <h4>📚 Quản lý khóa học</h4>
-                        <form id="add-course-form">
+                        <form id="course-form">
                             <div class="form-group">
                                 <label>Tên khóa học</label>
                                 <input type="text" id="course-title" placeholder="VD: Toán 9 nâng cao" required />
@@ -363,21 +475,21 @@
                             </div>
                             <div class="form-group">
                                 <label>Mô tả</label>
-                                <textarea id="course-desc" placeholder="Mô tả ngắn..."></textarea>
+                                <textarea id="course-desc" placeholder="Mô tả ngắn về khóa học..."></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary">Thêm khóa học</button>
+                            <button type="submit" class="btn btn-primary">➕ Thêm khóa học</button>
                         </form>
-                        <hr style="margin:20px 0;" />
+                        <hr style="margin:20px 0; border-color:var(--border);" />
                         <div id="admin-courses"></div>
                     </div>
 
                     <!-- Quản lý bài học -->
-                    <div class="admin-section">
+                    <div class="admin-card">
                         <h4>📖 Quản lý bài học</h4>
-                        <form id="add-lesson-form">
+                        <form id="lesson-form">
                             <div class="form-group">
-                                <label>Chọn khóa học</label>
-                                <select id="admin-course-select" required></select>
+                                <label>Khóa học</label>
+                                <select id="lesson-course" required></select>
                             </div>
                             <div class="form-group">
                                 <label>Tên bài học</label>
@@ -387,7 +499,7 @@
                                 <label>Loại tài liệu</label>
                                 <select id="lesson-type">
                                     <option value="Tài liệu PDF">Tài liệu PDF</option>
-                                    <option value="Bài giảng Video">Bài giảng Video</option>
+                                    <option value="Video bài giảng">Video bài giảng</option>
                                     <option value="Bài tập tự luyện">Bài tập tự luyện</option>
                                     <option value="Đề thi thử">Đề thi thử</option>
                                 </select>
@@ -396,18 +508,25 @@
                                 <label>Mô tả</label>
                                 <textarea id="lesson-desc" placeholder="Mô tả ngắn..."></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary">Thêm bài học</button>
+                            <button type="submit" class="btn btn-primary">➕ Thêm bài học</button>
                         </form>
-                        <hr style="margin:20px 0;" />
+                        <hr style="margin:20px 0; border-color:var(--border);" />
                         <div id="admin-lessons"></div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            © 2026 <strong>MATHA TN</strong>. Nền tảng học toán trực tuyến.
+        </div>
+    </footer>
 
     <!-- ============================================================ -->
-    <!-- FIREBASE SDK & CODE                                          -->
+    <!-- FIREBASE SDK (ES MODULES)                                   -->
     <!-- ============================================================ -->
     <script type="importmap">
         {
@@ -421,7 +540,7 @@
 
     <script type="module">
         // ============================================================
-        // 1. CẤU HÌNH FIREBASE (ĐÃ ĐIỀN SẴN CONFIG CỦA BẠN)
+        // 1. FIREBASE CONFIG
         // ============================================================
         import { initializeApp } from "firebase/app";
         import {
@@ -438,7 +557,9 @@
             addDoc,
             updateDoc,
             deleteDoc,
-            onSnapshot
+            onSnapshot,
+            query,
+            orderBy
         } from "firebase/firestore";
 
         const firebaseConfig = {
@@ -456,29 +577,32 @@
         const provider = new GoogleAuthProvider();
         const db = getFirestore(app);
 
-        // 📧 Email admin (đã set là email của bạn)
-        const ADMIN_EMAIL = "thaigjabao99@gmail.com"; // <-- Đây là email admin
+        // 📧 Admin email (đổi thành email bạn muốn làm admin)
+        const ADMIN_EMAIL = "thaigjabao99@gmail.com";
 
         // ============================================================
-        // 2. QUẢN LÝ DOM & STATE
+        // 2. DOM REFS
         // ============================================================
         const authSection = document.getElementById('auth-section');
-        const mainSection = document.getElementById('main-section');
-        const userInfo = document.getElementById('user-info');
+        const mainContent = document.getElementById('main-content');
+        const userArea = document.getElementById('user-area');
         const userAvatar = document.getElementById('user-avatar');
         const userName = document.getElementById('user-name');
-        const logoutBtn = document.getElementById('logout-btn');
         const loginBtn = document.getElementById('login-btn');
+        const authLoginBtn = document.getElementById('auth-login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const adminToggleBtn = document.getElementById('admin-toggle-btn');
         const courseList = document.getElementById('course-list');
         const courseDetail = document.getElementById('course-detail');
         const backBtn = document.getElementById('back-btn');
         const detailTitle = document.getElementById('detail-title');
-        const lessonList = document.getElementById('lesson-list');
+        const detailLessons = document.getElementById('detail-lessons');
         const adminPanel = document.getElementById('admin-panel');
-        const adminToggle = document.getElementById('admin-toggle');
         const adminCourses = document.getElementById('admin-courses');
         const adminLessons = document.getElementById('admin-lessons');
-        const adminCourseSelect = document.getElementById('admin-course-select');
+        const lessonCourse = document.getElementById('lesson-course');
+        const courseForm = document.getElementById('course-form');
+        const lessonForm = document.getElementById('lesson-form');
 
         let currentUser = null;
         let currentCourseId = null;
@@ -487,214 +611,162 @@
         let isAdmin = false;
 
         // ============================================================
-        // 3. RENDER HÀM HIỂN THỊ
+        // 3. RENDER FUNCTIONS
         // ============================================================
-        function renderCourses(courses) {
-            if (!courses || courses.length === 0) {
+        function renderCourses() {
+            if (!coursesData.length) {
                 courseList.innerHTML = `<div class="empty-state">📭 Chưa có khóa học nào. Hãy đăng nhập với Admin để thêm.</div>`;
                 return;
             }
             let html = '';
-            courses.forEach(course => {
-                const lessonCount = lessonsData.filter(l => l.courseId === course.id).length;
+            coursesData.forEach(c => {
+                const count = lessonsData.filter(l => l.courseId === c.id).length;
+                const badgeClass = c.type === 'free' ? 'badge-free' : 'badge-premium';
                 html += `
-                    <div class="course-card" data-id="${course.id}">
-                        <div class="course-header">
-                            <h3>${course.title}</h3>
-                            <span class="badge ${course.type === 'free' ? 'free' : 'premium'}">${course.type === 'free' ? 'Miễn phí' : 'Premium'}</span>
+                    <div class="course-card" data-id="${c.id}">
+                        <div class="top">
+                            <h3>${c.title}</h3>
+                            <span class="badge ${badgeClass}">${c.type === 'free' ? 'Miễn phí' : 'Premium'}</span>
                         </div>
-                        <p>${course.desc || ''}</p>
-                        <div class="course-meta">
-                            <span>📚 ${lessonCount} bài học</span>
+                        <p class="desc">${c.desc || ''}</p>
+                        <div class="meta">📚 ${count} bài học</div>
+                        <div class="actions">
+                            <button class="btn btn-primary btn-sm view-btn" data-id="${c.id}">Xem chi tiết</button>
+                            ${isAdmin ? `
+                                <button class="btn btn-warning btn-sm edit-course-btn" data-id="${c.id}">✏️</button>
+                                <button class="btn btn-danger btn-sm delete-course-btn" data-id="${c.id}">🗑</button>
+                            ` : ''}
                         </div>
-                        <button class="view-btn" data-id="${course.id}">Xem chi tiết</button>
-                        ${isAdmin ? `
-                            <button class="btn-sm edit-btn" data-id="${course.id}" data-action="edit-course">✏️</button>
-                            <button class="btn-sm delete-btn" data-id="${course.id}" data-action="delete-course">🗑</button>
-                        ` : ''}
                     </div>
                 `;
             });
             courseList.innerHTML = html;
 
-            // Gắn sự kiện cho các nút
-            courseList.querySelectorAll('.view-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const id = btn.dataset.id;
-                    showCourseDetail(id);
-                });
+            // Sự kiện
+            courseList.querySelectorAll('.view-btn').forEach(b => {
+                b.addEventListener('click', () => showDetail(b.dataset.id));
             });
             if (isAdmin) {
-                courseList.querySelectorAll('[data-action="delete-course"]').forEach(btn => {
-                    btn.addEventListener('click', () => deleteCourse(btn.dataset.id));
+                courseList.querySelectorAll('.delete-course-btn').forEach(b => {
+                    b.addEventListener('click', () => deleteCourse(b.dataset.id));
                 });
-                courseList.querySelectorAll('[data-action="edit-course"]').forEach(btn => {
-                    btn.addEventListener('click', () => editCourse(btn.dataset.id));
+                courseList.querySelectorAll('.edit-course-btn').forEach(b => {
+                    b.addEventListener('click', () => editCourse(b.dataset.id));
                 });
             }
         }
 
         function renderLessons(lessons) {
-            if (!lessons || lessons.length === 0) {
-                lessonList.innerHTML = `<div class="empty-state">📭 Chưa có bài học nào cho khóa học này.</div>`;
+            if (!lessons.length) {
+                detailLessons.innerHTML = `<div class="empty-state">📭 Chưa có bài học nào cho khóa học này.</div>`;
                 return;
             }
             let html = '';
-            lessons.forEach(lesson => {
+            lessons.forEach(l => {
                 html += `
                     <div class="lesson-item">
-                        <div>
-                            <h4>${lesson.title}</h4>
-                            <span class="lesson-type">${lesson.type || 'Tài liệu'}</span>
-                            <p class="lesson-desc">${lesson.desc || ''}</p>
+                        <div class="info">
+                            <h4>${l.title}</h4>
+                            <span class="type">${l.type || 'Tài liệu'}</span>
+                            <p class="desc">${l.desc || ''}</p>
                         </div>
                         ${isAdmin ? `
-                            <div>
-                                <button class="btn-sm edit-btn" data-id="${lesson.id}" data-action="edit-lesson">✏️</button>
-                                <button class="btn-sm delete-btn" data-id="${lesson.id}" data-action="delete-lesson">🗑</button>
+                            <div class="actions">
+                                <button class="btn btn-warning btn-sm edit-lesson-btn" data-id="${l.id}">✏️</button>
+                                <button class="btn btn-danger btn-sm delete-lesson-btn" data-id="${l.id}">🗑</button>
                             </div>
                         ` : ''}
                     </div>
                 `;
             });
-            lessonList.innerHTML = html;
+            detailLessons.innerHTML = html;
             if (isAdmin) {
-                lessonList.querySelectorAll('[data-action="delete-lesson"]').forEach(btn => {
-                    btn.addEventListener('click', () => deleteLesson(btn.dataset.id));
+                detailLessons.querySelectorAll('.delete-lesson-btn').forEach(b => {
+                    b.addEventListener('click', () => deleteLesson(b.dataset.id));
                 });
-                lessonList.querySelectorAll('[data-action="edit-lesson"]').forEach(btn => {
-                    btn.addEventListener('click', () => editLesson(btn.dataset.id));
+                detailLessons.querySelectorAll('.edit-lesson-btn').forEach(b => {
+                    b.addEventListener('click', () => editLesson(b.dataset.id));
                 });
             }
         }
 
-        function renderAdminCourses(courses) {
-            if (!courses || courses.length === 0) {
+        function renderAdminCourses() {
+            if (!coursesData.length) {
                 adminCourses.innerHTML = `<div class="empty-state">Chưa có khóa học nào.</div>`;
                 return;
             }
             let html = '';
-            courses.forEach(c => {
+            coursesData.forEach(c => {
                 html += `
                     <div class="admin-item">
                         <span><strong>${c.title}</strong> (${c.type})</span>
                         <div>
-                            <button class="btn-sm edit-btn" data-id="${c.id}" data-action="edit-course">Sửa</button>
-                            <button class="btn-sm delete-btn" data-id="${c.id}" data-action="delete-course">Xóa</button>
+                            <button class="btn btn-warning btn-sm edit-course-btn" data-id="${c.id}">Sửa</button>
+                            <button class="btn btn-danger btn-sm delete-course-btn" data-id="${c.id}">Xóa</button>
                         </div>
                     </div>
                 `;
             });
             adminCourses.innerHTML = html;
-            // Gắn sự kiện
-            adminCourses.querySelectorAll('[data-action="delete-course"]').forEach(btn => {
-                btn.addEventListener('click', () => deleteCourse(btn.dataset.id));
+            adminCourses.querySelectorAll('.delete-course-btn').forEach(b => {
+                b.addEventListener('click', () => deleteCourse(b.dataset.id));
             });
-            adminCourses.querySelectorAll('[data-action="edit-course"]').forEach(btn => {
-                btn.addEventListener('click', () => editCourse(btn.dataset.id));
+            adminCourses.querySelectorAll('.edit-course-btn').forEach(b => {
+                b.addEventListener('click', () => editCourse(b.dataset.id));
             });
         }
 
-        function renderAdminLessons(lessons) {
-            if (!lessons || lessons.length === 0) {
+        function renderAdminLessons() {
+            if (!lessonsData.length) {
                 adminLessons.innerHTML = `<div class="empty-state">Chưa có bài học nào.</div>`;
                 return;
             }
             let html = '';
-            lessons.forEach(l => {
+            lessonsData.forEach(l => {
                 const course = coursesData.find(c => c.id === l.courseId);
                 html += `
                     <div class="admin-item">
                         <span><strong>${l.title}</strong> (${course ? course.title : 'Không xác định'})</span>
                         <div>
-                            <button class="btn-sm edit-btn" data-id="${l.id}" data-action="edit-lesson">Sửa</button>
-                            <button class="btn-sm delete-btn" data-id="${l.id}" data-action="delete-lesson">Xóa</button>
+                            <button class="btn btn-warning btn-sm edit-lesson-btn" data-id="${l.id}">Sửa</button>
+                            <button class="btn btn-danger btn-sm delete-lesson-btn" data-id="${l.id}">Xóa</button>
                         </div>
                     </div>
                 `;
             });
             adminLessons.innerHTML = html;
-            adminLessons.querySelectorAll('[data-action="delete-lesson"]').forEach(btn => {
-                btn.addEventListener('click', () => deleteLesson(btn.dataset.id));
+            adminLessons.querySelectorAll('.delete-lesson-btn').forEach(b => {
+                b.addEventListener('click', () => deleteLesson(b.dataset.id));
             });
-            adminLessons.querySelectorAll('[data-action="edit-lesson"]').forEach(btn => {
-                btn.addEventListener('click', () => editLesson(btn.dataset.id));
+            adminLessons.querySelectorAll('.edit-lesson-btn').forEach(b => {
+                b.addEventListener('click', () => editLesson(b.dataset.id));
             });
         }
 
-        function showCourseDetail(courseId) {
+        function showDetail(courseId) {
             currentCourseId = courseId;
             const course = coursesData.find(c => c.id === courseId);
             if (!course) return;
             detailTitle.textContent = course.title;
             const lessons = lessonsData.filter(l => l.courseId === courseId);
             renderLessons(lessons);
-            courseDetail.style.display = 'block';
             courseList.style.display = 'none';
-            backBtn.style.display = 'inline-block';
+            courseDetail.classList.remove('hidden');
+            backBtn.classList.remove('hidden');
         }
 
-        function hideCourseDetail() {
-            courseDetail.style.display = 'none';
+        function hideDetail() {
             courseList.style.display = 'grid';
-            backBtn.style.display = 'none';
+            courseDetail.classList.add('hidden');
+            backBtn.classList.add('hidden');
             currentCourseId = null;
         }
 
         // ============================================================
-        // 4. CRUD TRÊN FIRESTORE
+        // 4. CRUD OPERATIONS
         // ============================================================
-        // Lấy dữ liệu từ Firestore (real-time)
-        function listenCourses() {
-            onSnapshot(collection(db, 'courses'), (snapshot) => {
-                coursesData = [];
-                snapshot.forEach(doc => {
-                    coursesData.push({ id: doc.id, ...doc.data() });
-                });
-                // Sắp xếp theo thời gian tạo
-                coursesData.sort((a, b) => (a.createdAt?.toMillis?.() || 0) - (b.createdAt?.toMillis?.() || 0));
-                if (currentUser) {
-                    renderCourses(coursesData);
-                    if (isAdmin) {
-                        renderAdminCourses(coursesData);
-                        // Cập nhật dropdown trong form thêm bài học
-                        adminCourseSelect.innerHTML = coursesData.map(c => `<option value="${c.id}">${c.title}</option>`).join('');
-                    }
-                }
-                // Nếu đang xem chi tiết, cập nhật lại số bài học
-                if (currentCourseId) {
-                    const lessons = lessonsData.filter(l => l.courseId === currentCourseId);
-                    renderLessons(lessons);
-                }
-            });
-        }
-
-        function listenLessons() {
-            onSnapshot(collection(db, 'lessons'), (snapshot) => {
-                lessonsData = [];
-                snapshot.forEach(doc => {
-                    lessonsData.push({ id: doc.id, ...doc.data() });
-                });
-                lessonsData.sort((a, b) => (a.createdAt?.toMillis?.() || 0) - (b.createdAt?.toMillis?.() || 0));
-                if (currentUser) {
-                    // Nếu đang xem chi tiết khóa học, cập nhật bài học
-                    if (currentCourseId) {
-                        const lessons = lessonsData.filter(l => l.courseId === currentCourseId);
-                        renderLessons(lessons);
-                    }
-                    if (isAdmin) {
-                        renderAdminLessons(lessonsData);
-                    }
-                }
-                // Cập nhật lại số bài học trên các card khóa học (khi đang xem danh sách)
-                if (!currentCourseId) {
-                    renderCourses(coursesData);
-                }
-            });
-        }
-
-        // Thêm khóa học
-        window.addCourse = async function() {
+        async function addCourse(e) {
+            e.preventDefault();
             const title = document.getElementById('course-title').value.trim();
             const type = document.getElementById('course-type').value;
             const desc = document.getElementById('course-desc').value.trim();
@@ -708,39 +780,35 @@
                 });
                 document.getElementById('course-title').value = '';
                 document.getElementById('course-desc').value = '';
-                alert('Thêm khóa học thành công!');
-            } catch (e) {
-                alert('Lỗi: ' + e.message);
+                alert('✅ Thêm khóa học thành công!');
+            } catch (err) {
+                alert('❌ Lỗi: ' + err.message);
             }
-        };
+        }
 
-        // Xóa khóa học
-        window.deleteCourse = async function(id) {
-            if (!confirm('Xóa khóa học này?')) return;
+        async function deleteCourse(id) {
+            if (!confirm('Xóa khóa học này và tất cả bài học?')) return;
             try {
-                // Xóa tất cả bài học liên quan
-                const lessonsToDelete = lessonsData.filter(l => l.courseId === id);
-                for (let l of lessonsToDelete) {
+                const lessons = lessonsData.filter(l => l.courseId === id);
+                for (let l of lessons) {
                     await deleteDoc(doc(db, 'lessons', l.id));
                 }
                 await deleteDoc(doc(db, 'courses', id));
-                alert('Đã xóa khóa học và các bài học liên quan.');
-            } catch (e) {
-                alert('Lỗi: ' + e.message);
+                alert('✅ Đã xóa khóa học và bài học.');
+            } catch (err) {
+                alert('❌ Lỗi: ' + err.message);
             }
-        };
+        }
 
-        // Sửa khóa học (đơn giản: điền thông tin vào form)
-        window.editCourse = function(id) {
+        function editCourse(id) {
             const course = coursesData.find(c => c.id === id);
             if (!course) return;
             document.getElementById('course-title').value = course.title;
             document.getElementById('course-type').value = course.type;
             document.getElementById('course-desc').value = course.desc || '';
-            // Thay đổi hành động của form sang update
-            const form = document.getElementById('add-course-form');
-            const oldSubmit = form.onsubmit;
-            form.onsubmit = async function(e) {
+            // Thay đổi hành động form
+            const oldSubmit = courseForm.onsubmit;
+            courseForm.onsubmit = async (e) => {
                 e.preventDefault();
                 const updated = {
                     title: document.getElementById('course-title').value.trim(),
@@ -749,21 +817,20 @@
                 };
                 try {
                     await updateDoc(doc(db, 'courses', id), updated);
-                    alert('Cập nhật thành công!');
-                    form.onsubmit = oldSubmit; // khôi phục
+                    alert('✅ Cập nhật thành công!');
+                    courseForm.onsubmit = oldSubmit;
                     document.getElementById('course-title').value = '';
                     document.getElementById('course-desc').value = '';
-                } catch (e) {
-                    alert('Lỗi: ' + e.message);
+                } catch (err) {
+                    alert('❌ Lỗi: ' + err.message);
                 }
             };
-            // Kích hoạt submit
-            form.dispatchEvent(new Event('submit'));
-        };
+            courseForm.dispatchEvent(new Event('submit'));
+        }
 
-        // Thêm bài học
-        window.addLesson = async function() {
-            const courseId = document.getElementById('admin-course-select').value;
+        async function addLesson(e) {
+            e.preventDefault();
+            const courseId = document.getElementById('lesson-course').value;
             const title = document.getElementById('lesson-title').value.trim();
             const type = document.getElementById('lesson-type').value;
             const desc = document.getElementById('lesson-desc').value.trim();
@@ -779,31 +846,30 @@
                 });
                 document.getElementById('lesson-title').value = '';
                 document.getElementById('lesson-desc').value = '';
-                alert('Thêm bài học thành công!');
-            } catch (e) {
-                alert('Lỗi: ' + e.message);
+                alert('✅ Thêm bài học thành công!');
+            } catch (err) {
+                alert('❌ Lỗi: ' + err.message);
             }
-        };
+        }
 
-        window.deleteLesson = async function(id) {
+        async function deleteLesson(id) {
             if (!confirm('Xóa bài học này?')) return;
             try {
                 await deleteDoc(doc(db, 'lessons', id));
-                alert('Đã xóa bài học.');
-            } catch (e) {
-                alert('Lỗi: ' + e.message);
+                alert('✅ Đã xóa bài học.');
+            } catch (err) {
+                alert('❌ Lỗi: ' + err.message);
             }
-        };
+        }
 
-        window.editLesson = function(id) {
+        function editLesson(id) {
             const lesson = lessonsData.find(l => l.id === id);
             if (!lesson) return;
             document.getElementById('lesson-title').value = lesson.title;
             document.getElementById('lesson-type').value = lesson.type || 'Tài liệu';
             document.getElementById('lesson-desc').value = lesson.desc || '';
-            const form = document.getElementById('add-lesson-form');
-            const oldSubmit = form.onsubmit;
-            form.onsubmit = async function(e) {
+            const oldSubmit = lessonForm.onsubmit;
+            lessonForm.onsubmit = async (e) => {
                 e.preventDefault();
                 const updated = {
                     title: document.getElementById('lesson-title').value.trim(),
@@ -812,113 +878,147 @@
                 };
                 try {
                     await updateDoc(doc(db, 'lessons', id), updated);
-                    alert('Cập nhật thành công!');
-                    form.onsubmit = oldSubmit;
+                    alert('✅ Cập nhật thành công!');
+                    lessonForm.onsubmit = oldSubmit;
                     document.getElementById('lesson-title').value = '';
                     document.getElementById('lesson-desc').value = '';
-                } catch (e) {
-                    alert('Lỗi: ' + e.message);
+                } catch (err) {
+                    alert('❌ Lỗi: ' + err.message);
                 }
             };
-            form.dispatchEvent(new Event('submit'));
-        };
+            lessonForm.dispatchEvent(new Event('submit'));
+        }
 
         // ============================================================
-        // 5. XÁC THỰC NGƯỜI DÙNG
+        // 5. AUTH & UI
         // ============================================================
-        function updateUIForUser(user) {
+        function updateUI(user) {
             if (user) {
                 currentUser = user;
-                // Kiểm tra admin
                 isAdmin = user.email === ADMIN_EMAIL;
-                authSection.style.display = 'none';
-                mainSection.style.display = 'block';
-                userInfo.style.display = 'flex';
-                userAvatar.src = user.photoURL || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.displayName);
+                authSection.classList.add('hidden');
+                mainContent.classList.remove('hidden');
+                userArea.classList.remove('hidden');
+                userAvatar.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}`;
                 userName.textContent = user.displayName;
-                // Hiện admin panel nếu là admin
                 if (isAdmin) {
-                    adminPanel.style.display = 'block';
-                    adminToggle.style.display = 'block';
+                    adminToggleBtn.classList.remove('hidden');
+                    adminPanel.classList.remove('hidden');
                 } else {
-                    adminPanel.style.display = 'none';
-                    adminToggle.style.display = 'none';
+                    adminToggleBtn.classList.add('hidden');
+                    adminPanel.classList.add('hidden');
                 }
-                // Lấy dữ liệu
-                listenCourses();
-                listenLessons();
+                // Lắng nghe dữ liệu
+                listenData();
             } else {
                 currentUser = null;
                 isAdmin = false;
-                authSection.style.display = 'flex';
-                mainSection.style.display = 'none';
-                userInfo.style.display = 'none';
-                adminPanel.style.display = 'none';
-                adminToggle.style.display = 'none';
+                authSection.classList.remove('hidden');
+                mainContent.classList.add('hidden');
+                userArea.classList.add('hidden');
+                adminToggleBtn.classList.add('hidden');
+                adminPanel.classList.add('hidden');
                 courseList.innerHTML = '';
-                lessonList.innerHTML = '';
+                detailLessons.innerHTML = '';
                 coursesData = [];
                 lessonsData = [];
+                // Hủy listeners? không cần thiết vì onSnapshot sẽ tự hủy khi gắn lại
             }
         }
 
-        // Đăng nhập Google
-        async function loginWithGoogle() {
+        function listenData() {
+            // Courses
+            const qCourses = query(collection(db, 'courses'), orderBy('createdAt', 'asc'));
+            onSnapshot(qCourses, (snapshot) => {
+                coursesData = [];
+                snapshot.forEach(doc => {
+                    coursesData.push({ id: doc.id, ...doc.data() });
+                });
+                if (currentUser) {
+                    renderCourses();
+                    renderAdminCourses();
+                    // Cập nhật dropdown lesson
+                    const select = document.getElementById('lesson-course');
+                    select.innerHTML = coursesData.map(c => `<option value="${c.id}">${c.title}</option>`).join('');
+                    if (currentCourseId) {
+                        const lessons = lessonsData.filter(l => l.courseId === currentCourseId);
+                        renderLessons(lessons);
+                    }
+                }
+            });
+
+            // Lessons
+            const qLessons = query(collection(db, 'lessons'), orderBy('createdAt', 'asc'));
+            onSnapshot(qLessons, (snapshot) => {
+                lessonsData = [];
+                snapshot.forEach(doc => {
+                    lessonsData.push({ id: doc.id, ...doc.data() });
+                });
+                if (currentUser) {
+                    renderAdminLessons();
+                    if (currentCourseId) {
+                        const lessons = lessonsData.filter(l => l.courseId === currentCourseId);
+                        renderLessons(lessons);
+                    }
+                    renderCourses(); // cập nhật số bài học trên card
+                }
+            });
+        }
+
+        // ============================================================
+        // 6. AUTH ACTIONS
+        // ============================================================
+        async function loginGoogle() {
             try {
                 await signInWithPopup(auth, provider);
-                // onAuthStateChanged sẽ tự động gọi updateUI
-            } catch (error) {
-                console.error(error);
-                alert('Đăng nhập thất bại: ' + error.message);
+            } catch (err) {
+                console.error(err);
+                alert('Đăng nhập thất bại: ' + err.message);
             }
         }
 
-        // Đăng xuất
         async function logout() {
             if (!confirm('Bạn có chắc muốn đăng xuất?')) return;
             try {
                 await signOut(auth);
-            } catch (e) {
-                alert('Lỗi đăng xuất: ' + e.message);
+            } catch (err) {
+                alert('Lỗi đăng xuất: ' + err.message);
             }
         }
 
-        // Theo dõi trạng thái đăng nhập
-        onAuthStateChanged(auth, (user) => {
-            updateUIForUser(user);
-        });
-
-        // Gắn sự kiện cho các nút
-        loginBtn.addEventListener('click', loginWithGoogle);
+        // ============================================================
+        // 7. EVENT LISTENERS
+        // ============================================================
+        loginBtn.addEventListener('click', loginGoogle);
+        authLoginBtn.addEventListener('click', loginGoogle);
         logoutBtn.addEventListener('click', logout);
-        backBtn.addEventListener('click', hideCourseDetail);
+        backBtn.addEventListener('click', hideDetail);
 
-        // Admin toggle
-        adminToggle.addEventListener('click', () => {
-            const panel = document.getElementById('admin-panel');
-            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        adminToggleBtn.addEventListener('click', () => {
+            adminPanel.classList.toggle('hidden');
         });
 
-        // Gắn sự kiện cho form thêm khóa học
-        document.getElementById('add-course-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            addCourse();
-        });
-        document.getElementById('add-lesson-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            addLesson();
+        courseForm.addEventListener('submit', addCourse);
+        lessonForm.addEventListener('submit', addLesson);
+
+        // Auth state
+        onAuthStateChanged(auth, (user) => {
+            updateUI(user);
         });
 
         // ============================================================
-        // 6. KHỞI TẠO GIAO DIỆN
+        // 8. INIT
         // ============================================================
-        // Mặc định ẩn các phần khi chưa đăng nhập
-        mainSection.style.display = 'none';
-        userInfo.style.display = 'none';
-        adminPanel.style.display = 'none';
-        adminToggle.style.display = 'none';
-        backBtn.style.display = 'none';
-        courseDetail.style.display = 'none';
+        // Mặc định ẩn main
+        mainContent.classList.add('hidden');
+        userArea.classList.add('hidden');
+        adminToggleBtn.classList.add('hidden');
+        adminPanel.classList.add('hidden');
+        backBtn.classList.add('hidden');
+        courseDetail.classList.add('hidden');
+
+        console.log('🚀 MATHA TN đã sẵn sàng!');
+        console.log('👑 Admin email: ' + ADMIN_EMAIL);
     </script>
 </body>
 </html>
