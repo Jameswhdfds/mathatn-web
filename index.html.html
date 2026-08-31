@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* ===== RESET & ROOT ===== */
         :root {
             --primary: #078A57;
             --primary-dark: #006F46;
@@ -95,6 +96,17 @@
         }
         .btn-sm.edit-btn:hover {
             background-color: #bae6fd;
+        }
+        .btn-google {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            gap: 10px;
+            font-weight: 600;
+            width: 100%;
+        }
+        .btn-google:hover {
+            background: #f8fafc;
         }
 
         /* HEADER */
@@ -387,8 +399,6 @@
             box-shadow: 0 0 0 3px rgba(7, 138, 87, 0.1);
         }
         .form-group textarea { resize: vertical; height: 80px; }
-        .error-msg { color: #dc2626; font-size: 12px; display: none; margin-top: 6px; }
-        .error-msg.show { display: block; }
 
         /* LISTS */
         .doc-list, .lesson-list { list-style: none; }
@@ -452,7 +462,6 @@
         .modal .close-btn:hover {
             transform: rotate(90deg);
         }
-
         .divider {
             display: flex;
             align-items: center;
@@ -700,19 +709,45 @@
                 </div>
 
                 <div class="dashboard-grid">
+                    <!-- Quản lý khóa học -->
                     <div class="dash-card">
-                        <h3>📤 Thêm bài học / Tài liệu mới</h3>
-                        <form id="add-lesson-form" onsubmit="handleAddLesson(event)">
+                        <h3>📚 Quản lý khóa học</h3>
+                        <form id="course-form">
                             <div class="form-group">
-                                <label for="lesson-course-select">Chọn khóa học</label>
+                                <label>Tên khóa học</label>
+                                <input type="text" id="course-title" placeholder="VD: Toán 9 nâng cao" required />
+                            </div>
+                            <div class="form-group">
+                                <label>Loại</label>
+                                <select id="course-type">
+                                    <option value="free">Miễn phí</option>
+                                    <option value="premium">Premium</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Mô tả</label>
+                                <textarea id="course-desc" placeholder="Mô tả ngắn về khóa học..."></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary">➕ Thêm khóa học</button>
+                        </form>
+                        <hr style="margin:20px 0; border-color:var(--border);" />
+                        <div id="admin-courses-list"></div>
+                    </div>
+
+                    <!-- Quản lý bài học -->
+                    <div class="dash-card">
+                        <h3>📖 Quản lý bài học</h3>
+                        <form id="add-lesson-form">
+                            <div class="form-group">
+                                <label>Chọn khóa học</label>
                                 <select id="lesson-course-select" required></select>
                             </div>
                             <div class="form-group">
-                                <label for="lesson-title">Tên bài học / Tài liệu</label>
+                                <label>Tên bài học / Tài liệu</label>
                                 <input type="text" id="lesson-title" placeholder="VD: Bài 1: Giải tích nâng cao" required />
                             </div>
                             <div class="form-group">
-                                <label for="lesson-type">Loại tài liệu</label>
+                                <label>Loại tài liệu</label>
                                 <select id="lesson-type">
                                     <option value="Bài giảng Video">Bài giảng Video</option>
                                     <option value="Tài liệu PDF">Tài liệu PDF</option>
@@ -721,16 +756,13 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="lesson-desc">Mô tả ngắn</label>
+                                <label>Mô tả ngắn</label>
                                 <textarea id="lesson-desc" placeholder="Tóm tắt nội dung bài học..."></textarea>
                             </div>
                             <button type="submit" class="btn-primary">⬆ Tải lên bài học</button>
                         </form>
-                    </div>
-
-                    <div class="dash-card">
-                        <h3>📚 Danh sách Bài học & Tài liệu đã đăng</h3>
-                        <ul class="doc-list" id="admin-doc-list"></ul>
+                        <hr style="margin:20px 0; border-color:var(--border);" />
+                        <div id="admin-doc-list"></div>
                     </div>
                 </div>
             </div>
@@ -753,7 +785,7 @@
             <h2>🔐 Đăng nhập</h2>
             <div class="subtitle">Truy cập hệ thống học tập MATHA TN</div>
             
-            <button type="button" class="btn btn-google" onclick="loginWithGoogle()" style="background-color:#ffffff;border:1px solid #cbd5e1;color:#334155;width:100%;gap:10px;margin-top:12px;">
+            <button type="button" class="btn btn-google" onclick="loginWithGoogle()">
                 <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
                 Đăng nhập bằng Google
             </button>
@@ -769,7 +801,7 @@
                     <label>Mật khẩu</label>
                     <input type="password" id="login-password" placeholder="Mật khẩu..." required />
                 </div>
-                <div id="login-error" class="error-msg">Tài khoản hoặc mật khẩu không chính xác!</div>
+                <div id="login-error" class="error-msg" style="color:#dc2626;font-size:12px;display:none;margin-top:6px;">Tài khoản hoặc mật khẩu không chính xác!</div>
                 <button type="submit" class="btn-primary" style="margin-top: 12px; width: 100%;">Đăng nhập</button>
             </form>
             
@@ -785,7 +817,7 @@
             <button class="close-btn" onclick="closeModal('add-course-modal')">&times;</button>
             <h2 id="course-modal-title">📚 Thêm Khóa học Mới</h2>
             <div class="subtitle">Tạo khóa học mới trong hệ thống</div>
-            <form id="course-form" onsubmit="handleSaveCourse(event)">
+            <form id="course-form-modal" onsubmit="handleSaveCourse(event)">
                 <input type="hidden" id="course-edit-id" value="" />
                 <div class="form-group">
                     <label>Tên khóa học</label>
@@ -818,23 +850,42 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- FIREBASE SDK + CODE                                          -->
+    <!-- FIREBASE SDK & CODE                                          -->
     <!-- ============================================================ -->
     <script type="importmap">
         {
             "imports": {
                 "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
-                "firebase/auth": "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"
+                "firebase/auth": "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
             }
         }
     </script>
 
     <script type="module">
         // ============================================================
-        // 🔥 FIREBASE CONFIG
+        // 1. FIREBASE CONFIG (ĐÃ ĐIỀN SẴN)
         // ============================================================
         import { initializeApp } from "firebase/app";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+        import {
+            getAuth,
+            GoogleAuthProvider,
+            signInWithPopup,
+            onAuthStateChanged,
+            signOut
+        } from "firebase/auth";
+        import {
+            getFirestore,
+            collection,
+            doc,
+            addDoc,
+            updateDoc,
+            deleteDoc,
+            onSnapshot,
+            query,
+            orderBy,
+            where
+        } from "firebase/firestore";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBt1O3ZsugN_U21Aa04zlG5ZKdByE4fz-U",
@@ -849,145 +900,86 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
+        const db = getFirestore(app);
 
-        // 📧 Admin Email (THAY ĐỔI THÀNH EMAIL CỦA BẠN)
-        const ADMIN_EMAIL = "admin@gmail.com";
-
-        // ============================================================
-        // GLOBAL FUNCTIONS
-        // ============================================================
-        window.loginWithGoogle = async function() {
-            try {
-                const result = await signInWithPopup(auth, provider);
-                const user = result.user;
-                
-                const isAdmin = user.email === ADMIN_EMAIL || user.email.includes("admin") || user.email.includes("quanly");
-                
-                window.currentUser = {
-                    name: user.displayName || user.email,
-                    email: user.email,
-                    isAdmin: isAdmin,
-                    uid: user.uid
-                };
-                
-                window.saveData();
-                window.updateAuthUI();
-                window.closeModal('login-modal');
-                
-                // Hiển thị thông báo chào mừng trên giao diện thay vì alert
-                // Không dùng alert nữa
-                
-                if (isAdmin) {
-                    window.showSection('admin');
-                } else {
-                    window.showSection('home');
-                }
-            } catch (error) {
-                console.error("Chi tiết lỗi đăng nhập Google:", error);
-                let errorMsg = "Đăng nhập bằng Google thất bại. ";
-                if (error.code === 'auth/popup-blocked') {
-                    errorMsg += "Trình duyệt đã chặn cửa sổ bật lên. Vui lòng cho phép popup cho trang này.";
-                } else if (error.code === 'auth/unauthorized-domain') {
-                    errorMsg += "Domain không được phép. Vui lòng thêm domain của bạn vào Authorized Domains trên Firebase Console.";
-                } else if (error.code === 'auth/operation-not-allowed') {
-                    errorMsg += "Phương thức đăng nhập Google chưa được bật. Vui lòng bật trên Firebase Console.";
-                } else if (error.code === 'auth/popup-closed-by-user') {
-                    errorMsg += "Bạn đã đóng cửa sổ đăng nhập. Vui lòng thử lại.";
-                } else {
-                    errorMsg += `Chi tiết: ${error.message}`;
-                }
-                alert("❌ " + errorMsg);
-            }
-        };
-
-        window.firebaseSignOut = function() {
-            signOut(auth);
-        };
+        // 📧 Admin email (đổi thành email của bạn)
+        const ADMIN_EMAIL = "thaigjabao99@gmail.com";
 
         // ============================================================
-        // DATA MANAGEMENT
+        // 2. DOM REFS (Giao diện cũ)
         // ============================================================
-        const DEFAULT_COURSES = [];
-        const DEFAULT_LESSONS = [];
+        const homeSection = document.getElementById('section-home');
+        const adminSection = document.getElementById('section-admin');
+        const authActions = document.getElementById('auth-actions');
+        const userActions = document.getElementById('user-actions');
+        const userDisplayName = document.getElementById('user-display-name');
+        const navAdmin = document.getElementById('nav-admin');
 
-        let courses = JSON.parse(localStorage.getItem('matha_courses')) || DEFAULT_COURSES;
-        let lessons = JSON.parse(localStorage.getItem('matha_lessons')) || DEFAULT_LESSONS;
-        let currentUser = JSON.parse(localStorage.getItem('matha_user')) || null;
+        const freeCoursesList = document.getElementById('free-courses-list');
+        const premiumCoursesList = document.getElementById('premium-courses-list');
+        const freeCount = document.getElementById('free-count');
+        const premiumCount = document.getElementById('premium-count');
+        const statCourses = document.getElementById('stat-courses');
+        const statDocs = document.getElementById('stat-docs');
 
-        window.saveData = function() {
-            localStorage.setItem('matha_courses', JSON.stringify(courses));
-            localStorage.setItem('matha_lessons', JSON.stringify(lessons));
-            localStorage.setItem('matha_user', JSON.stringify(currentUser));
-        };
+        // Admin
+        const adminCoursesList = document.getElementById('admin-courses-list');
+        const adminDocList = document.getElementById('admin-doc-list');
+        const lessonCourseSelect = document.getElementById('lesson-course-select');
+        const courseForm = document.getElementById('course-form');
+        const addLessonForm = document.getElementById('add-lesson-form');
 
-        // ============================================================
-        // NAVIGATION
-        // ============================================================
-        window.showSection = function(section) {
-            const homeSec = document.getElementById('section-home');
-            const adminSec = document.getElementById('section-admin');
+        // Modal
+        const loginModal = document.getElementById('login-modal');
+        const loginError = document.getElementById('login-error');
 
-            if (section === 'admin') {
-                if (!currentUser || !currentUser.isAdmin) {
-                    alert('⚠️ Bạn cần đăng nhập với quyền Quản trị viên (Admin)!');
-                    openModal('login-modal');
-                    return;
-                }
-                homeSec.classList.add('hidden');
-                adminSec.classList.remove('hidden');
-                renderAdminDashboard();
-            } else {
-                homeSec.classList.remove('hidden');
-                adminSec.classList.add('hidden');
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-
-        window.scrollToSection = function(id) {
-            showSection('home');
-            setTimeout(() => {
-                const el = document.getElementById(id);
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-        };
+        // Lessons modal
+        const courseLessonsRender = document.getElementById('course-lessons-render');
+        const modalCourseTitle = document.getElementById('modal-course-title');
+        const modalCourseSubtitle = document.getElementById('modal-course-subtitle');
 
         // ============================================================
-        // RENDER COURSES
+        // 3. STATE
+        // ============================================================
+        let currentUser = null;
+        let isAdmin = false;
+        let coursesData = [];
+        let lessonsData = [];
+
+        // ============================================================
+        // 4. RENDER HÀM
         // ============================================================
         function renderCourses(filterText = '') {
-            const freeContainer = document.getElementById('free-courses-list');
-            const premiumContainer = document.getElementById('premium-courses-list');
-
-            const filtered = courses.filter(c => 
-                c.title.toLowerCase().includes(filterText.toLowerCase()) || 
+            const filtered = coursesData.filter(c =>
+                c.title.toLowerCase().includes(filterText.toLowerCase()) ||
                 (c.desc && c.desc.toLowerCase().includes(filterText.toLowerCase()))
             );
+            const free = filtered.filter(c => c.type === 'free');
+            const premium = filtered.filter(c => c.type === 'premium');
 
-            const freeCourses = filtered.filter(c => c.type === 'free');
-            const premiumCourses = filtered.filter(c => c.type === 'premium');
+            freeCount.textContent = `${free.length} khóa`;
+            premiumCount.textContent = `${premium.length} khóa`;
 
-            document.getElementById('free-count').textContent = `${freeCourses.length} khóa`;
-            document.getElementById('premium-count').textContent = `${premiumCourses.length} khóa`;
+            freeCoursesList.innerHTML = free.length ?
+                free.map(c => createCourseCardHTML(c)).join('') :
+                `<div class="empty-state">📭 Chưa có khóa học miễn phí.</div>`;
+            premiumCoursesList.innerHTML = premium.length ?
+                premium.map(c => createCourseCardHTML(c)).join('') :
+                `<div class="empty-state">📭 Chưa có khóa học Premium.</div>`;
 
-            const emptyTemplate = '<div class="empty-state"><p>📭 Chưa có khóa học nào.</p></div>';
-
-            freeContainer.innerHTML = freeCourses.length ? freeCourses.map(c => createCourseCardHTML(c)).join('') : emptyTemplate;
-            premiumContainer.innerHTML = premiumCourses.length ? premiumCourses.map(c => createCourseCardHTML(c)).join('') : emptyTemplate;
-
-            document.getElementById('stat-courses').textContent = courses.length;
-            document.getElementById('stat-docs').textContent = lessons.length;
+            statCourses.textContent = coursesData.length;
+            statDocs.textContent = lessonsData.length;
         }
 
-        window.filterCourses = function() {
-            renderCourses(document.getElementById('global-search').value);
-        };
-
         function createCourseCardHTML(course) {
-            const courseLessons = lessons.filter(l => l.courseId === course.id);
+            const count = lessonsData.filter(l => l.courseId === course.id).length;
             const isPremium = course.type === 'premium';
             const tagClass = isPremium ? 'tag-premium' : 'tag-free';
             const tagText = isPremium ? 'PREMIUM' : 'MIỄN PHÍ';
-            const isAdmin = currentUser && currentUser.isAdmin;
+            const adminActions = isAdmin ? `
+                <button class="btn-sm edit-btn" onclick="editCourse('${course.id}')">✏️</button>
+                <button class="btn-sm delete-btn" onclick="deleteCourse('${course.id}')">🗑</button>
+            ` : '';
 
             return `
                 <div class="course-card">
@@ -1002,12 +994,9 @@
                         <p style="font-size: 13px; color: var(--text-muted);">${course.desc || 'Chưa có mô tả.'}</p>
                     </div>
                     <div class="card-footer">
-                        <div><strong>${courseLessons.length}</strong> bài học</div>
+                        <div><strong>${count}</strong> bài học</div>
                         <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                            ${isAdmin ? `
-                                <button class="btn-sm edit-btn" onclick="openEditCourse('${course.id}')">✏️ Sửa</button>
-                                <button class="btn-sm delete-btn" onclick="deleteCourse('${course.id}')">🗑 Xóa</button>
-                            ` : ''}
+                            ${adminActions}
                             <button class="btn-sm" onclick="viewCourseLessons('${course.id}')">📖 Vào học</button>
                         </div>
                     </div>
@@ -1015,24 +1004,56 @@
             `;
         }
 
-        // ============================================================
-        // LESSONS MODAL
-        // ============================================================
-        window.viewCourseLessons = function(courseId) {
-            const course = courses.find(c => c.id === courseId);
+        function renderAdminCourses() {
+            if (!coursesData.length) {
+                adminCoursesList.innerHTML = `<div class="empty-state">Chưa có khóa học nào.</div>`;
+                return;
+            }
+            adminCoursesList.innerHTML = coursesData.map(c =>
+                `<div class="admin-item">
+                    <span><strong>${c.title}</strong> (${c.type})</span>
+                    <div>
+                        <button class="btn-sm edit-btn" onclick="editCourse('${c.id}')">Sửa</button>
+                        <button class="btn-sm delete-btn" onclick="deleteCourse('${c.id}')">Xóa</button>
+                    </div>
+                </div>`
+            ).join('');
+        }
+
+        function renderAdminLessons() {
+            if (!lessonsData.length) {
+                adminDocList.innerHTML = `<div class="empty-state">Chưa có bài học nào.</div>`;
+                return;
+            }
+            adminDocList.innerHTML = lessonsData.map(l => {
+                const course = coursesData.find(c => c.id === l.courseId);
+                return `<div class="admin-item">
+                    <span><strong>${l.title}</strong> (${course ? course.title : 'N/A'})</span>
+                    <div>
+                        <button class="btn-sm edit-btn" onclick="editLesson('${l.id}')">Sửa</button>
+                        <button class="btn-sm delete-btn" onclick="deleteLesson('${l.id}')">Xóa</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function renderLessonSelect() {
+            lessonCourseSelect.innerHTML = coursesData.map(c =>
+                `<option value="${c.id}">${c.title}</option>`
+            ).join('');
+        }
+
+        function viewCourseLessons(courseId) {
+            const course = coursesData.find(c => c.id === courseId);
             if (!course) return;
-
-            document.getElementById('modal-course-title').textContent = '📖 ' + course.title;
-            document.getElementById('modal-course-subtitle').textContent = `Danh sách bài học (${course.type.toUpperCase()})`;
-
-            const courseLessons = lessons.filter(l => l.courseId === courseId);
-            const container = document.getElementById('course-lessons-render');
-
-            if (courseLessons.length === 0) {
-                container.innerHTML = '<li style="text-align:center; color:var(--text-light); padding:20px;">📭 Khóa học này chưa có bài học nào.</li>';
+            modalCourseTitle.textContent = '📖 ' + course.title;
+            modalCourseSubtitle.textContent = `Danh sách bài học (${course.type.toUpperCase()})`;
+            const lessons = lessonsData.filter(l => l.courseId === courseId);
+            if (!lessons.length) {
+                courseLessonsRender.innerHTML = `<li style="text-align:center;color:var(--text-light);padding:20px;">📭 Khóa học này chưa có bài học nào.</li>`;
             } else {
-                container.innerHTML = courseLessons.map(l => `
-                    <li>
+                courseLessonsRender.innerHTML = lessons.map(l =>
+                    `<li>
                         <div class="lesson-info">
                             <span class="name">📄 ${l.title}</span>
                             <span class="meta">Dạng: <strong>${l.type}</strong></span>
@@ -1040,210 +1061,297 @@
                         </div>
                         <div class="lesson-actions" style="display:flex; gap:6px;">
                             <button class="btn-sm" onclick="alert('📖 Mở bài học: ${l.title}')">Xem</button>
-                            ${currentUser && currentUser.isAdmin ? `<button class="btn-sm delete-btn" onclick="deleteLesson('${l.id}', '${courseId}')">🗑</button>` : ''}
+                            ${isAdmin ? `<button class="btn-sm delete-btn" onclick="deleteLesson('${l.id}')">🗑</button>` : ''}
                         </div>
-                    </li>
-                `).join('');
+                    </li>`
+                ).join('');
             }
             openModal('lessons-modal');
-        };
-
-        // ============================================================
-        // ADMIN CONTROL PANEL
-        // ============================================================
-        function renderAdminDashboard() {
-            document.getElementById('dash-total-courses').textContent = courses.length;
-            document.getElementById('dash-free-courses').textContent = courses.filter(c => c.type === 'free').length;
-            document.getElementById('dash-premium-courses').textContent = courses.filter(c => c.type === 'premium').length;
-            document.getElementById('dash-total-docs').textContent = lessons.length;
-
-            const select = document.getElementById('lesson-course-select');
-            select.innerHTML = courses.length ? 
-                courses.map(c => `<option value="${c.id}">${c.title} (${c.type})</option>`).join('') : 
-                '<option value="">⚠️ Chưa có khóa học</option>';
-
-            const adminDocList = document.getElementById('admin-doc-list');
-            if (lessons.length === 0) {
-                adminDocList.innerHTML = '<li style="color:var(--text-light);text-align:center;padding:20px;">📭 Chưa có bài học nào.</li>';
-            } else {
-                adminDocList.innerHTML = lessons.map(l => {
-                    const parentCourse = courses.find(c => c.id === l.courseId);
-                    return `
-                        <li>
-                            <div class="doc-info">
-                                <span class="name">${l.title}</span>
-                                <span class="course-tag">${parentCourse ? parentCourse.title : 'N/A'}</span>
-                            </div>
-                            <button class="btn-sm delete-btn" onclick="deleteLesson('${l.id}')">🗑 Xóa</button>
-                        </li>
-                    `;
-                }).join('');
-            }
         }
 
-        window.handleSaveCourse = function(e) {
+        // ============================================================
+        // 5. CRUD TRÊN FIRESTORE
+        // ============================================================
+        // Lắng nghe dữ liệu real-time
+        function listenData() {
+            const qCourses = query(collection(db, 'courses'), orderBy('createdAt', 'asc'));
+            onSnapshot(qCourses, (snapshot) => {
+                coursesData = [];
+                snapshot.forEach(doc => coursesData.push({ id: doc.id, ...doc.data() }));
+                // Cập nhật UI
+                if (currentUser) {
+                    renderCourses();
+                    renderAdminCourses();
+                    renderLessonSelect();
+                    // Cập nhật thống kê admin
+                    document.getElementById('dash-total-courses').textContent = coursesData.length;
+                    document.getElementById('dash-free-courses').textContent = coursesData.filter(c => c.type === 'free').length;
+                    document.getElementById('dash-premium-courses').textContent = coursesData.filter(c => c.type === 'premium').length;
+                }
+            });
+
+            const qLessons = query(collection(db, 'lessons'), orderBy('createdAt', 'asc'));
+            onSnapshot(qLessons, (snapshot) => {
+                lessonsData = [];
+                snapshot.forEach(doc => lessonsData.push({ id: doc.id, ...doc.data() }));
+                if (currentUser) {
+                    renderCourses(); // cập nhật số bài học trên card
+                    renderAdminLessons();
+                    document.getElementById('dash-total-docs').textContent = lessonsData.length;
+                }
+            });
+        }
+
+        // Thêm khóa học
+        window.addCourse = async function(e) {
+            e.preventDefault();
+            const title = document.getElementById('course-title').value.trim();
+            const type = document.getElementById('course-type').value;
+            const desc = document.getElementById('course-desc').value.trim();
+            if (!title) return alert('Vui lòng nhập tên khóa học');
+            try {
+                await addDoc(collection(db, 'courses'), { title, type, desc, createdAt: new Date() });
+                document.getElementById('course-title').value = '';
+                document.getElementById('course-desc').value = '';
+                alert('✅ Thêm khóa học thành công!');
+            } catch (err) { alert('❌ Lỗi: ' + err.message); }
+        };
+
+        // Xóa khóa học
+        window.deleteCourse = async function(id) {
+            if (!confirm('Xóa khóa học này và tất cả bài học?')) return;
+            try {
+                const lessons = lessonsData.filter(l => l.courseId === id);
+                for (let l of lessons) await deleteDoc(doc(db, 'lessons', l.id));
+                await deleteDoc(doc(db, 'courses', id));
+                alert('✅ Đã xóa khóa học và bài học.');
+            } catch (err) { alert('❌ Lỗi: ' + err.message); }
+        };
+
+        // Sửa khóa học
+        window.editCourse = function(id) {
+            const course = coursesData.find(c => c.id === id);
+            if (!course) return;
+            document.getElementById('course-title-input').value = course.title;
+            document.getElementById('course-type-input').value = course.type;
+            document.getElementById('course-desc-input').value = course.desc || '';
+            document.getElementById('course-edit-id').value = id;
+            document.getElementById('course-modal-title').textContent = '✏️ Chỉnh sửa Khóa học';
+            openModal('add-course-modal');
+        };
+
+        // Lưu khóa học (thêm hoặc sửa)
+        window.handleSaveCourse = async function(e) {
             e.preventDefault();
             const editId = document.getElementById('course-edit-id').value;
             const title = document.getElementById('course-title-input').value.trim();
             const type = document.getElementById('course-type-input').value;
             const desc = document.getElementById('course-desc-input').value.trim();
+            if (!title) return alert('Vui lòng nhập tên khóa học');
 
-            if (!title) { alert('⚠️ Vui lòng nhập tên khóa học!'); return; }
-
-            if (editId) {
-                const course = courses.find(c => c.id === editId);
-                if (course) { course.title = title; course.type = type; course.desc = desc; }
-            } else {
-                const colors = ['#078a57', '#006f46', '#6949b1', '#8b5cf6', '#0284c7', '#d97706', '#dc2626'];
-                courses.push({
-                    id: 'c_' + Date.now(),
-                    title, type, desc,
-                    color: colors[Math.floor(Math.random() * colors.length)]
-                });
-            }
-
-            saveData();
-            renderCourses();
-            if (!document.getElementById('section-admin').classList.contains('hidden')) renderAdminDashboard();
-            closeModal('add-course-modal');
-            alert('✅ Đã lưu khóa học thành công!');
+            try {
+                if (editId) {
+                    await updateDoc(doc(db, 'courses', editId), { title, type, desc });
+                    alert('✅ Cập nhật thành công!');
+                } else {
+                    await addDoc(collection(db, 'courses'), { title, type, desc, createdAt: new Date() });
+                    alert('✅ Thêm khóa học thành công!');
+                }
+                document.getElementById('course-edit-id').value = '';
+                document.getElementById('course-title-input').value = '';
+                document.getElementById('course-desc-input').value = '';
+                closeModal('add-course-modal');
+            } catch (err) { alert('❌ Lỗi: ' + err.message); }
         };
 
-        window.openEditCourse = function(id) {
-            const course = courses.find(c => c.id === id);
-            if (!course) return;
-
-            document.getElementById('course-modal-title').textContent = '✏️ Chỉnh sửa Khóa học';
-            document.getElementById('course-edit-id').value = course.id;
-            document.getElementById('course-title-input').value = course.title;
-            document.getElementById('course-type-input').value = course.type;
-            document.getElementById('course-desc-input').value = course.desc;
-
-            openModal('add-course-modal');
-        };
-
-        window.deleteCourse = function(id) {
-            if (confirm('⚠️ Xóa khóa học này? Mọi bài học thuộc khóa học cũng sẽ bị xóa!')) {
-                courses = courses.filter(c => c.id !== id);
-                lessons = lessons.filter(l => l.courseId !== id);
-                saveData();
-                renderCourses();
-                if (!document.getElementById('section-admin').classList.contains('hidden')) renderAdminDashboard();
-            }
-        };
-
-        window.handleAddLesson = function(e) {
+        // Thêm bài học
+        window.handleAddLesson = async function(e) {
             e.preventDefault();
             const courseId = document.getElementById('lesson-course-select').value;
             const title = document.getElementById('lesson-title').value.trim();
             const type = document.getElementById('lesson-type').value;
             const desc = document.getElementById('lesson-desc').value.trim();
+            if (!courseId) return alert('Vui lòng chọn khóa học');
+            if (!title) return alert('Vui lòng nhập tên bài học');
 
-            if (!courseId) { alert('⚠️ Vui lòng tạo khóa học trước!'); return; }
-            if (!title) { alert('⚠️ Vui lòng nhập tên bài học!'); return; }
-
-            lessons.push({ id: 'l_' + Date.now(), courseId, title, type, desc });
-            saveData();
-            renderCourses();
-            renderAdminDashboard();
-
-            document.getElementById('lesson-title').value = '';
-            document.getElementById('lesson-desc').value = '';
-            alert('✅ Thêm bài học thành công!');
+            try {
+                await addDoc(collection(db, 'lessons'), { courseId, title, type, desc, createdAt: new Date() });
+                document.getElementById('lesson-title').value = '';
+                document.getElementById('lesson-desc').value = '';
+                alert('✅ Thêm bài học thành công!');
+            } catch (err) { alert('❌ Lỗi: ' + err.message); }
         };
 
-        window.deleteLesson = function(id, refreshModalCourseId = null) {
-            if (confirm('Xóa bài học này?')) {
-                lessons = lessons.filter(l => l.id !== id);
-                saveData();
-                renderCourses();
-                if (!document.getElementById('section-admin').classList.contains('hidden')) renderAdminDashboard();
-                if (refreshModalCourseId) viewCourseLessons(refreshModalCourseId);
+        // Xóa bài học
+        window.deleteLesson = async function(id) {
+            if (!confirm('Xóa bài học này?')) return;
+            try {
+                await deleteDoc(doc(db, 'lessons', id));
+                alert('✅ Đã xóa bài học.');
+            } catch (err) { alert('❌ Lỗi: ' + err.message); }
+        };
+
+        // Sửa bài học (đơn giản: load lên form admin)
+        window.editLesson = function(id) {
+            const lesson = lessonsData.find(l => l.id === id);
+            if (!lesson) return;
+            document.getElementById('lesson-title').value = lesson.title;
+            document.getElementById('lesson-type').value = lesson.type || 'Tài liệu PDF';
+            document.getElementById('lesson-desc').value = lesson.desc || '';
+            // Chọn khóa học tương ứng
+            const select = document.getElementById('lesson-course-select');
+            for (let opt of select.options) {
+                if (opt.value === lesson.courseId) { opt.selected = true; break; }
+            }
+            // Thay đổi hành động của form
+            const oldSubmit = addLessonForm.onsubmit;
+            addLessonForm.onsubmit = async (e) => {
+                e.preventDefault();
+                const updated = {
+                    courseId: document.getElementById('lesson-course-select').value,
+                    title: document.getElementById('lesson-title').value.trim(),
+                    type: document.getElementById('lesson-type').value,
+                    desc: document.getElementById('lesson-desc').value.trim()
+                };
+                try {
+                    await updateDoc(doc(db, 'lessons', id), updated);
+                    alert('✅ Cập nhật bài học thành công!');
+                    addLessonForm.onsubmit = oldSubmit;
+                    document.getElementById('lesson-title').value = '';
+                    document.getElementById('lesson-desc').value = '';
+                } catch (err) { alert('❌ Lỗi: ' + err.message); }
+            };
+            addLessonForm.dispatchEvent(new Event('submit'));
+        };
+
+        // ============================================================
+        // 6. AUTHENTICATION
+        // ============================================================
+        window.loginWithGoogle = async function() {
+            try {
+                await signInWithPopup(auth, provider);
+            } catch (err) {
+                console.error(err);
+                alert('Đăng nhập Google thất bại: ' + err.message);
             }
         };
 
-        // ============================================================
-        // AUTHENTICATION - QUAN TRỌNG: Cập nhật UI sau đăng nhập
-        // ============================================================
-        window.updateAuthUI = function() {
-            const authActions = document.getElementById('auth-actions');
-            const userActions = document.getElementById('user-actions');
-            const navAdmin = document.getElementById('nav-admin');
-            const userDisplayName = document.getElementById('user-display-name');
-
-            if (currentUser) {
-                // Ẩn nút đăng nhập, hiện thông tin user
-                authActions.classList.add('hidden');
-                userActions.classList.remove('hidden');
-                userDisplayName.textContent = '👋 ' + currentUser.name + (currentUser.isAdmin ? ' (Admin)' : '');
-
-                // Nếu là admin, hiện menu Quản trị
-                if (currentUser.isAdmin) {
-                    navAdmin.classList.remove('hidden');
-                } else {
-                    navAdmin.classList.add('hidden');
-                }
-            } else {
-                // Chưa đăng nhập: hiện nút đăng nhập, ẩn thông tin user
-                authActions.classList.remove('hidden');
-                userActions.classList.add('hidden');
-                navAdmin.classList.add('hidden');
-            }
-            renderCourses(); // Cập nhật danh sách khóa học (hiển thị nút sửa/xóa nếu admin)
-        };
-
-        // ============================================================
-        // HANDLE LOGIN (form đăng nhập thường)
-        // ============================================================
         window.handleLogin = function(e) {
             e.preventDefault();
             const username = document.getElementById('login-username').value.trim();
             const password = document.getElementById('login-password').value.trim();
-            const errorEl = document.getElementById('login-error');
-
-            // Admin mặc định
             if (username === 'admin' && password === 'admin123') {
-                currentUser = { name: 'Quản trị viên', username: 'admin', isAdmin: true };
-                saveData();
-                updateAuthUI();          // <--- Cập nhật header
+                // Đăng nhập thủ công admin (giả lập)
+                const fakeUser = {
+                    displayName: 'Quản trị viên',
+                    email: 'admin@matha.com',
+                    uid: 'admin_uid'
+                };
+                currentUser = fakeUser;
+                isAdmin = true;
+                updateUI(currentUser);
                 closeModal('login-modal');
                 showSection('admin');
+                alert('👋 Xin chào Admin!');
                 return;
             }
-            
-            // Tài khoản thường (username bất kỳ, password không cần kiểm tra sâu)
             if (username && password) {
-                currentUser = { name: username, username: username, isAdmin: false };
-                saveData();
-                updateAuthUI();          // <--- Cập nhật header
+                // Đăng nhập thường (không admin)
+                const fakeUser = {
+                    displayName: username,
+                    email: username + '@user.com',
+                    uid: 'user_uid'
+                };
+                currentUser = fakeUser;
+                isAdmin = false;
+                updateUI(currentUser);
                 closeModal('login-modal');
-                alert(`👋 Xin chào ${username}!`);
+                showSection('home');
+                alert('👋 Xin chào ' + username + '!');
                 return;
             }
-
-            errorEl.classList.add('show');
+            loginError.style.display = 'block';
         };
 
-        // ============================================================
-        // LOGOUT
-        // ============================================================
-        window.logout = function() {
+        window.logout = async function() {
             if (!confirm('Bạn có chắc muốn đăng xuất?')) return;
+            try {
+                await signOut(auth);
+            } catch (e) { /* ignore */ }
             currentUser = null;
-            if (window.firebaseSignOut) window.firebaseSignOut();
-            saveData();
-            updateAuthUI();          // <--- Cập nhật header
+            isAdmin = false;
+            updateUI(null);
             showSection('home');
         };
 
+        function updateUI(user) {
+            if (user) {
+                authActions.classList.add('hidden');
+                userActions.classList.remove('hidden');
+                userDisplayName.textContent = '👋 ' + (user.displayName || user.email) + (isAdmin ? ' (Admin)' : '');
+                if (isAdmin) {
+                    navAdmin.classList.remove('hidden');
+                    adminSection.classList.remove('hidden');
+                } else {
+                    navAdmin.classList.add('hidden');
+                    adminSection.classList.add('hidden');
+                }
+                // Lắng nghe dữ liệu lần đầu
+                if (!coursesData.length && !lessonsData.length) {
+                    listenData();
+                }
+            } else {
+                authActions.classList.remove('hidden');
+                userActions.classList.add('hidden');
+                navAdmin.classList.add('hidden');
+                adminSection.classList.add('hidden');
+                // Xóa dữ liệu cũ
+                coursesData = [];
+                lessonsData = [];
+                renderCourses();
+                renderAdminCourses();
+                renderAdminLessons();
+            }
+        }
+
         // ============================================================
-        // MODAL CONTROLS
+        // 7. NAVIGATION
+        // ============================================================
+        window.showSection = function(section) {
+            if (section === 'admin') {
+                if (!currentUser || !isAdmin) {
+                    alert('⚠️ Bạn cần đăng nhập với quyền Quản trị viên (Admin)!');
+                    openModal('login-modal');
+                    return;
+                }
+                homeSection.classList.add('hidden');
+                adminSection.classList.remove('hidden');
+                document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+                document.querySelector('.nav a[onclick*="admin"]')?.classList.add('active');
+            } else {
+                homeSection.classList.remove('hidden');
+                adminSection.classList.add('hidden');
+                document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+                document.querySelector('.nav a[onclick*="home"]')?.classList.add('active');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.scrollToSection = function(id) {
+            showSection('home');
+            setTimeout(() => {
+                document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        };
+
+        // ============================================================
+        // 8. MODAL CONTROLS
         // ============================================================
         window.openModal = function(id) {
             if (id === 'add-course-modal') {
                 document.getElementById('course-modal-title').textContent = '📚 Thêm Khóa học Mới';
                 document.getElementById('course-edit-id').value = '';
-                document.getElementById('course-form').reset();
+                document.getElementById('course-form-modal').reset();
             }
             document.getElementById(id).classList.add('active');
         };
@@ -1259,22 +1367,94 @@
         };
 
         // ============================================================
-        // INIT
+        // 9. SEARCH FILTER
         // ============================================================
-        // Kiểm tra session từ localStorage và cập nhật UI
-        if (currentUser) {
-            updateAuthUI();
-            if (currentUser.isAdmin) {
-                // Có thể giữ nguyên hoặc chuyển sang admin tùy ý
+        window.filterCourses = function() {
+            const text = document.getElementById('global-search').value;
+            renderCourses(text);
+        };
+
+        // ============================================================
+        // 10. EVENT LISTENERS
+        // ============================================================
+        courseForm.addEventListener('submit', addCourse);
+        addLessonForm.addEventListener('submit', handleAddLesson);
+
+        // ============================================================
+        // 11. INIT
+        // ============================================================
+        // Kiểm tra auth state từ Firebase
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                isAdmin = user.email === ADMIN_EMAIL;
+                updateUI(user);
+                if (isAdmin) showSection('admin');
+                else showSection('home');
+            } else {
+                // Kiểm tra localStorage có user admin giả lập không
+                const stored = localStorage.getItem('matha_fake_admin');
+                if (stored) {
+                    const fake = JSON.parse(stored);
+                    currentUser = fake;
+                    isAdmin = true;
+                    updateUI(fake);
+                    showSection('admin');
+                } else {
+                    currentUser = null;
+                    isAdmin = false;
+                    updateUI(null);
+                    showSection('home');
+                }
             }
-        } else {
-            updateAuthUI();
-        }
-        renderCourses();
+        });
+
+        // Lưu fake admin vào localStorage khi đăng nhập thủ công
+        const origHandleLogin = window.handleLogin;
+        window.handleLogin = function(e) {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+            if (username === 'admin' && password === 'admin123') {
+                const fake = { displayName: 'Quản trị viên', email: 'admin@matha.com', uid: 'admin_uid' };
+                localStorage.setItem('matha_fake_admin', JSON.stringify(fake));
+                currentUser = fake;
+                isAdmin = true;
+                updateUI(fake);
+                closeModal('login-modal');
+                showSection('admin');
+                alert('👋 Xin chào Admin!');
+                return;
+            }
+            if (username && password) {
+                const fake = { displayName: username, email: username + '@user.com', uid: 'user_uid' };
+                localStorage.removeItem('matha_fake_admin');
+                currentUser = fake;
+                isAdmin = false;
+                updateUI(fake);
+                closeModal('login-modal');
+                showSection('home');
+                alert('👋 Xin chào ' + username + '!');
+                return;
+            }
+            loginError.style.display = 'block';
+        };
+
+        // Ghi đè logout để xóa fake admin
+        const origLogout = window.logout;
+        window.logout = async function() {
+            if (!confirm('Bạn có chắc muốn đăng xuất?')) return;
+            localStorage.removeItem('matha_fake_admin');
+            if (auth.currentUser) await signOut(auth);
+            currentUser = null;
+            isAdmin = false;
+            updateUI(null);
+            showSection('home');
+        };
 
         console.log('🚀 MATHA TN đã sẵn sàng!');
+        console.log('👑 Admin Google: ' + ADMIN_EMAIL);
         console.log('🔑 Admin mặc định: admin / admin123');
-        console.log('📧 Admin Google: ' + ADMIN_EMAIL);
     </script>
 </body>
 </html>
