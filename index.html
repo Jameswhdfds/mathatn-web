@@ -198,79 +198,62 @@
 
         /* ===== HERO ===== */
         .hero {
-            position: relative;
-            min-height: 680px;
-            padding: 78px 0 70px;
-            color: #fff;
-            overflow: hidden;
-            background: #120b08 url('assets/hero-books.jpg') center 55% / cover no-repeat;
-            isolation: isolate;
-        }
-        .hero::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            z-index: -1;
-            background: linear-gradient(90deg, rgba(0,0,0,.90) 0%, rgba(0,0,0,.76) 34%, rgba(0,0,0,.35) 67%, rgba(0,0,0,.40) 100%);
+            padding: 60px 0;
+            background: linear-gradient(180deg, var(--primary-light) 0%, var(--bg-body) 100%);
         }
         .hero .container {
-            position: relative;
-            z-index: 2;
-            display: block;
-            max-width: 1200px;
-        }
-        .hero-content {
-            width: min(620px, 100%);
-            padding-top: 34px;
-        }
-        .hero-content::before {
-            content: 'MATHA TN';
-            display: block;
-            margin-bottom: 18px;
-            color: #a78bfa;
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: .4px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
         }
         .hero-content h1 {
-            font-size: clamp(44px, 5vw, 68px);
+            font-size: 36px;
             font-weight: 800;
-            line-height: 1.08;
-            letter-spacing: -1.8px;
-            margin-bottom: 26px;
-            color: #fff;
-            max-width: 600px;
+            line-height: 1.25;
+            margin-bottom: 16px;
         }
-        .hero-content h1 span { color: #fff; }
+        .hero-content h1 span { color: var(--primary); }
         .hero-content p {
-            color: rgba(255,255,255,.90);
-            font-size: 17px;
-            line-height: 1.75;
-            max-width: 560px;
-            margin-bottom: 28px;
-        }
-        .hero-buttons { display: flex; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; }
-        .hero-buttons .btn-primary {
-            min-height: 56px;
-            padding: 0 30px;
-            border-radius: 8px;
+            color: var(--text-muted);
             font-size: 16px;
+            margin-bottom: 24px;
         }
-        .hero-buttons .btn-outline {
-            min-height: 56px;
-            padding: 0 28px;
-            border-radius: 8px;
-            border-color: rgba(255,255,255,.85);
-            color: #fff;
-            background: rgba(0,0,0,.18);
-            font-size: 16px;
+        .hero-buttons { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+        .hero-tags { display: flex; gap: 12px; flex-wrap: wrap; }
+        .hero-tags span {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
         }
-        .hero-buttons .btn-outline:hover {
-            background: rgba(255,255,255,.12);
-            border-color: #fff;
+
+        /* ===== HERO IMAGE ===== */
+        .hero-illustration img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            display: block;
         }
-        .hero-tags { display: none; }
-        .hero-illustration { display: none; }
+        .hero-illustration .placeholder-svg {
+            width: 100%;
+            max-height: 400px;
+            border-radius: 24px;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 18px;
+            min-height: 280px;
+            padding: 20px;
+            text-align: center;
+        }
 
         /* ===== FEATURES ===== */
         .features { padding: 40px 0; }
@@ -577,10 +560,6 @@
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) {
-            .hero { min-height: 650px; }
-            .hero-content { width: min(680px, 100%); }
-        }
-        @media (max-width: 992px) {
             .courses-grid { grid-template-columns: 1fr; }
             .features-grid { grid-template-columns: repeat(3, 1fr); }
             .features-grid .feature-item:nth-child(3) { border-right: none; }
@@ -610,17 +589,6 @@
             .hero-buttons button { width: 100%; }
             .stats-grid { grid-template-columns: 1fr 1fr; }
             .stats-grid .stat-item:last-child { border-bottom: none; }
-        }
-        @media (max-width: 768px) {
-            .hero { min-height: 640px; padding: 52px 0 50px; background-position: 62% center; }
-            .hero::after { background: linear-gradient(90deg, rgba(0,0,0,.90), rgba(0,0,0,.58)); }
-            .hero-content { padding-top: 10px; }
-            .hero-content h1 { font-size: 42px; letter-spacing: -1px; }
-            .hero-content p { font-size: 15px; }
-        }
-        @media (max-width: 500px) {
-            .hero { min-height: 650px; }
-            .hero-content h1 { font-size: 38px; }
         }
     </style>
 </head>
@@ -677,11 +645,11 @@
             <section class="hero">
                 <div class="container">
                     <div class="hero-content">
-                        <h1>Học Toán<br><span>Bằng Tư Duy Mở</span></h1>
-                        <p>Hệ thống khóa học Toán từ cơ bản đến nâng cao, giúp bạn nắm vững kiến thức và phát triển tư duy giải quyết vấn đề.</p>
+                        <h1>Chinh phục <span>Toán học</span> cùng MATHA TN</h1>
+                        <p>Nền tảng học tập chuyên sâu dành cho học sinh, sinh viên. Cung cấp tài liệu, bài giảng chất lượng cao và kho đề thi phong phú.</p>
                         <div class="hero-buttons">
                             <button class="btn-primary" onclick="scrollToSection('courses-section')">Khám phá khóa học</button>
-                            <button class="btn-outline" onclick="openModal('login-modal')">▶&nbsp; Xem giới thiệu</button>
+                            <button class="btn-outline" onclick="openModal('login-modal')">Đăng nhập Admin</button>
                         </div>
                         <div class="hero-tags">
                             <span>Bài giảng cập nhật</span>
@@ -690,7 +658,7 @@
                         </div>
                     </div>
                     <div class="hero-illustration">
-                        <img src="assets/hero-books.jpg" alt="Thư viện và sách - MATHA TN"
+                        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=360&fit=crop" alt="Học sinh học Toán"
                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
                         <div class="placeholder-svg" style="display:none;">
                             📚 Thêm ảnh hoặc sửa đường dẫn<br>
@@ -1144,7 +1112,7 @@
                 <button class="btn-sm delete-btn" onclick="deleteCourse('${course.id}')">🗑</button>
             ` : '';
 
-            const imageSrc = `https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=140&fit=crop`;
+            const imageSrc = './assets/course-geometry.png';
 
             return `
                 <div class="course-card">
