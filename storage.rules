@@ -1,0 +1,27 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.email == 'thaigiabao99@gmail.com';
+    }
+
+    function canAccessCourse(courseId) {
+      return firestore.get(/databases/(default)/documents/courses/$(courseId)).data.type == 'free'
+        || isAdmin()
+        || (signedIn() && courseId in firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.accessCourses);
+    }
+
+    match /videos/{courseId}/{lessonId}/{fileName} {
+      allow read: if canAccessCourse(courseId);
+      allow write: if isAdmin()
+        && request.resource != null
+        && request.resource.size < 1 * 1024 * 1024 * 1024
+        && request.resource.contentType.matches('video/.*');
+      allow delete: if isAdmin();
+    }
+  }
+}

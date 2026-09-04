@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.email == 'thaigiabao99@gmail.com';
+    }
+
+    match /courses/{courseId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Chỉ lưu metadata + đường dẫn Storage. Không lưu download URL của video Premium.
+    match /lessons/{lessonId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /users/{userId} {
+      // Học viên chỉ được đọc hồ sơ của chính mình; Admin xem tất cả.
+      allow read: if isAdmin() || (signedIn() && request.auth.uid == userId);
+
+      // Lần đầu đăng nhập: chỉ được tạo hồ sơ của chính mình với accessCourses rỗng.
+      allow create: if signedIn() && request.auth.uid == userId
+        && request.resource.data.uid == userId
+        && request.resource.data.accessCourses == [];
+
+      // Học viên chỉ được sửa thông tin hồ sơ, tuyệt đối không được tự sửa accessCourses.
+      allow update: if isAdmin()
+        || (signedIn() && request.auth.uid == userId
+          && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['email', 'displayName', 'photoURL', 'updatedAt', 'uid']));
+
+      allow delete: if isAdmin();
+    }
+  }
+}
