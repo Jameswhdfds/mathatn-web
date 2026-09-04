@@ -198,32 +198,39 @@
 
         /* ===== HERO ===== */
         .hero {
-            padding: 60px 0;
-            background: linear-gradient(180deg, var(--primary-light) 0%, var(--bg-body) 100%);
+            position: relative;
+            min-height: 560px;
+            padding: 90px 0 80px;
+            color: #fff;
+            background-image: linear-gradient(90deg, rgba(0,0,0,.82) 0%, rgba(0,0,0,.66) 42%, rgba(0,0,0,.20) 75%, rgba(0,0,0,.18) 100%), url('./assets/hero-library.jpg');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
         }
         .hero .container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: minmax(0, 1fr);
             gap: 40px;
             align-items: center;
         }
+        .hero-content { max-width: 650px; }
         .hero-content h1 {
-            font-size: 36px;
+            font-size: 48px;
             font-weight: 800;
             line-height: 1.25;
             margin-bottom: 16px;
         }
-        .hero-content h1 span { color: var(--primary); }
+        .hero-content h1 span { color: #a78bfa; }
         .hero-content p {
-            color: var(--text-muted);
+            color: rgba(255,255,255,.88);
             font-size: 16px;
             margin-bottom: 24px;
         }
         .hero-buttons { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
         .hero-tags { display: flex; gap: 12px; flex-wrap: wrap; }
         .hero-tags span {
-            background: var(--primary-light);
-            color: var(--primary-dark);
+            background: rgba(124,58,237,.28);
+            color: #fff;
             padding: 4px 10px;
             border-radius: 20px;
             font-size: 12px;
@@ -570,13 +577,13 @@
             .hero .container, .features-grid, .stats-grid, .dashboard-grid, .dashboard-stats {
                 grid-template-columns: 1fr;
             }
-            .hero-illustration { display: none; }
+            .hero { min-height: 520px; padding: 70px 0 60px; background-position: 62% center; }
             .header .container { flex-wrap: wrap; height: auto; padding: 12px; gap: 10px; }
             .nav { order: 3; width: 100%; justify-content: center; flex-wrap: wrap; }
             .search-box input { width: 140px; }
             .dashboard-stats { grid-template-columns: 1fr 1fr; }
             .dashboard-grid { grid-template-columns: 1fr; }
-            .hero-content h1 { font-size: 28px; }
+            .hero-content h1 { font-size: 34px; }
             .modal { padding: 20px; margin: 10px; }
             .features-grid .feature-item { border-right: none !important; border-bottom: 1px solid var(--border); }
             .features-grid .feature-item:last-child { border-bottom: none; }
@@ -655,14 +662,6 @@
                             <span>Bài giảng cập nhật</span>
                             <span>Hỗ trợ trực tuyến</span>
                             <span>Tài liệu chuẩn hóa</span>
-                        </div>
-                    </div>
-                    <div class="hero-illustration">
-                        <img src="./assets/hero-library.jpg" alt="Thư viện MATHA TN"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                        <div class="placeholder-svg" style="display:none;">
-                            📚 Thêm ảnh hoặc sửa đường dẫn<br>
-                            <span style="font-size:14px; color:#94a3b8;">assets/hero-banner.jpg</span>
                         </div>
                     </div>
                 </div>
