@@ -1139,7 +1139,7 @@
             if (prevValue) lessonCourseSelect.value = prevValue;
         }
 
-        function viewCourseLessons(courseId) {
+        window.viewCourseLessons = function(courseId) {
             const course = coursesData.find(c => c.id === courseId);
             if (!course) return;
             modalCourseTitle.textContent = '📖 ' + course.title;
