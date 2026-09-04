@@ -10,10 +10,12 @@
     <style>
         /* ===== RESET & ROOT ===== */
         :root {
-            --primary: #078A57;
-            --primary-dark: #006F46;
-            --primary-light: #E6F4EE;
-            --secondary: #32C989;
+            --primary: #5624D0;
+            --primary-dark: #3C1A9E;
+            --primary-light: #F3F0FF;
+            --primary-gradient: linear-gradient(135deg, #5624D0, #3C1A9E);
+            --secondary: #A435F0;
+            --secondary-light: #F8F0FF;
             --bg-body: #F8FAFC;
             --bg-card: #FFFFFF;
             --text-main: #0F172A;
@@ -21,7 +23,7 @@
             --text-light: #94A3B8;
             --border: #E2E8F0;
             --radius: 12px;
-            --shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.02);
+            --shadow: 0 10px 15px -3px rgba(86, 36, 208, 0.08), 0 4px 6px -2px rgba(86, 36, 208, 0.02);
         }
 
         * {
@@ -63,11 +65,12 @@
             transition: all 0.2s ease;
         }
         .btn-primary {
-            background-color: var(--primary);
+            background: var(--primary-gradient);
             color: #ffffff;
         }
         .btn-primary:hover {
-            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(86, 36, 208, 0.35);
         }
         .btn-outline {
             background-color: transparent;
@@ -91,11 +94,11 @@
             background-color: #fca5a5;
         }
         .btn-sm.edit-btn {
-            background-color: #e0f2fe;
-            color: #0284c7;
+            background-color: var(--primary-light);
+            color: var(--primary);
         }
         .btn-sm.edit-btn:hover {
-            background-color: #bae6fd;
+            background-color: #ddd6fe;
         }
         .btn-google {
             background: #fff;
@@ -132,7 +135,7 @@
         .brand-icon {
             width: 40px;
             height: 40px;
-            background-color: var(--primary);
+            background: var(--primary-gradient);
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -196,7 +199,7 @@
         /* ===== HERO ===== */
         .hero {
             padding: 60px 0;
-            background: linear-gradient(180deg, #FFFFFF 0%, var(--bg-body) 100%);
+            background: linear-gradient(180deg, var(--primary-light) 0%, var(--bg-body) 100%);
         }
         .hero .container {
             display: grid;
@@ -256,21 +259,25 @@
         .features { padding: 40px 0; }
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px 8px;
+            box-shadow: var(--shadow);
         }
         .feature-item {
-            background: var(--bg-card);
-            padding: 20px;
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
             display: flex;
-            gap: 16px;
             align-items: center;
+            gap: 14px;
+            padding: 12px 18px;
+            border-right: 1px solid var(--border);
         }
-        .feature-item .icon { font-size: 28px; }
-        .feature-item h4 { font-size: 15px; margin-bottom: 4px; }
-        .feature-item p { font-size: 13px; color: var(--text-muted); }
+        .feature-item:last-child { border-right: none; }
+        .feature-item .icon { font-size: 34px; color: var(--primary); line-height: 1; flex-shrink: 0; }
+        .feature-item .text h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+        .feature-item .text p { font-size: 12px; color: var(--text-light); line-height: 1.3; }
 
         /* ===== COURSES ===== */
         .courses { padding: 40px 0; }
@@ -348,7 +355,7 @@
             font-weight: 700;
         }
         .tag-free { background: #dcfce7; color: #15803d; }
-        .tag-premium { background: #f3e8ff; color: #6b21a8; }
+        .tag-premium { background: var(--primary-light); color: var(--primary); }
         .course-card .card-footer {
             padding: 12px 18px;
             border-top: 1px solid var(--border);
@@ -435,7 +442,7 @@
         }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(7, 138, 87, 0.1);
+            box-shadow: 0 0 0 3px rgba(86, 36, 208, 0.1);
         }
         .form-group textarea { resize: vertical; height: 80px; }
 
@@ -454,12 +461,34 @@
         }
         .doc-info .name, .lesson-info .name { font-weight: 600; font-size: 14px; display: block; }
         .doc-info .meta, .lesson-info .meta { font-size: 12px; color: var(--text-muted); }
-        .doc-info .course-tag { font-size: 10px; background: #e2e8f0; padding: 2px 6px; border-radius: 4px; }
+        .doc-info .course-tag { font-size: 10px; background: var(--primary-light); color: var(--primary); padding: 2px 6px; border-radius: 4px; }
         .empty-state {
             text-align: center;
             padding: 30px;
             color: var(--text-light);
             grid-column: 1 / -1;
+        }
+        .admin-item {
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        /* ===== BANNER (thông báo lỗi kết nối/quyền) ===== */
+        .system-banner {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            padding: 10px 16px;
+            font-size: 13px;
+            text-align: center;
         }
 
         /* ===== MODAL ===== */
@@ -498,9 +527,7 @@
             font-size: 20px; cursor: pointer; color: var(--text-light);
             transition: transform 0.2s;
         }
-        .modal .close-btn:hover {
-            transform: rotate(90deg);
-        }
+        .modal .close-btn:hover { transform: rotate(90deg); }
         .divider {
             display: flex;
             align-items: center;
@@ -516,6 +543,10 @@
         }
         .divider span { padding: 0 10px; }
 
+        /* Thông báo lỗi trong form (đã sửa: dùng class .show thay vì để trống) */
+        .error-msg { display: none; }
+        .error-msg.show { display: block !important; }
+
         /* ===== FOOTER ===== */
         .footer {
             margin-top: auto;
@@ -530,13 +561,16 @@
         /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) {
             .courses-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: repeat(3, 1fr); }
+            .features-grid .feature-item:nth-child(3) { border-right: none; }
+            .features-grid .feature-item:nth-child(4),
+            .features-grid .feature-item:nth-child(5) { border-top: 1px solid var(--border); border-right: none; }
         }
         @media (max-width: 768px) {
             .hero .container, .features-grid, .stats-grid, .dashboard-grid, .dashboard-stats {
                 grid-template-columns: 1fr;
             }
-            .hero-illustration img { max-height: 260px; }
-            .hero-illustration .placeholder-svg { min-height: 200px; }
+            .hero-illustration { display: none; }
             .header .container { flex-wrap: wrap; height: auto; padding: 12px; gap: 10px; }
             .nav { order: 3; width: 100%; justify-content: center; flex-wrap: wrap; }
             .search-box input { width: 140px; }
@@ -544,6 +578,8 @@
             .dashboard-grid { grid-template-columns: 1fr; }
             .hero-content h1 { font-size: 28px; }
             .modal { padding: 20px; margin: 10px; }
+            .features-grid .feature-item { border-right: none !important; border-bottom: 1px solid var(--border); }
+            .features-grid .feature-item:last-child { border-bottom: none; }
         }
         @media (max-width: 500px) {
             .courses-header { flex-direction: column; align-items: flex-start; }
@@ -551,11 +587,15 @@
             .dashboard-stats { grid-template-columns: 1fr; }
             .hero-buttons { flex-direction: column; }
             .hero-buttons button { width: 100%; }
-            .hero-illustration img { max-height: 200px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .stats-grid .stat-item:last-child { border-bottom: none; }
         }
     </style>
 </head>
 <body>
+
+    <!-- Banner thông báo lỗi hệ thống (hiện khi Firestore từ chối đọc/ghi) -->
+    <div id="system-banner" class="system-banner hidden"></div>
 
     <!-- ===== HEADER ===== -->
     <header class="header">
@@ -618,12 +658,11 @@
                         </div>
                     </div>
                     <div class="hero-illustration">
-                        <!-- ====== THAY ẢNH Ở ĐÂY ====== -->
-                        <img src="assets/hero-banner.jpg" alt="Học sinh học Toán" 
+                        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=360&fit=crop" alt="Học sinh học Toán"
                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
                         <div class="placeholder-svg" style="display:none;">
-                            📚 Thêm ảnh vào assets/hero-banner.jpg<br>
-                            <span style="font-size:14px; color:#94a3b8;">Hoặc sửa đường dẫn ảnh trong thẻ &lt;img&gt;</span>
+                            📚 Thêm ảnh hoặc sửa đường dẫn<br>
+                            <span style="font-size:14px; color:#94a3b8;">assets/hero-banner.jpg</span>
                         </div>
                     </div>
                 </div>
@@ -634,24 +673,38 @@
                 <div class="container">
                     <div class="features-grid">
                         <div class="feature-item">
-                            <div class="icon">📚</div>
-                            <div>
-                                <h4>Kho bài giảng phong phú</h4>
-                                <p>Hệ thống bài giảng từ cơ bản đến nâng cao, bám sát chương trình.</p>
+                            <span class="icon">▱</span>
+                            <div class="text">
+                                <h4>Lộ trình rõ ràng</h4>
+                                <p>Hệ thống từ cơ bản đến nâng cao</p>
                             </div>
                         </div>
                         <div class="feature-item">
-                            <div class="icon">⚡</div>
-                            <div>
-                                <h4>Học tập linh hoạt</h4>
-                                <p>Truy cập nội dung mọi lúc, mọi nơi trên nhiều thiết bị khác nhau.</p>
+                            <span class="icon">◎</span>
+                            <div class="text">
+                                <h4>Hiệu quả thực tế</h4>
+                                <p>Bài tập chọn lọc, bám sát kỳ thi</p>
                             </div>
                         </div>
                         <div class="feature-item">
-                            <div class="icon">🎯</div>
-                            <div>
-                                <h4>Quản lý tiến độ</h4>
-                                <p>Theo dõi sát sao quá trình học tập và hoàn thành các học phần.</p>
+                            <span class="icon">▥</span>
+                            <div class="text">
+                                <h4>Giảng dạy tận tâm</h4>
+                                <p>Dễ hiểu – logic – ứng dụng thực tế</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="icon">♢</span>
+                            <div class="text">
+                                <h4>An toàn &amp; tin cậy</h4>
+                                <p>Nền tảng học tập chất lượng</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="icon">♙</span>
+                            <div class="text">
+                                <h4>Đồng hành cùng bạn</h4>
+                                <p>Học mọi lúc, mọi nơi, trên mọi thiết bị</p>
                             </div>
                         </div>
                     </div>
@@ -666,7 +719,7 @@
                             Khóa học Miễn phí <small id="free-count">0 khóa</small>
                         </div>
                         <div class="section-title">
-                            Khóa học Premium <small id="premium-count" style="background:#f3e8ff; color:#6949b1;">0 khóa</small>
+                            Khóa học Premium <small id="premium-count" style="background:var(--primary-light); color:var(--primary);">0 khóa</small>
                         </div>
                     </div>
 
@@ -682,28 +735,28 @@
                 <div class="container">
                     <div class="stats-grid">
                         <div class="stat-item">
-                            <div class="icon">👥</div>
+                            <span class="icon">👥</span>
                             <div>
                                 <div class="number" id="stat-users">1,250+</div>
                                 <div class="label">Học viên</div>
                             </div>
                         </div>
                         <div class="stat-item">
-                            <div class="icon">📖</div>
+                            <span class="icon">📖</span>
                             <div>
                                 <div class="number" id="stat-courses">0</div>
                                 <div class="label">Khóa học</div>
                             </div>
                         </div>
                         <div class="stat-item">
-                            <div class="icon">📄</div>
+                            <span class="icon">📄</span>
                             <div>
                                 <div class="number" id="stat-docs">0</div>
                                 <div class="label">Tài liệu & Bài học</div>
                             </div>
                         </div>
                         <div class="stat-item">
-                            <div class="icon">⭐</div>
+                            <span class="icon">⭐</span>
                             <div>
                                 <div class="number">4.9/5</div>
                                 <div class="label">Đánh giá chất lượng</div>
@@ -796,7 +849,8 @@
                                 <label>Mô tả ngắn</label>
                                 <textarea id="lesson-desc" placeholder="Tóm tắt nội dung bài học..."></textarea>
                             </div>
-                            <button type="submit" class="btn-primary">⬆ Tải lên bài học</button>
+                            <button type="submit" id="lesson-submit-btn" class="btn-primary">⬆ Tải lên bài học</button>
+                            <button type="button" id="lesson-cancel-edit-btn" class="btn-outline hidden" style="margin-top:8px; width:100%;" onclick="cancelEditLesson()">Hủy chỉnh sửa</button>
                         </form>
                         <hr style="margin:20px 0; border-color:var(--border);" />
                         <div id="admin-doc-list"></div>
@@ -821,7 +875,7 @@
             <button class="close-btn" onclick="closeModal('login-modal')">&times;</button>
             <h2>🔐 Đăng nhập</h2>
             <div class="subtitle">Truy cập hệ thống học tập MATHA TN</div>
-            
+
             <button type="button" class="btn btn-google" onclick="loginWithGoogle()">
                 <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
                 Đăng nhập bằng Google
@@ -838,10 +892,10 @@
                     <label>Mật khẩu</label>
                     <input type="password" id="login-password" placeholder="Mật khẩu..." required />
                 </div>
-                <div id="login-error" class="error-msg" style="color:#dc2626;font-size:12px;display:none;margin-top:6px;">Tài khoản hoặc mật khẩu không chính xác!</div>
+                <div id="login-error" class="error-msg">Tài khoản hoặc mật khẩu không chính xác!</div>
                 <button type="submit" class="btn-primary" style="margin-top: 12px; width: 100%;">Đăng nhập</button>
             </form>
-            
+
             <div style="text-align:center;margin-top:16px;font-size:12px;color:var(--text-light);">
                 👨‍💼 Admin mặc định: <strong>admin</strong> / <strong>admin123</strong>
             </div>
@@ -901,7 +955,7 @@
 
     <script type="module">
         // ============================================================
-        // 1. FIREBASE CONFIG (ĐÃ ĐIỀN SẴN)
+        // 1. FIREBASE CONFIG
         // ============================================================
         import { initializeApp } from "firebase/app";
         import {
@@ -950,6 +1004,7 @@
         const userActions = document.getElementById('user-actions');
         const userDisplayName = document.getElementById('user-display-name');
         const navAdmin = document.getElementById('nav-admin');
+        const systemBanner = document.getElementById('system-banner');
 
         const freeCoursesList = document.getElementById('free-courses-list');
         const premiumCoursesList = document.getElementById('premium-courses-list');
@@ -963,6 +1018,8 @@
         const lessonCourseSelect = document.getElementById('lesson-course-select');
         const courseForm = document.getElementById('course-form');
         const addLessonForm = document.getElementById('add-lesson-form');
+        const lessonSubmitBtn = document.getElementById('lesson-submit-btn');
+        const lessonCancelEditBtn = document.getElementById('lesson-cancel-edit-btn');
 
         const loginModal = document.getElementById('login-modal');
         const loginError = document.getElementById('login-error');
@@ -972,12 +1029,16 @@
         const modalCourseSubtitle = document.getElementById('modal-course-subtitle');
 
         // ============================================================
-        // 3. STATE
+        // 3. STATE & LISTENER QUẢN LÝ
         // ============================================================
         let currentUser = null;
         let isAdmin = false;
         let coursesData = [];
         let lessonsData = [];
+        let unsubscribeCourses = null;
+        let unsubscribeLessons = null;
+        let listenerStarted = false;
+        let editingLessonId = null; // FIX: theo dõi bài học đang sửa thay vì hijack onsubmit
 
         // ============================================================
         // 4. RENDER HÀM
@@ -1014,19 +1075,16 @@
                 <button class="btn-sm delete-btn" onclick="deleteCourse('${course.id}')">🗑</button>
             ` : '';
 
-            // ====== ẢNH CHO KHÓA HỌC ======
-            // Bạn có thể thay đổi đường dẫn ảnh theo từng khóa học.
-            // Hiện tại dùng ảnh mặc định với tên theo course.id
-            const imageSrc = `assets/course-${course.id}.jpg`; // hoặc dùng ảnh chung: 'assets/course-default.jpg'
+            const imageSrc = `https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=140&fit=crop`;
 
             return `
                 <div class="course-card">
                     <div class="card-body">
-                        <img src="${imageSrc}" alt="${course.title}" 
+                        <img src="${imageSrc}" alt="${course.title}"
                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
                         <div class="placeholder-course" style="display:none;">
                             📚 ${course.title}<br>
-                            <span style="font-size:12px;color:#94a3b8;">Thêm ảnh: assets/course-${course.id}.jpg</span>
+                            <span style="font-size:12px;color:#94a3b8;">Thêm ảnh</span>
                         </div>
                         <span class="tag ${tagClass}">${tagText}</span>
                     </div>
@@ -1078,9 +1136,11 @@
         }
 
         function renderLessonSelect() {
+            const prevValue = lessonCourseSelect.value;
             lessonCourseSelect.innerHTML = coursesData.map(c =>
                 `<option value="${c.id}">${c.title}</option>`
             ).join('');
+            if (prevValue) lessonCourseSelect.value = prevValue;
         }
 
         function viewCourseLessons(courseId) {
@@ -1109,36 +1169,71 @@
             openModal('lessons-modal');
         }
 
+        // FIX: hàm hiển thị banner lỗi hệ thống cho người dùng thay vì chỉ console.error
+        function showSystemBanner(message) {
+            systemBanner.textContent = '⚠️ ' + message;
+            systemBanner.classList.remove('hidden');
+        }
+        function hideSystemBanner() {
+            systemBanner.classList.add('hidden');
+        }
+
         // ============================================================
-        // 5. CRUD TRÊN FIRESTORE
+        // 5. LISTENER REAL-TIME (CHỈ GỌI 1 LẦN)
         // ============================================================
-        function listenData() {
+        function startListeners() {
+            if (listenerStarted) {
+                console.log('📡 Listener đã được kích hoạt trước đó, bỏ qua.');
+                return;
+            }
+            listenerStarted = true;
+            console.log('📡 Bắt đầu lắng nghe dữ liệu Firestore...');
+
             const qCourses = query(collection(db, 'courses'), orderBy('createdAt', 'asc'));
-            onSnapshot(qCourses, (snapshot) => {
+            unsubscribeCourses = onSnapshot(qCourses, (snapshot) => {
+                hideSystemBanner();
                 coursesData = [];
                 snapshot.forEach(doc => coursesData.push({ id: doc.id, ...doc.data() }));
-                if (currentUser) {
-                    renderCourses();
-                    renderAdminCourses();
-                    renderLessonSelect();
-                    document.getElementById('dash-total-courses').textContent = coursesData.length;
-                    document.getElementById('dash-free-courses').textContent = coursesData.filter(c => c.type === 'free').length;
-                    document.getElementById('dash-premium-courses').textContent = coursesData.filter(c => c.type === 'premium').length;
+                console.log(`📚 Đã tải ${coursesData.length} khóa học.`);
+                renderCourses();
+                renderAdminCourses();
+                renderLessonSelect();
+                document.getElementById('dash-total-courses').textContent = coursesData.length;
+                document.getElementById('dash-free-courses').textContent = coursesData.filter(c => c.type === 'free').length;
+                document.getElementById('dash-premium-courses').textContent = coursesData.filter(c => c.type === 'premium').length;
+                statCourses.textContent = coursesData.length;
+            }, (error) => {
+                console.error('❌ Lỗi listener courses:', error);
+                // FIX: hiện thông báo cho người dùng thay vì im lặng
+                if (error.code === 'permission-denied') {
+                    showSystemBanner('Không có quyền tải danh sách khóa học. Vui lòng kiểm tra Firestore Rules.');
+                } else {
+                    showSystemBanner('Không thể kết nối tới máy chủ dữ liệu. Vui lòng thử lại sau.');
                 }
             });
 
             const qLessons = query(collection(db, 'lessons'), orderBy('createdAt', 'asc'));
-            onSnapshot(qLessons, (snapshot) => {
+            unsubscribeLessons = onSnapshot(qLessons, (snapshot) => {
                 lessonsData = [];
                 snapshot.forEach(doc => lessonsData.push({ id: doc.id, ...doc.data() }));
-                if (currentUser) {
-                    renderCourses();
-                    renderAdminLessons();
-                    document.getElementById('dash-total-docs').textContent = lessonsData.length;
+                console.log(`📄 Đã tải ${lessonsData.length} bài học.`);
+                renderCourses();
+                renderAdminLessons();
+                document.getElementById('dash-total-docs').textContent = lessonsData.length;
+                statDocs.textContent = lessonsData.length;
+            }, (error) => {
+                console.error('❌ Lỗi listener lessons:', error);
+                if (error.code === 'permission-denied') {
+                    showSystemBanner('Không có quyền tải danh sách bài học. Vui lòng kiểm tra Firestore Rules.');
+                } else {
+                    showSystemBanner('Không thể kết nối tới máy chủ dữ liệu. Vui lòng thử lại sau.');
                 }
             });
         }
 
+        // ============================================================
+        // 6. CRUD
+        // ============================================================
         window.addCourse = async function(e) {
             e.preventDefault();
             const title = document.getElementById('course-title').value.trim();
@@ -1197,21 +1292,50 @@
             } catch (err) { alert('❌ Lỗi: ' + err.message); }
         };
 
+        // FIX: gộp logic thêm + sửa bài học vào MỘT handler duy nhất (bỏ kiểu hijack onsubmit cũ gây trùng dữ liệu)
         window.handleAddLesson = async function(e) {
             e.preventDefault();
+
+            if (!currentUser) {
+                alert('⚠️ Bạn cần đăng nhập để thêm bài học!');
+                openModal('login-modal');
+                return;
+            }
+            if (!isAdmin) {
+                alert('⚠️ Bạn cần quyền Admin để thêm bài học!');
+                return;
+            }
+
             const courseId = document.getElementById('lesson-course-select').value;
             const title = document.getElementById('lesson-title').value.trim();
             const type = document.getElementById('lesson-type').value;
             const desc = document.getElementById('lesson-desc').value.trim();
-            if (!courseId) return alert('Vui lòng chọn khóa học');
-            if (!title) return alert('Vui lòng nhập tên bài học');
+
+            if (!courseId) {
+                alert('⚠️ Vui lòng chọn khóa học!');
+                return;
+            }
+            if (!title) {
+                alert('⚠️ Vui lòng nhập tên bài học!');
+                return;
+            }
 
             try {
-                await addDoc(collection(db, 'lessons'), { courseId, title, type, desc, createdAt: new Date() });
+                if (editingLessonId) {
+                    // Đang ở chế độ sửa -> chỉ update, KHÔNG tạo mới
+                    await updateDoc(doc(db, 'lessons', editingLessonId), { courseId, title, type, desc });
+                    alert('✅ Cập nhật bài học thành công!');
+                    cancelEditLesson();
+                } else {
+                    await addDoc(collection(db, 'lessons'), { courseId, title, type, desc, createdAt: new Date() });
+                    alert('✅ Thêm bài học thành công!');
+                }
                 document.getElementById('lesson-title').value = '';
                 document.getElementById('lesson-desc').value = '';
-                alert('✅ Thêm bài học thành công!');
-            } catch (err) { alert('❌ Lỗi: ' + err.message); }
+            } catch (err) {
+                console.error('❌ Lỗi chi tiết khi thêm bài học:', err);
+                alert('❌ Lỗi Firestore: ' + err.message + '\n\nKiểm tra lại quyền ghi (Firestore Rules) hoặc kết nối mạng.');
+            }
         };
 
         window.deleteLesson = async function(id) {
@@ -1219,9 +1343,11 @@
             try {
                 await deleteDoc(doc(db, 'lessons', id));
                 alert('✅ Đã xóa bài học.');
+                if (editingLessonId === id) cancelEditLesson();
             } catch (err) { alert('❌ Lỗi: ' + err.message); }
         };
 
+        // FIX: chỉ điền dữ liệu vào form + bật "chế độ sửa", KHÔNG tự submit form nữa
         window.editLesson = function(id) {
             const lesson = lessonsData.find(l => l.id === id);
             if (!lesson) return;
@@ -1232,28 +1358,22 @@
             for (let opt of select.options) {
                 if (opt.value === lesson.courseId) { opt.selected = true; break; }
             }
-            const oldSubmit = addLessonForm.onsubmit;
-            addLessonForm.onsubmit = async (e) => {
-                e.preventDefault();
-                const updated = {
-                    courseId: document.getElementById('lesson-course-select').value,
-                    title: document.getElementById('lesson-title').value.trim(),
-                    type: document.getElementById('lesson-type').value,
-                    desc: document.getElementById('lesson-desc').value.trim()
-                };
-                try {
-                    await updateDoc(doc(db, 'lessons', id), updated);
-                    alert('✅ Cập nhật bài học thành công!');
-                    addLessonForm.onsubmit = oldSubmit;
-                    document.getElementById('lesson-title').value = '';
-                    document.getElementById('lesson-desc').value = '';
-                } catch (err) { alert('❌ Lỗi: ' + err.message); }
-            };
-            addLessonForm.dispatchEvent(new Event('submit'));
+            editingLessonId = id;
+            lessonSubmitBtn.textContent = '💾 Cập nhật bài học';
+            lessonCancelEditBtn.classList.remove('hidden');
+            addLessonForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        };
+
+        window.cancelEditLesson = function() {
+            editingLessonId = null;
+            lessonSubmitBtn.textContent = '⬆ Tải lên bài học';
+            lessonCancelEditBtn.classList.add('hidden');
+            document.getElementById('lesson-title').value = '';
+            document.getElementById('lesson-desc').value = '';
         };
 
         // ============================================================
-        // 6. AUTHENTICATION
+        // 7. AUTH
         // ============================================================
         window.loginWithGoogle = async function() {
             try {
@@ -1266,6 +1386,7 @@
 
         window.handleLogin = function(e) {
             e.preventDefault();
+            loginError.classList.remove('show'); // FIX: ẩn lỗi cũ trước khi thử lại
             const username = document.getElementById('login-username').value.trim();
             const password = document.getElementById('login-password').value.trim();
             if (username === 'admin' && password === 'admin123') {
@@ -1290,7 +1411,7 @@
                 alert('👋 Xin chào ' + username + '!');
                 return;
             }
-            loginError.style.display = 'block';
+            loginError.classList.add('show'); // FIX: class này giờ có CSS tương ứng nên sẽ thực sự hiện ra
         };
 
         window.logout = async function() {
@@ -1315,24 +1436,28 @@
                     navAdmin.classList.add('hidden');
                     adminSection.classList.add('hidden');
                 }
-                if (!coursesData.length && !lessonsData.length) {
-                    listenData();
-                }
+                renderCourses();
+                renderAdminCourses();
+                renderLessonSelect();
+                document.getElementById('dash-total-courses').textContent = coursesData.length;
+                document.getElementById('dash-free-courses').textContent = coursesData.filter(c => c.type === 'free').length;
+                document.getElementById('dash-premium-courses').textContent = coursesData.filter(c => c.type === 'premium').length;
+                document.getElementById('dash-total-docs').textContent = lessonsData.length;
+
+                startListeners();
             } else {
                 authActions.classList.remove('hidden');
                 userActions.classList.add('hidden');
                 navAdmin.classList.add('hidden');
                 adminSection.classList.add('hidden');
-                coursesData = [];
-                lessonsData = [];
                 renderCourses();
                 renderAdminCourses();
-                renderAdminLessons();
+                renderLessonSelect();
             }
         }
 
         // ============================================================
-        // 7. NAVIGATION
+        // 8. NAVIGATION
         // ============================================================
         window.showSection = function(section) {
             if (section === 'admin') {
@@ -1362,13 +1487,16 @@
         };
 
         // ============================================================
-        // 8. MODAL CONTROLS
+        // 9. MODAL
         // ============================================================
         window.openModal = function(id) {
             if (id === 'add-course-modal') {
                 document.getElementById('course-modal-title').textContent = '📚 Thêm Khóa học Mới';
                 document.getElementById('course-edit-id').value = '';
                 document.getElementById('course-form-modal').reset();
+            }
+            if (id === 'login-modal') {
+                loginError.classList.remove('show');
             }
             document.getElementById(id).classList.add('active');
         };
@@ -1384,7 +1512,7 @@
         };
 
         // ============================================================
-        // 9. SEARCH FILTER
+        // 10. SEARCH
         // ============================================================
         window.filterCourses = function() {
             const text = document.getElementById('global-search').value;
@@ -1392,13 +1520,13 @@
         };
 
         // ============================================================
-        // 10. EVENT LISTENERS
+        // 11. EVENT LISTENERS
         // ============================================================
         courseForm.addEventListener('submit', addCourse);
-        addLessonForm.addEventListener('submit', handleAddLesson);
+        addLessonForm.addEventListener('submit', handleAddLesson); // FIX: đây giờ là handler DUY NHẤT xử lý cả thêm lẫn sửa
 
         // ============================================================
-        // 11. INIT
+        // 12. INIT
         // ============================================================
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -1424,10 +1552,13 @@
             }
         });
 
+        // Khởi tạo listener ngay lập tức để mọi khách (kể cả chưa đăng nhập) đều xem được dữ liệu công khai
+        startListeners();
+
         console.log('🚀 MATHA TN đã sẵn sàng!');
         console.log('👑 Admin Google: ' + ADMIN_EMAIL);
         console.log('🔑 Admin mặc định: admin / admin123');
-        console.log('📸 Để thêm ảnh: đặt file ảnh vào thư mục assets/ và cập nhật đường dẫn trong HTML.');
+        console.log('📡 Lắng nghe dữ liệu real-time đã được thiết lập (đọc công khai).');
     </script>
 </body>
 </html>
