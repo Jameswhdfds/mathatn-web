@@ -846,6 +846,10 @@
                                 </select>
                             </div>
                             <div class="form-group">
+                                <label>Link Google Drive (video/PDF)</label>
+                                <input type="url" id="lesson-link" placeholder="https://drive.google.com/file/d/..." />
+                            </div>
+                            <div class="form-group">
                                 <label>Mô tả ngắn</label>
                                 <textarea id="lesson-desc" placeholder="Tóm tắt nội dung bài học..."></textarea>
                             </div>
@@ -933,6 +937,20 @@
             <h2 id="modal-course-title">📖 Chi tiết khóa học</h2>
             <div class="subtitle" id="modal-course-subtitle">Danh sách bài học và tài liệu</div>
             <ul class="lesson-list" id="course-lessons-render"></ul>
+        </div>
+    </div>
+
+    <!-- Lesson Viewer Modal (xem trực tiếp video/PDF từ Google Drive) -->
+    <div id="viewer-modal" class="modal-overlay">
+        <div class="modal" style="max-width: 900px;">
+            <button class="close-btn" onclick="closeModal('viewer-modal')">&times;</button>
+            <h2 id="viewer-title">📖 Xem bài học</h2>
+            <div class="subtitle">Xem trực tiếp trên trình duyệt</div>
+            <iframe id="viewer-iframe" class="hidden" style="width:100%; height:65vh; border:none; border-radius:10px; background:#000;" allow="autoplay" allowfullscreen></iframe>
+            <div id="viewer-fallback" class="hidden" style="text-align:center; padding:40px 10px;">
+                <p style="color:var(--text-muted); margin-bottom:16px;">Không thể nhúng xem trực tiếp link này. Vui lòng mở trong tab mới.</p>
+                <a href="#" target="_blank" rel="noopener" class="btn btn-primary" style="text-decoration:none;">🔗 Mở link tài liệu</a>
+            </div>
         </div>
     </div>
 
@@ -1156,7 +1174,7 @@
                             <span class="desc">${l.desc || ''}</span>
                         </div>
                         <div class="lesson-actions" style="display:flex; gap:6px;">
-                            <button class="btn-sm" onclick="alert('📖 Mở bài học: ${l.title}')">Xem</button>
+                            <button class="btn-sm" onclick="openLessonViewer('${l.id}')">▶ Xem</button>
                             ${isAdmin ? `<button class="btn-sm delete-btn" onclick="deleteLesson('${l.id}')">🗑</button>` : ''}
                         </div>
                     </li>`
@@ -1173,6 +1191,56 @@
         function hideSystemBanner() {
             systemBanner.classList.add('hidden');
         }
+
+        // ============================================================
+        // TÍNH NĂNG MỚI: Xem trực tiếp video/PDF từ Google Drive
+        // ============================================================
+        // Nhận diện nhiều định dạng link Google Drive và chuyển thành link nhúng (embed/preview)
+        function getDriveEmbedUrl(url) {
+            if (!url) return null;
+            const patterns = [
+                /\/file\/d\/([a-zA-Z0-9_-]+)/,   // https://drive.google.com/file/d/FILE_ID/view
+                /[?&]id=([a-zA-Z0-9_-]+)/,        // https://drive.google.com/open?id=FILE_ID
+                /\/d\/([a-zA-Z0-9_-]+)/           // dạng rút gọn /d/FILE_ID
+            ];
+            for (const p of patterns) {
+                const m = url.match(p);
+                if (m && m[1]) return `https://drive.google.com/file/d/${m[1]}/preview`;
+            }
+            return null; // không nhận diện được -> để fallback mở tab mới
+        }
+
+        window.openLessonViewer = function(lessonId) {
+            const lesson = lessonsData.find(l => l.id === lessonId);
+            if (!lesson) return;
+            const viewerTitle = document.getElementById('viewer-title');
+            const iframe = document.getElementById('viewer-iframe');
+            const fallback = document.getElementById('viewer-fallback');
+            const fallbackLink = fallback.querySelector('a');
+            const fallbackText = fallback.querySelector('p');
+
+            viewerTitle.textContent = '📖 ' + lesson.title;
+            const embedUrl = getDriveEmbedUrl(lesson.link);
+
+            if (embedUrl) {
+                iframe.src = embedUrl;
+                iframe.classList.remove('hidden');
+                fallback.classList.add('hidden');
+            } else if (lesson.link) {
+                iframe.src = '';
+                iframe.classList.add('hidden');
+                fallback.classList.remove('hidden');
+                fallbackText.textContent = 'Không thể nhúng xem trực tiếp link này. Vui lòng mở trong tab mới.';
+                fallbackLink.href = lesson.link;
+            } else {
+                iframe.src = '';
+                iframe.classList.add('hidden');
+                fallback.classList.remove('hidden');
+                fallbackText.textContent = 'Bài học này chưa có link tài liệu.';
+                fallbackLink.removeAttribute('href');
+            }
+            openModal('viewer-modal');
+        };
 
         // ============================================================
         // 5. LISTENER REAL-TIME (CHỈ GỌI 1 LẦN)
@@ -1305,6 +1373,7 @@
             const courseId = document.getElementById('lesson-course-select').value;
             const title = document.getElementById('lesson-title').value.trim();
             const type = document.getElementById('lesson-type').value;
+            const link = document.getElementById('lesson-link').value.trim();
             const desc = document.getElementById('lesson-desc').value.trim();
 
             if (!courseId) {
@@ -1319,14 +1388,15 @@
             try {
                 if (editingLessonId) {
                     // Đang ở chế độ sửa -> chỉ update, KHÔNG tạo mới
-                    await updateDoc(doc(db, 'lessons', editingLessonId), { courseId, title, type, desc });
+                    await updateDoc(doc(db, 'lessons', editingLessonId), { courseId, title, type, link, desc });
                     alert('✅ Cập nhật bài học thành công!');
                     cancelEditLesson();
                 } else {
-                    await addDoc(collection(db, 'lessons'), { courseId, title, type, desc, createdAt: new Date() });
+                    await addDoc(collection(db, 'lessons'), { courseId, title, type, link, desc, createdAt: new Date() });
                     alert('✅ Thêm bài học thành công!');
                 }
                 document.getElementById('lesson-title').value = '';
+                document.getElementById('lesson-link').value = '';
                 document.getElementById('lesson-desc').value = '';
             } catch (err) {
                 console.error('❌ Lỗi chi tiết khi thêm bài học:', err);
@@ -1349,6 +1419,7 @@
             if (!lesson) return;
             document.getElementById('lesson-title').value = lesson.title;
             document.getElementById('lesson-type').value = lesson.type || 'Tài liệu PDF';
+            document.getElementById('lesson-link').value = lesson.link || '';
             document.getElementById('lesson-desc').value = lesson.desc || '';
             const select = document.getElementById('lesson-course-select');
             for (let opt of select.options) {
@@ -1365,6 +1436,7 @@
             lessonSubmitBtn.textContent = '⬆ Tải lên bài học';
             lessonCancelEditBtn.classList.add('hidden');
             document.getElementById('lesson-title').value = '';
+            document.getElementById('lesson-link').value = '';
             document.getElementById('lesson-desc').value = '';
         };
 
@@ -1490,6 +1562,9 @@
 
         window.closeModal = function(id) {
             document.getElementById(id).classList.remove('active');
+            if (id === 'viewer-modal') {
+                document.getElementById('viewer-iframe').src = ''; // dừng phát video khi đóng
+            }
         };
 
         window.onclick = function(e) {
