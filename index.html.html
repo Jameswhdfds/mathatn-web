@@ -846,7 +846,16 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Link Google Drive (video/PDF)</label>
+                                <label>🎥 Video bài giảng (khuyên dùng)</label>
+                                <input type="file" id="lesson-video-file" accept="video/mp4,video/webm,video/ogg" />
+                                <small style="display:block;margin-top:6px;color:var(--text-muted);">Video sẽ được lưu trên Firebase Storage. Với khóa Premium, đây là cách bảo vệ nội dung tốt hơn Google Drive.</small>
+                                <div id="video-upload-progress" class="hidden" style="margin-top:10px;">
+                                    <div style="font-size:13px;margin-bottom:5px;">Đang tải video: <strong id="video-upload-percent">0%</strong></div>
+                                    <div style="height:8px;background:var(--border);border-radius:999px;overflow:hidden;"><div id="video-upload-bar" style="height:100%;width:0%;background:var(--primary);transition:width .2s;"></div></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Hoặc Link Google Drive (video/PDF)</label>
                                 <input type="url" id="lesson-link" placeholder="https://drive.google.com/file/d/..." />
                             </div>
                             <div class="form-group">
@@ -859,6 +868,12 @@
                         <hr style="margin:20px 0; border-color:var(--border);" />
                         <div id="admin-doc-list"></div>
                     </div>
+                </div>
+
+                <div class="dash-card" style="margin-top:20px;">
+                    <h3>👥 Quản lý quyền học Premium</h3>
+                    <p style="color:var(--text-muted);font-size:13px;margin-bottom:14px;">Tài khoản đã đăng nhập bằng Google sẽ xuất hiện tại đây. Tick khóa học để cấp quyền, bỏ tick để thu hồi.</p>
+                    <div id="admin-users-list"><div class="empty-state">Đang tải danh sách học viên...</div></div>
                 </div>
             </div>
         </div>
@@ -885,20 +900,10 @@
                 Đăng nhập bằng Google
             </button>
 
-            <div class="divider"><span>hoặc tài khoản</span></div>
-
-            <form onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label>Tên đăng nhập / Email</label>
-                    <input type="text" id="login-username" placeholder="Nhập admin hoặc username..." required />
-                </div>
-                <div class="form-group">
-                    <label>Mật khẩu</label>
-                    <input type="password" id="login-password" placeholder="Mật khẩu..." required />
-                </div>
-                <div id="login-error" class="error-msg">Tài khoản hoặc mật khẩu không chính xác!</div>
-                <button type="submit" class="btn-primary" style="margin-top: 12px; width: 100%;">Đăng nhập</button>
-            </form>
+            <div style="margin-top:16px;padding:12px;border-radius:10px;background:var(--bg-soft,#f8fafc);font-size:13px;color:var(--text-muted);">
+                🔐 MATHA TN sử dụng tài khoản Google để xác thực học viên và cấp quyền các khóa Premium.
+            </div>
+            <div id="login-error" class="error-msg"></div>
         </div>
     </div>
 
@@ -946,6 +951,7 @@
             <button class="close-btn" onclick="closeModal('viewer-modal')">&times;</button>
             <h2 id="viewer-title">📖 Xem bài học</h2>
             <div class="subtitle">Xem trực tiếp trên trình duyệt</div>
+            <video id="viewer-video" class="hidden" style="width:100%; max-height:65vh; border-radius:10px; background:#000;" controls playsinline controlsList="nodownload"></video>
             <iframe id="viewer-iframe" class="hidden" style="width:100%; height:65vh; border:none; border-radius:10px; background:#000;" allow="autoplay" allowfullscreen></iframe>
             <div id="viewer-fallback" class="hidden" style="text-align:center; padding:40px 10px;">
                 <p style="color:var(--text-muted); margin-bottom:16px;">Không thể nhúng xem trực tiếp link này. Vui lòng mở trong tab mới.</p>
@@ -962,7 +968,8 @@
             "imports": {
                 "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
                 "firebase/auth": "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js",
-                "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js",
+                "firebase/storage": "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js"
             }
         }
     </script>
@@ -988,8 +995,19 @@
             deleteDoc,
             onSnapshot,
             query,
-            orderBy
+            orderBy,
+            getDoc,
+            setDoc,
+            arrayUnion,
+            arrayRemove
         } from "firebase/firestore";
+        import {
+            getStorage,
+            ref as storageRef,
+            uploadBytesResumable,
+            getDownloadURL,
+            deleteObject
+        } from "firebase/storage";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBt1O3ZsugN_U21Aa04zlG5ZKdByE4fz-U",
@@ -1005,6 +1023,7 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         // 📧 Admin email (đổi thành email của bạn)
         const ADMIN_EMAIL = "thaigiabao99@gmail.com";
@@ -1029,6 +1048,7 @@
 
         const adminCoursesList = document.getElementById('admin-courses-list');
         const adminDocList = document.getElementById('admin-doc-list');
+        const adminUsersList = document.getElementById('admin-users-list');
         const lessonCourseSelect = document.getElementById('lesson-course-select');
         const courseForm = document.getElementById('course-form');
         const addLessonForm = document.getElementById('add-lesson-form');
@@ -1052,7 +1072,10 @@
         let unsubscribeCourses = null;
         let unsubscribeLessons = null;
         let listenerStarted = false;
-        let editingLessonId = null; // FIX: theo dõi bài học đang sửa thay vì hijack onsubmit
+        let unsubscribeUsers = null;
+        let editingLessonId = null;
+        let currentUserProfile = { accessCourses: [] };
+        let adminUsersData = [];
 
         // ============================================================
         // 4. RENDER HÀM
@@ -1109,7 +1132,7 @@
                         <div><strong>${count}</strong> bài học</div>
                         <div style="display:flex; gap:6px; flex-wrap:wrap;">
                             ${adminActions}
-                            <button class="btn-sm" onclick="viewCourseLessons('${course.id}')">📖 Vào học</button>
+                            ${isPremium && !canAccessCourse(course.id) ? `<button class="btn-sm" onclick="requestPremiumAccess('${course.id}')">🔒 Cần quyền</button>` : `<button class="btn-sm" onclick="viewCourseLessons('${course.id}')">📖 Vào học</button>`}
                         </div>
                     </div>
                 </div>
@@ -1157,9 +1180,32 @@
             if (prevValue) lessonCourseSelect.value = prevValue;
         }
 
+        function canAccessCourse(courseId) {
+            const course = coursesData.find(c => c.id === courseId);
+            if (!course) return false;
+            if (course.type === 'free') return true;
+            if (isAdmin) return true;
+            return !!currentUser && Array.isArray(currentUserProfile.accessCourses) && currentUserProfile.accessCourses.includes(courseId);
+        }
+
+        window.requestPremiumAccess = function(courseId) {
+            const course = coursesData.find(c => c.id === courseId);
+            if (!course) return;
+            if (!currentUser) {
+                alert('🔐 Khóa học Premium yêu cầu đăng nhập Google.');
+                openModal('login-modal');
+                return;
+            }
+            alert('🔒 Tài khoản ' + (currentUser.email || '') + ' chưa được cấp quyền cho khóa "' + course.title + '". Vui lòng liên hệ giáo viên để được cấp quyền.');
+        };
+
         window.viewCourseLessons = function(courseId) {
             const course = coursesData.find(c => c.id === courseId);
             if (!course) return;
+            if (!canAccessCourse(courseId)) {
+                requestPremiumAccess(courseId);
+                return;
+            }
             modalCourseTitle.textContent = '📖 ' + course.title;
             modalCourseSubtitle.textContent = `Danh sách bài học (${course.type.toUpperCase()})`;
             const lessons = lessonsData.filter(l => l.courseId === courseId);
@@ -1169,13 +1215,13 @@
                 courseLessonsRender.innerHTML = lessons.map(l =>
                     `<li>
                         <div class="lesson-info">
-                            <span class="name">📄 ${l.title}</span>
-                            <span class="meta">Dạng: <strong>${l.type}</strong></span>
+                            <span class="name">${l.videoStoragePath ? '🎥' : '📄'} ${l.title}</span>
+                            <span class="meta">Dạng: <strong>${l.type || 'Bài học'}</strong></span>
                             <span class="desc">${l.desc || ''}</span>
                         </div>
                         <div class="lesson-actions" style="display:flex; gap:6px;">
                             <button class="btn-sm" onclick="openLessonViewer('${l.id}')">▶ Xem</button>
-                            ${isAdmin ? `<button class="btn-sm delete-btn" onclick="deleteLesson('${l.id}')">🗑</button>` : ''}
+                            ${isAdmin ? `<button class="btn-sm edit-btn" onclick="editLesson('${l.id}')">Sửa</button><button class="btn-sm delete-btn" onclick="deleteLesson('${l.id}')">🗑</button>` : ''}
                         </div>
                     </li>`
                 ).join('');
@@ -1210,37 +1256,75 @@
             return null; // không nhận diện được -> để fallback mở tab mới
         }
 
-        window.openLessonViewer = function(lessonId) {
+        window.openLessonViewer = async function(lessonId) {
             const lesson = lessonsData.find(l => l.id === lessonId);
             if (!lesson) return;
+            const course = coursesData.find(c => c.id === lesson.courseId);
+            if (course && !canAccessCourse(course.id)) {
+                requestPremiumAccess(course.id);
+                return;
+            }
+
             const viewerTitle = document.getElementById('viewer-title');
             const iframe = document.getElementById('viewer-iframe');
+            const video = document.getElementById('viewer-video');
             const fallback = document.getElementById('viewer-fallback');
             const fallbackLink = fallback.querySelector('a');
             const fallbackText = fallback.querySelector('p');
 
             viewerTitle.textContent = '📖 ' + lesson.title;
-            const embedUrl = getDriveEmbedUrl(lesson.link);
+            iframe.src = '';
+            iframe.classList.add('hidden');
+            video.pause();
+            video.removeAttribute('src');
+            video.load();
+            fallback.classList.add('hidden');
 
-            if (embedUrl) {
-                iframe.src = embedUrl;
-                iframe.classList.remove('hidden');
-                fallback.classList.add('hidden');
-            } else if (lesson.link) {
-                iframe.src = '';
-                iframe.classList.add('hidden');
+            try {
+                if (lesson.videoStoragePath) {
+                    if (!currentUser && course?.type !== 'free') throw new Error('AUTH_REQUIRED');
+                    const url = await getDownloadURL(storageRef(storage, lesson.videoStoragePath));
+                    video.src = url;
+                    video.classList.remove('hidden');
+                    video.controls = true;
+                    video.setAttribute('playsinline', '');
+                } else {
+                    const embedUrl = getDriveEmbedUrl(lesson.link);
+                    if (embedUrl) {
+                        iframe.src = embedUrl;
+                        iframe.classList.remove('hidden');
+                    } else if (lesson.link) {
+                        fallback.classList.remove('hidden');
+                        fallbackText.textContent = 'Không thể nhúng xem trực tiếp link này. Vui lòng mở trong tab mới.';
+                        fallbackLink.href = lesson.link;
+                    } else {
+                        fallback.classList.remove('hidden');
+                        fallbackText.textContent = 'Bài học này chưa có video hoặc link tài liệu.';
+                        fallbackLink.removeAttribute('href');
+                    }
+                }
+            } catch (err) {
+                console.error(err);
                 fallback.classList.remove('hidden');
-                fallbackText.textContent = 'Không thể nhúng xem trực tiếp link này. Vui lòng mở trong tab mới.';
-                fallbackLink.href = lesson.link;
-            } else {
-                iframe.src = '';
-                iframe.classList.add('hidden');
-                fallback.classList.remove('hidden');
-                fallbackText.textContent = 'Bài học này chưa có link tài liệu.';
+                if (err.message === 'AUTH_REQUIRED') fallbackText.textContent = 'Bạn cần đăng nhập Google để xem nội dung này.';
+                else fallbackText.textContent = 'Bạn chưa được cấp quyền hoặc video không tồn tại.';
                 fallbackLink.removeAttribute('href');
             }
             openModal('viewer-modal');
         };
+
+        function startUserListener() {
+            if (!isAdmin || unsubscribeUsers) return;
+            const qUsers = query(collection(db, 'users'), orderBy('createdAt', 'asc'));
+            unsubscribeUsers = onSnapshot(qUsers, (snapshot) => {
+                adminUsersData = [];
+                snapshot.forEach(d => adminUsersData.push({ id: d.id, ...d.data() }));
+                renderAdminUsers(adminUsersData);
+            }, (error) => {
+                console.error('❌ Lỗi listener users:', error);
+                if (adminUsersList) adminUsersList.innerHTML = `<div class="empty-state">Không thể tải danh sách học viên: ${error.message}</div>`;
+            });
+        }
 
         // ============================================================
         // 5. LISTENER REAL-TIME (CHỈ GỌI 1 LẦN)
@@ -1266,6 +1350,7 @@
                 document.getElementById('dash-free-courses').textContent = coursesData.filter(c => c.type === 'free').length;
                 document.getElementById('dash-premium-courses').textContent = coursesData.filter(c => c.type === 'premium').length;
                 statCourses.textContent = coursesData.length;
+                renderAdminUsers(adminUsersData);
             }, (error) => {
                 console.error('❌ Lỗi listener courses:', error);
                 // FIX: hiện thông báo cho người dùng thay vì im lặng
@@ -1356,64 +1441,84 @@
             } catch (err) { alert('❌ Lỗi: ' + err.message); }
         };
 
-        // FIX: gộp logic thêm + sửa bài học vào MỘT handler duy nhất (bỏ kiểu hijack onsubmit cũ gây trùng dữ liệu)
+        async function uploadLessonVideo(file, courseId, lessonId) {
+            if (!file) return null;
+            if (!file.type.startsWith('video/')) throw new Error('Vui lòng chọn file video hợp lệ.');
+            const maxSize = 1024 * 1024 * 1024; // 1 GB
+            if (file.size > maxSize) throw new Error('Video vượt quá giới hạn 1 GB.');
+            const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+            const path = `videos/${courseId}/${lessonId}/${Date.now()}_${safeName}`;
+            const task = uploadBytesResumable(storageRef(storage, path), file, { contentType: file.type });
+            const progressWrap = document.getElementById('video-upload-progress');
+            const progressBar = document.getElementById('video-upload-bar');
+            const progressText = document.getElementById('video-upload-percent');
+            progressWrap.classList.remove('hidden');
+            return await new Promise((resolve, reject) => {
+                task.on('state_changed', snap => {
+                    const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+                    progressBar.style.width = pct + '%';
+                    progressText.textContent = pct + '%';
+                }, reject, () => {
+                    progressBar.style.width = '100%';
+                    progressText.textContent = '100%';
+                    resolve(path);
+                });
+            });
+        }
+
         window.handleAddLesson = async function(e) {
             e.preventDefault();
-
-            if (!currentUser) {
-                alert('⚠️ Bạn cần đăng nhập để thêm bài học!');
-                openModal('login-modal');
+            if (!currentUser || !isAdmin) {
+                alert('⚠️ Chỉ Admin mới có quyền thêm/sửa bài học.');
                 return;
             }
-            if (!isAdmin) {
-                alert('⚠️ Bạn cần quyền Admin để thêm bài học!');
-                return;
-            }
-
             const courseId = document.getElementById('lesson-course-select').value;
             const title = document.getElementById('lesson-title').value.trim();
             const type = document.getElementById('lesson-type').value;
             const link = document.getElementById('lesson-link').value.trim();
             const desc = document.getElementById('lesson-desc').value.trim();
-
-            if (!courseId) {
-                alert('⚠️ Vui lòng chọn khóa học!');
-                return;
-            }
-            if (!title) {
-                alert('⚠️ Vui lòng nhập tên bài học!');
-                return;
-            }
+            const videoFile = document.getElementById('lesson-video-file').files[0];
+            if (!courseId) return alert('⚠️ Vui lòng chọn khóa học!');
+            if (!title) return alert('⚠️ Vui lòng nhập tên bài học!');
+            if (!videoFile && !link && !editingLessonId) return alert('⚠️ Hãy chọn video hoặc nhập link tài liệu.');
 
             try {
-                if (editingLessonId) {
-                    // Đang ở chế độ sửa -> chỉ update, KHÔNG tạo mới
-                    await updateDoc(doc(db, 'lessons', editingLessonId), { courseId, title, type, link, desc });
-                    alert('✅ Cập nhật bài học thành công!');
-                    cancelEditLesson();
+                let lessonId = editingLessonId;
+                if (!lessonId) {
+                    const newDoc = await addDoc(collection(db, 'lessons'), { courseId, title, type, link, desc, videoStoragePath: '', createdAt: new Date(), createdBy: currentUser.uid });
+                    lessonId = newDoc.id;
                 } else {
-                    await addDoc(collection(db, 'lessons'), { courseId, title, type, link, desc, createdAt: new Date() });
-                    alert('✅ Thêm bài học thành công!');
+                    await updateDoc(doc(db, 'lessons', lessonId), { courseId, title, type, link, desc, updatedAt: new Date() });
                 }
-                document.getElementById('lesson-title').value = '';
-                document.getElementById('lesson-link').value = '';
-                document.getElementById('lesson-desc').value = '';
+                if (videoFile) {
+                    const path = await uploadLessonVideo(videoFile, courseId, lessonId);
+                    await updateDoc(doc(db, 'lessons', lessonId), { videoStoragePath: path });
+                }
+                alert(editingLessonId ? '✅ Cập nhật bài học thành công!' : '✅ Thêm bài học thành công!');
+                cancelEditLesson();
             } catch (err) {
-                console.error('❌ Lỗi chi tiết khi thêm bài học:', err);
-                alert('❌ Lỗi Firestore: ' + err.message + '\n\nKiểm tra lại quyền ghi (Firestore Rules) hoặc kết nối mạng.');
+                console.error(err);
+                alert('❌ Không thể lưu bài học: ' + err.message);
+            } finally {
+                document.getElementById('video-upload-progress').classList.add('hidden');
+                document.getElementById('video-upload-bar').style.width = '0%';
+                document.getElementById('video-upload-percent').textContent = '0%';
             }
         };
 
         window.deleteLesson = async function(id) {
-            if (!confirm('Xóa bài học này?')) return;
+            if (!isAdmin || !confirm('Xóa bài học này?')) return;
             try {
+                const lesson = lessonsData.find(l => l.id === id);
+                if (lesson?.videoStoragePath) {
+                    try { await deleteObject(storageRef(storage, lesson.videoStoragePath)); } catch (e) { console.warn('Không xóa được video cũ:', e); }
+                }
                 await deleteDoc(doc(db, 'lessons', id));
                 alert('✅ Đã xóa bài học.');
                 if (editingLessonId === id) cancelEditLesson();
             } catch (err) { alert('❌ Lỗi: ' + err.message); }
         };
 
-        // FIX: chỉ điền dữ liệu vào form + bật "chế độ sửa", KHÔNG tự submit form nữa
         window.editLesson = function(id) {
             const lesson = lessonsData.find(l => l.id === id);
             if (!lesson) return;
@@ -1421,10 +1526,9 @@
             document.getElementById('lesson-type').value = lesson.type || 'Tài liệu PDF';
             document.getElementById('lesson-link').value = lesson.link || '';
             document.getElementById('lesson-desc').value = lesson.desc || '';
+            document.getElementById('lesson-video-file').value = '';
             const select = document.getElementById('lesson-course-select');
-            for (let opt of select.options) {
-                if (opt.value === lesson.courseId) { opt.selected = true; break; }
-            }
+            for (let opt of select.options) if (opt.value === lesson.courseId) { opt.selected = true; break; }
             editingLessonId = id;
             lessonSubmitBtn.textContent = '💾 Cập nhật bài học';
             lessonCancelEditBtn.classList.remove('hidden');
@@ -1438,6 +1542,44 @@
             document.getElementById('lesson-title').value = '';
             document.getElementById('lesson-link').value = '';
             document.getElementById('lesson-desc').value = '';
+            document.getElementById('lesson-video-file').value = '';
+        };
+
+        function renderAdminUsers(users) {
+            if (!adminUsersList) return;
+            if (!users.length) {
+                adminUsersList.innerHTML = `<div class="empty-state">Chưa có học viên nào đăng nhập Google.</div>`;
+                return;
+            }
+            adminUsersList.innerHTML = users.map(u => {
+                const access = Array.isArray(u.accessCourses) ? u.accessCourses : [];
+                const options = coursesData.filter(c => c.type === 'premium').map(c => `
+                    <label style="display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;">
+                        <input type="checkbox" ${access.includes(c.id) ? 'checked' : ''} onchange="setCourseAccess('${u.id}','${c.id}',this.checked)">
+                        <span>${c.title}</span>
+                    </label>`).join('');
+                return `<div class="admin-item" style="display:block;margin-bottom:12px;">
+                    <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;">
+                        <div><strong>${u.displayName || 'Học viên'}</strong><br><small style="color:var(--text-muted);">${u.email || ''}</small></div>
+                        <span class="tag tag-free">${access.length} quyền</span>
+                    </div>
+                    <div style="margin-top:10px;">${options || '<small style="color:var(--text-muted);">Chưa có khóa Premium.</small>'}</div>
+                </div>`;
+            }).join('');
+        }
+
+        window.setCourseAccess = async function(uid, courseId, enabled) {
+            if (!isAdmin) return;
+            try {
+                await setDoc(doc(db, 'users', uid), { accessCourses: enabled ? arrayUnion(courseId) : arrayRemove(courseId) }, { merge: true });
+                if (uid === currentUser?.uid) {
+                    currentUserProfile.accessCourses = enabled ? [...new Set([...(currentUserProfile.accessCourses || []), courseId])] : (currentUserProfile.accessCourses || []).filter(x => x !== courseId);
+                    renderCourses();
+                }
+            } catch (err) {
+                alert('❌ Không thể cập nhật quyền: ' + err.message);
+                renderAdminUsers(adminUsersData);
+            }
         };
 
         // ============================================================
@@ -1445,7 +1587,16 @@
         // ============================================================
         window.loginWithGoogle = async function() {
             try {
-                await signInWithPopup(auth, provider);
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                await setDoc(doc(db, 'users', user.uid), {
+                    uid: user.uid,
+                    email: user.email || '',
+                    displayName: user.displayName || '',
+                    photoURL: user.photoURL || '',
+                    updatedAt: new Date()
+                }, { merge: true });
+                closeModal('login-modal');
             } catch (err) {
                 console.error(err);
                 alert('Đăng nhập Google thất bại: ' + err.message);
@@ -1454,29 +1605,15 @@
 
         window.handleLogin = function(e) {
             e.preventDefault();
-            loginError.classList.remove('show'); // FIX: ẩn lỗi cũ trước khi thử lại
-            const username = document.getElementById('login-username').value.trim();
-            const password = document.getElementById('login-password').value.trim();
-            // FIX: bỏ tài khoản admin/admin123 giả — quyền Admin CHỈ được cấp qua
-            // đăng nhập Google đúng email ADMIN_EMAIL (xác thực thật với Firebase).
-            // Đăng nhập bằng username/password ở đây chỉ tạo phiên hiển thị tên,
-            // không có quyền ghi dữ liệu (Firestore Rules không công nhận phiên này).
-            if (username && password) {
-                const fake = { displayName: username, email: username + '@user.com', uid: 'user_uid' };
-                currentUser = fake;
-                isAdmin = false;
-                updateUI(fake);
-                closeModal('login-modal');
-                showSection('home');
-                alert('👋 Xin chào ' + username + '!');
-                return;
-            }
-            loginError.classList.add('show'); // FIX: class này giờ có CSS tương ứng nên sẽ thực sự hiện ra
+            alert('ℹ️ Website hiện sử dụng đăng nhập Google để xác thực tài khoản. Vui lòng bấm "Đăng nhập bằng Google".');
+            loginError.classList.remove('show');
         };
 
         window.logout = async function() {
             if (!confirm('Bạn có chắc muốn đăng xuất?')) return;
             if (auth.currentUser) await signOut(auth);
+            if (unsubscribeUsers) { unsubscribeUsers(); unsubscribeUsers = null; }
+            adminUsersData = [];
             currentUser = null;
             isAdmin = false;
             updateUI(null);
@@ -1504,6 +1641,8 @@
                 document.getElementById('dash-total-docs').textContent = lessonsData.length;
 
                 startListeners();
+                startUserListener();
+                renderAdminUsers(adminUsersData);
             } else {
                 authActions.classList.remove('hidden');
                 userActions.classList.add('hidden');
@@ -1563,7 +1702,9 @@
         window.closeModal = function(id) {
             document.getElementById(id).classList.remove('active');
             if (id === 'viewer-modal') {
-                document.getElementById('viewer-iframe').src = ''; // dừng phát video khi đóng
+                document.getElementById('viewer-iframe').src = '';
+                const v = document.getElementById('viewer-video');
+                if (v) { v.pause(); v.removeAttribute('src'); v.load(); }
             }
         };
 
@@ -1590,19 +1731,36 @@
         // ============================================================
         // 12. INIT
         // ============================================================
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
-                isAdmin = user.email === ADMIN_EMAIL;
+                isAdmin = (user.email || '').toLowerCase() === ADMIN_EMAIL.toLowerCase();
+                try {
+                    const snap = await getDoc(doc(db, 'users', user.uid));
+                    currentUserProfile = snap.exists() ? snap.data() : { accessCourses: [] };
+                    if (!Array.isArray(currentUserProfile.accessCourses)) currentUserProfile.accessCourses = [];
+                    if (!snap.exists()) {
+                        await setDoc(doc(db, 'users', user.uid), { uid: user.uid, email: user.email || '', displayName: user.displayName || '', photoURL: user.photoURL || '', createdAt: new Date(), updatedAt: new Date(), accessCourses: [] });
+                    } else {
+                        await setDoc(doc(db, 'users', user.uid), { uid: user.uid, email: user.email || '', displayName: user.displayName || '', photoURL: user.photoURL || '', updatedAt: new Date() }, { merge: true });
+                    }
+                } catch (e) {
+                    console.warn('Không tải được hồ sơ quyền học:', e);
+                    currentUserProfile = { accessCourses: [] };
+                }
                 updateUI(user);
                 if (isAdmin) showSection('admin');
                 else showSection('home');
             } else {
+                if (unsubscribeUsers) { unsubscribeUsers(); unsubscribeUsers = null; }
+                adminUsersData = [];
                 currentUser = null;
                 isAdmin = false;
+                currentUserProfile = { accessCourses: [] };
                 updateUI(null);
                 showSection('home');
             }
+            renderCourses();
         });
 
         // Khởi tạo listener ngay lập tức để mọi khách (kể cả chưa đăng nhập) đều xem được dữ liệu công khai
