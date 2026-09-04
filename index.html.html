@@ -895,10 +895,6 @@
                 <div id="login-error" class="error-msg">Tài khoản hoặc mật khẩu không chính xác!</div>
                 <button type="submit" class="btn-primary" style="margin-top: 12px; width: 100%;">Đăng nhập</button>
             </form>
-
-            <div style="text-align:center;margin-top:16px;font-size:12px;color:var(--text-light);">
-                👨‍💼 Admin mặc định: <strong>admin</strong> / <strong>admin123</strong>
-            </div>
         </div>
     </div>
 
@@ -1389,20 +1385,12 @@
             loginError.classList.remove('show'); // FIX: ẩn lỗi cũ trước khi thử lại
             const username = document.getElementById('login-username').value.trim();
             const password = document.getElementById('login-password').value.trim();
-            if (username === 'admin' && password === 'admin123') {
-                const fake = { displayName: 'Quản trị viên', email: 'admin@matha.com', uid: 'admin_uid' };
-                localStorage.setItem('matha_fake_admin', JSON.stringify(fake));
-                currentUser = fake;
-                isAdmin = true;
-                updateUI(fake);
-                closeModal('login-modal');
-                showSection('admin');
-                alert('👋 Xin chào Admin!');
-                return;
-            }
+            // FIX: bỏ tài khoản admin/admin123 giả — quyền Admin CHỈ được cấp qua
+            // đăng nhập Google đúng email ADMIN_EMAIL (xác thực thật với Firebase).
+            // Đăng nhập bằng username/password ở đây chỉ tạo phiên hiển thị tên,
+            // không có quyền ghi dữ liệu (Firestore Rules không công nhận phiên này).
             if (username && password) {
                 const fake = { displayName: username, email: username + '@user.com', uid: 'user_uid' };
-                localStorage.removeItem('matha_fake_admin');
                 currentUser = fake;
                 isAdmin = false;
                 updateUI(fake);
@@ -1416,7 +1404,6 @@
 
         window.logout = async function() {
             if (!confirm('Bạn có chắc muốn đăng xuất?')) return;
-            localStorage.removeItem('matha_fake_admin');
             if (auth.currentUser) await signOut(auth);
             currentUser = null;
             isAdmin = false;
@@ -1536,19 +1523,10 @@
                 if (isAdmin) showSection('admin');
                 else showSection('home');
             } else {
-                const stored = localStorage.getItem('matha_fake_admin');
-                if (stored) {
-                    const fake = JSON.parse(stored);
-                    currentUser = fake;
-                    isAdmin = true;
-                    updateUI(fake);
-                    showSection('admin');
-                } else {
-                    currentUser = null;
-                    isAdmin = false;
-                    updateUI(null);
-                    showSection('home');
-                }
+                currentUser = null;
+                isAdmin = false;
+                updateUI(null);
+                showSection('home');
             }
         });
 
