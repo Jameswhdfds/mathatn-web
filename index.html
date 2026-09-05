@@ -806,7 +806,9 @@
                         <div id="qb-dropzone" class="qb-upload"><div class="big">📷</div><strong>Kéo thả ảnh hoặc PDF vào đây</strong><span>JPG · PNG · WEBP · PDF · Có thể chọn nhiều file</span></div>
                         <div id="qb-file-list" class="qb-file-list"><div class="qb-empty" style="padding:20px">Chưa có file được chọn.</div></div>
                         <div id="qb-progress" class="qb-progress hidden"><div id="qb-status" class="qb-status">Đang xử lý...</div><div class="qb-progress-bar"><div id="qb-progress-fill" class="qb-progress-fill"></div></div></div>
+                        <div id="qb-storage-status" class="qb-source-info hidden"><span id="qb-storage-status-text">Đang lưu bản gốc...</span></div>
                         <div class="qb-actions"><button class="btn-primary" id="qb-analyze-btn" onclick="analyzeQuestionFiles()">🤖 AI NHẬN DIỆN</button><button class="btn-outline" onclick="clearQuestionFiles()">Xóa file</button></div>
+                        <div class="qb-source-info">⚡ Tối ưu: file được gửi <strong>trực tiếp cho AI</strong>; không phải upload Firebase trước. Bản gốc được lưu ở nền sau khi AI trả kết quả.</div>
                         <div class="qb-source-info">AI chỉ nhận diện và chuẩn hóa nội dung; không tự ý thay đổi ý nghĩa toán học. Mọi câu hỏi phải được giáo viên kiểm tra trước khi duyệt.</div>
                     </div>
                     <div class="qb-card">
@@ -1783,6 +1785,11 @@
         let qbApprovedQuestions = [];
         let unsubscribeQuestionBank = null;
 
+        // Tối ưu tốc độ: không upload Firebase trước khi gọi AI.
+        // File được gửi trực tiếp cho backend AI; bản gốc được lưu ở nền sau đó.
+        const qbUploadedSources = new Map();
+        const qbUploadingSources = new Map();
+
         const qbEsc = (v='') => String(v).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
         const qbLevelName = {A:'Nhận biết',B:'Thông hiểu',C:'Vận dụng',D:'Vận dụng cao'};
 
@@ -1820,13 +1827,67 @@
         window.removeQuestionFile=function(i){qbFiles.splice(i,1);renderQuestionFiles()};
         window.clearQuestionFiles=function(){qbFiles=[];document.getElementById('qb-file-input').value='';renderQuestionFiles()};
 
-        async function uploadQuestionSource(file){
-            const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
-            const path=`question-bank/sources/${Date.now()}_${Math.random().toString(36).slice(2,8)}_${safe}`;
-            const task=uploadBytesResumable(storageRef(storage,path),file,{contentType:file.type});
-            return await new Promise((resolve,reject)=>task.on('state_changed',()=>{},reject,async()=>{
-                try{resolve({path,url:await getDownloadURL(storageRef(storage,path))})}catch(e){reject(e)}
-            }));
+        async function uploadQuestionSource(file, sourceIndex){
+            if(qbUploadedSources.has(sourceIndex)) return qbUploadedSources.get(sourceIndex);
+            if(qbUploadingSources.has(sourceIndex)) return qbUploadingSources.get(sourceIndex);
+
+            const promise=(async()=>{
+                const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+                const path=`question-bank/sources/${Date.now()}_${Math.random().toString(36).slice(2,8)}_${safe}`;
+                const task=uploadBytesResumable(storageRef(storage,path),file,{contentType:file.type});
+                return await new Promise((resolve,reject)=>task.on('state_changed',snap=>{
+                    const pct=snap.totalBytes ? Math.round(snap.bytesTransferred/snap.totalBytes*100) : 0;
+                    document.getElementById('qb-storage-status')?.classList.remove('hidden');
+                    const text=document.getElementById('qb-storage-status-text');
+                    if(text) text.textContent=`Đang lưu bản gốc: ${file.name} · ${pct}%`;
+                },reject,async()=>{
+                    try{
+                        const url=await getDownloadURL(storageRef(storage,path));
+                        const result={path,url};
+                        qbUploadedSources.set(sourceIndex,result);
+                        resolve(result);
+                    }catch(e){reject(e)}
+                }));
+            })();
+
+            qbUploadingSources.set(sourceIndex,promise);
+            try{return await promise}finally{qbUploadingSources.delete(sourceIndex)}
+        }
+
+        async function uploadQuestionSourcesInBackground(sources){
+            if(!sources.length)return;
+            const status=document.getElementById('qb-storage-status');
+            const text=document.getElementById('qb-storage-status-text');
+            status?.classList.remove('hidden');
+            if(text) text.textContent=`Đang lưu ${sources.length} bản gốc lên Firebase ở nền...`;
+
+            const results=await Promise.allSettled(
+                sources.map((s,i)=>uploadQuestionSource(s.file,i))
+            );
+
+            results.forEach((r,i)=>{
+                if(r.status==='fulfilled'){
+                    sources[i].path=r.value.path;
+                    sources[i].url=r.value.url;
+                }
+            });
+
+            qbQuestions.forEach(q=>{
+                const idx=Number(q.sourceIndex||0);
+                const s=sources[idx];
+                if(s?.url){
+                    q.originalImageUrl=s.url;
+                    q.sourceStoragePath=s.path;
+                }
+            });
+
+            if(text){
+                const failed=results.filter(r=>r.status==='rejected').length;
+                text.textContent=failed
+                    ? `⚠️ ${failed} file chưa lưu được. Hệ thống sẽ thử lại khi bạn duyệt.`
+                    : `✅ Đã lưu ${sources.length} bản gốc lên Firebase Storage.`;
+            }
+            renderQBReview();
         }
 
         function qbSetProgress(pct,text){
@@ -1836,44 +1897,108 @@
         }
 
         window.analyzeQuestionFiles=async function(){
-            if(!qbIsAdmin() || !qbFiles.length) { if(!qbFiles.length) alert('📁 Hãy chọn ít nhất một ảnh hoặc PDF.'); return; }
-            const btn=document.getElementById('qb-analyze-btn'); btn.disabled=true;
+            if(!qbIsAdmin() || !qbFiles.length) {
+                if(!qbFiles.length) alert('📁 Hãy chọn ít nhất một ảnh hoặc PDF.');
+                return;
+            }
+
+            const btn=document.getElementById('qb-analyze-btn');
+            btn.disabled=true;
+
             try{
-                qbSetProgress(10,'Đang chuẩn bị file...');
-                const sources=[];
-                for(let i=0;i<qbFiles.length;i++){
-                    qbSetProgress(10+Math.round((i/qbFiles.length)*30),`Đang tải nguồn ${i+1}/${qbFiles.length}...`);
-                    sources.push({file:qbFiles[i],...(await uploadQuestionSource(qbFiles[i]))});
-                }
-                qbSetProgress(50,'Đang gửi ảnh/PDF cho AI nhận diện...');
+                // QUAN TRỌNG: không upload Firebase trước AI.
+                // Đây là điểm giúp giảm một vòng truyền file và tránh upload xong lại gửi file lần nữa.
+                qbSetProgress(10,'Đang chuẩn bị file để nhận diện...');
+                const sources=qbFiles.map((file,index)=>({
+                    file,index,name:file.name,type:file.type,size:file.size
+                }));
+
                 const form=new FormData();
                 sources.forEach(x=>form.append('files',x.file,x.file.name));
-                form.append('sourceMetadata',JSON.stringify(sources.map(x=>({name:x.file.name,type:x.file.type,size:x.file.size,storagePath:x.path,storageUrl:x.url}))));
+                form.append('sourceMetadata',JSON.stringify(
+                    sources.map(x=>({
+                        name:x.name,
+                        type:x.type,
+                        size:x.size,
+                        sourceIndex:x.index
+                    }))
+                ));
                 form.append('task','ocr_normalize_split_classify_math12');
-                form.append('taxonomy',JSON.stringify({grade:'12',levels:qbLevelName,order:['chapter','topic','problemType','skill','level','format']}));
-                const response=await fetch(QUESTION_BANK_AI_ENDPOINT,{method:'POST',body:form});
-                if(!response.ok){let detail='';try{detail=await response.text()}catch(e){};throw new Error(`API AI chưa sẵn sàng (${response.status}). ${detail.slice(0,180)}`)}
+                form.append('taxonomy',JSON.stringify({
+                    grade:'12',
+                    levels:qbLevelName,
+                    order:['chapter','topic','problemType','skill','level','format']
+                }));
+
+                qbSetProgress(35,`Đang gửi ${sources.length} file trực tiếp cho AI...`);
+                const response=await fetch(QUESTION_BANK_AI_ENDPOINT,{
+                    method:'POST',
+                    body:form
+                });
+
+                if(!response.ok){
+                    let detail='';
+                    try{detail=await response.text()}catch(e){}
+                    throw new Error(`API AI chưa sẵn sàng (${response.status}). ${detail.slice(0,180)}`);
+                }
+
+                qbSetProgress(80,'AI đã xử lý xong, đang dựng bản xem trước...');
                 const data=await response.json();
                 qbQuestions=(data.questions||[]).map((q,i)=>normalizeAIQuestion(q,i,sources));
-                qbSetProgress(100,`AI đã nhận diện ${qbQuestions.length} câu. Đang chờ giáo viên kiểm tra.`);
+
                 if(!qbQuestions.length) throw new Error('AI không trả về câu hỏi.');
-                qbSelectedIndex=0; renderQBReview();
-                alert(`✅ AI đã nhận diện ${qbQuestions.length} câu. Hãy kiểm tra từng câu trước khi duyệt.`);
+
+                qbSetProgress(100,`AI đã nhận diện ${qbQuestions.length} câu. Có thể kiểm tra ngay.`);
+                qbSelectedIndex=0;
+                renderQBReview();
+
+                // Lưu bản gốc ở nền; không bắt giáo viên phải chờ upload xong mới xem kết quả AI.
+                uploadQuestionSourcesInBackground(sources).catch(err=>{
+                    console.warn('Background source upload:',err);
+                });
+
+                alert(`✅ AI đã nhận diện ${qbQuestions.length} câu. Bạn có thể kiểm tra ngay.`);
             }catch(err){
                 console.error('Question bank AI:',err);
                 qbSetProgress(100,'Chưa hoàn tất.');
-                alert('❌ Không thể nhận diện: '+err.message+'\n\nGiao diện đã sẵn sàng; cần triển khai API AI tại '+QUESTION_BANK_AI_ENDPOINT+'.');
-            }finally{btn.disabled=false}
+                alert('❌ Không thể nhận diện: '+err.message+
+                      '\n\nGiao diện đã sẵn sàng; cần triển khai API AI tại '+QUESTION_BANK_AI_ENDPOINT+'.');
+            }finally{
+                btn.disabled=false;
+            }
         };
 
         function normalizeAIQuestion(q,i,sources){
-            const src=sources[Math.min(Number(q.sourceIndex||0),sources.length-1)]||sources[0]||{};
+            const sourceIndex=Math.min(
+                Math.max(Number(q.sourceIndex||0),0),
+                Math.max(sources.length-1,0)
+            );
+            const src=sources[sourceIndex]||sources[0]||{};
+
             return {
                 code:q.code||`12-01-${q.level||'B'}-${String(i+1).padStart(4,'0')}`,
-                grade:'12',subject:'Toán',chapter:q.chapter||'01',topic:q.topic||'',problemType:q.problemType||'',skill:q.skill||'',level:q.level||'B',format:q.format||'Trắc nghiệm 4 lựa chọn',
-                questionText:q.questionText||q.text||'',questionLatex:q.questionLatex||'',options:Array.isArray(q.options)?q.options:[],correctAnswer:q.correctAnswer||'',solution:q.solution||'',
-                sourceFile:q.sourceFile||src.file?.name||'',sourcePage:q.sourcePage||q.page||'',originalImageUrl:q.originalImageUrl||src.url||'',sourceStoragePath:src.path||'',
-                ocrConfidence:q.ocrConfidence??null,classificationConfidence:q.classificationConfidence??null,status:'draft',createdAt:new Date()
+                grade:'12',
+                subject:'Toán',
+                chapter:q.chapter||'01',
+                topic:q.topic||'',
+                problemType:q.problemType||'',
+                skill:q.skill||'',
+                level:q.level||'B',
+                format:q.format||'Trắc nghiệm 4 lựa chọn',
+                questionText:q.questionText||q.text||'',
+                questionLatex:q.questionLatex||'',
+                options:Array.isArray(q.options)?q.options:[],
+                correctAnswer:q.correctAnswer||'',
+                solution:q.solution||'',
+                sourceIndex,
+                sourceFile:q.sourceFile||src.name||'',
+                sourcePage:q.sourcePage||q.page||'',
+                originalImageUrl:q.originalImageUrl||src.url||'',
+                sourceStoragePath:src.path||'',
+                ocrConfidence:q.ocrConfidence??null,
+                classificationConfidence:q.classificationConfidence??null,
+                status:'draft',
+                createdAt:new Date()
             };
         }
 
@@ -1911,9 +2036,30 @@
         }
         window.qbSaveCurrentDraft=function(){collectQBReview();alert('💾 Đã lưu thay đổi vào bản nháp hiện tại. Bạn có thể duyệt sau.');renderQBReview()};
         window.qbApproveCurrent=async function(){
-            if(!qbIsAdmin())return; collectQBReview(); const q=qbQuestions[qbSelectedIndex];
+            if(!qbIsAdmin())return;
+            collectQBReview();
+            const q=qbQuestions[qbSelectedIndex];
             if(!q.questionText.trim()){alert('⚠️ Nội dung câu hỏi đang trống.');return}
-            try{q.status='approved';q.reviewedAt=new Date();q.reviewedBy=currentUser.uid;await addDoc(collection(db,'questionBank'),q);qbApprovedQuestions.push(q);renderQBReview();alert('✅ Đã duyệt và lưu câu hỏi vào Firestore.');}catch(e){console.error(e);alert('❌ Không thể lưu questionBank: '+e.message)}
+
+            try{
+                // Nếu bản gốc chưa upload xong, chỉ chờ đúng file của câu đang duyệt.
+                if(q.sourceIndex!==undefined && qbFiles[q.sourceIndex]){
+                    const source=await uploadQuestionSource(qbFiles[q.sourceIndex],q.sourceIndex);
+                    q.originalImageUrl=source.url;
+                    q.sourceStoragePath=source.path;
+                }
+
+                q.status='approved';
+                q.reviewedAt=new Date();
+                q.reviewedBy=currentUser.uid;
+                await addDoc(collection(db,'questionBank'),q);
+                qbApprovedQuestions.push(q);
+                renderQBReview();
+                alert('✅ Đã duyệt và lưu câu hỏi vào Firestore.');
+            }catch(e){
+                console.error(e);
+                alert('❌ Không thể lưu questionBank: '+e.message);
+            }
         };
         window.qbNextQuestion=function(){collectQBReview();if(qbSelectedIndex<qbQuestions.length-1){qbSelectedIndex++;renderQBReview()}else alert('🎉 Đã đến câu cuối.');};
 
