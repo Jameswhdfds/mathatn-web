@@ -597,6 +597,21 @@
             .stats-grid { grid-template-columns: 1fr 1fr; }
             .stats-grid .stat-item:last-child { border-bottom: none; }
         }
+    
+        /* ===== QUESTION BANK ===== */
+        .question-bank-section{padding:36px 0 60px;background:var(--bg-body);min-height:calc(100vh - 140px)}
+        .qb-header{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+        .qb-header h2{font-size:28px;font-weight:800;margin-bottom:6px}.qb-header p{color:var(--text-muted);font-size:14px}
+        .qb-toolbar{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow);margin-bottom:20px}
+        .qb-filters{display:grid;grid-template-columns:2fr repeat(6,1fr);gap:10px}.qb-filters input,.qb-filters select{width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:12px;background:#fff}
+        .qb-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:20px;align-items:start}.qb-card{background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}.qb-card-head{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px}.qb-card-head h3{font-size:16px}
+        .qb-upload{margin:18px;border:2px dashed #c4b5fd;border-radius:14px;background:var(--primary-light);padding:34px 20px;text-align:center;cursor:pointer;transition:.2s}.qb-upload.dragover{border-color:var(--primary);background:#ede9fe;transform:scale(1.01)}.qb-upload .big{font-size:40px;margin-bottom:8px}.qb-upload strong{display:block;font-size:16px}.qb-upload span{font-size:12px;color:var(--text-muted)}
+        .qb-file-list{padding:0 18px 18px}.qb-file{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;border:1px solid var(--border);border-radius:9px;margin-top:8px;font-size:12px}.qb-file .meta{color:var(--text-muted)}
+        .qb-actions{display:flex;gap:8px;padding:0 18px 18px;flex-wrap:wrap}.qb-progress{margin:0 18px 18px}.qb-progress-bar{height:8px;background:var(--border);border-radius:99px;overflow:hidden}.qb-progress-fill{height:100%;width:0;background:var(--primary);transition:.2s}.qb-status{font-size:12px;color:var(--text-muted);margin-bottom:6px}
+        .qb-review{padding:18px}.qb-review-layout{display:grid;grid-template-columns:38% 62%;gap:16px}.qb-source-preview{min-height:360px;border:1px solid var(--border);border-radius:10px;background:#f8fafc;display:flex;align-items:center;justify-content:center;overflow:hidden}.qb-source-preview img{width:100%;height:100%;object-fit:contain;max-height:620px}.qb-source-preview iframe{width:100%;height:620px;border:0}.qb-source-placeholder{text-align:center;color:var(--text-light);padding:30px}.qb-fields{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.qb-fields .full{grid-column:1/-1}.qb-fields textarea{min-height:110px}.qb-badge{font-size:10px;font-weight:700;border-radius:99px;padding:4px 8px;background:#f1f5f9;color:var(--text-muted)}.qb-badge.ai{background:#ede9fe;color:var(--primary)}.qb-question-item{padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer}.qb-question-item:hover{background:#fafafa}.qb-question-item:last-child{border-bottom:0}.qb-question-item .title{font-weight:700;font-size:13px;line-height:1.45}.qb-question-item .tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}.qb-list-scroll{max-height:650px;overflow:auto}.qb-empty{padding:45px 20px;text-align:center;color:var(--text-light)}.qb-selected{outline:2px solid var(--primary-light);background:#faf8ff}.qb-source-info{font-size:11px;color:var(--text-muted);padding:0 18px 14px}.qb-check{display:flex;align-items:center;gap:8px;font-size:12px}.qb-check input{width:16px;height:16px}
+        @media(max-width:1100px){.qb-filters{grid-template-columns:repeat(3,1fr)}.qb-grid,.qb-review-layout{grid-template-columns:1fr}}
+        @media(max-width:650px){.qb-filters{grid-template-columns:1fr 1fr}.qb-fields{grid-template-columns:1fr}.qb-fields .full{grid-column:auto}}
+
     </style>
 </head>
 <body>
@@ -626,6 +641,7 @@
                 <a class="active" onclick="showSection('home')">Trang chủ</a>
                 <a onclick="scrollToSection('courses-section')">Khóa học</a>
                 <a onclick="scrollToSection('stats-section')">Thống kê</a>
+                <a onclick="showSection('question-bank')">🧠 Ngân hàng câu hỏi</a>
                 <a id="nav-admin" class="hidden" onclick="showSection('admin')">👨‍💼 Quản trị</a>
             </nav>
 
@@ -762,6 +778,47 @@
                     </div>
                 </div>
             </section>
+        </div>
+
+
+        <!-- ===== QUESTION BANK SECTION ===== -->
+        <div id="section-question-bank" class="question-bank-section hidden">
+            <div class="container">
+                <div class="qb-header">
+                    <div><h2>🧠 Ngân hàng câu hỏi Toán 12</h2><p>Tải ảnh/PDF → AI nhận diện → giáo viên kiểm tra → duyệt vào ngân hàng.</p></div>
+                    <button class="btn-primary" onclick="document.getElementById('qb-file-input').click()">📁 Chọn ảnh / PDF</button>
+                </div>
+                <div class="qb-toolbar">
+                    <div class="qb-filters">
+                        <input id="qb-search" placeholder="🔍 Tìm nội dung câu hỏi..." oninput="renderQuestionBank()">
+                        <select id="qb-filter-chapter" onchange="renderQuestionBank()"><option value="">Tất cả chương</option><option value="01">01 · Ứng dụng đạo hàm</option><option value="02">02 · Hàm số lũy thừa, mũ, logarit</option><option value="03">03 · Nguyên hàm - Tích phân</option><option value="04">04 · Số phức</option><option value="05">05 · Hình học Oxyz</option><option value="06">06 · Xác suất</option></select>
+                        <select id="qb-filter-topic" onchange="renderQuestionBank()"><option value="">Chủ đề</option><option>Hàm số</option><option>Đạo hàm</option><option>Nguyên hàm</option><option>Tích phân</option><option>Số phức</option><option>Oxyz</option></select>
+                        <select id="qb-filter-type" onchange="renderQuestionBank()"><option value="">Dạng bài</option><option>Nhận biết khái niệm</option><option>Tính toán</option><option>Biện luận</option><option>Ứng dụng thực tế</option><option>Chứng minh</option></select>
+                        <select id="qb-filter-skill" onchange="renderQuestionBank()"><option value="">Kỹ năng</option><option>Đọc hiểu</option><option>Tính toán</option><option>Biến đổi</option><option>Suy luận</option><option>Mô hình hóa</option></select>
+                        <select id="qb-filter-level" onchange="renderQuestionBank()"><option value="">Mức độ</option><option value="A">A · Nhận biết</option><option value="B">B · Thông hiểu</option><option value="C">C · Vận dụng</option><option value="D">D · Vận dụng cao</option></select>
+                        <select id="qb-filter-format" onchange="renderQuestionBank()"><option value="">Loại câu</option><option>Trắc nghiệm 4 lựa chọn</option><option>Đúng/Sai</option><option>Trả lời ngắn</option><option>Tự luận</option></select>
+                    </div>
+                </div>
+                <div class="qb-grid">
+                    <div class="qb-card">
+                        <div class="qb-card-head"><h3>📥 Nhập câu hỏi bằng AI</h3><span class="qb-badge ai">AI VISION</span></div>
+                        <input id="qb-file-input" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" multiple class="hidden">
+                        <div id="qb-dropzone" class="qb-upload"><div class="big">📷</div><strong>Kéo thả ảnh hoặc PDF vào đây</strong><span>JPG · PNG · WEBP · PDF · Có thể chọn nhiều file</span></div>
+                        <div id="qb-file-list" class="qb-file-list"><div class="qb-empty" style="padding:20px">Chưa có file được chọn.</div></div>
+                        <div id="qb-progress" class="qb-progress hidden"><div id="qb-status" class="qb-status">Đang xử lý...</div><div class="qb-progress-bar"><div id="qb-progress-fill" class="qb-progress-fill"></div></div></div>
+                        <div class="qb-actions"><button class="btn-primary" id="qb-analyze-btn" onclick="analyzeQuestionFiles()">🤖 AI NHẬN DIỆN</button><button class="btn-outline" onclick="clearQuestionFiles()">Xóa file</button></div>
+                        <div class="qb-source-info">AI chỉ nhận diện và chuẩn hóa nội dung; không tự ý thay đổi ý nghĩa toán học. Mọi câu hỏi phải được giáo viên kiểm tra trước khi duyệt.</div>
+                    </div>
+                    <div class="qb-card">
+                        <div class="qb-card-head"><h3>📚 Câu hỏi đã duyệt</h3><span id="qb-count" class="qb-badge">0 câu</span></div>
+                        <div id="qb-list" class="qb-list-scroll"><div class="qb-empty">Chưa có câu hỏi trong ngân hàng.</div></div>
+                    </div>
+                </div>
+                <div class="qb-card" style="margin-top:20px;">
+                    <div class="qb-card-head"><h3>✍️ Kiểm tra & chuẩn hóa câu hỏi</h3><span id="qb-review-status" class="qb-badge">Chưa chọn</span></div>
+                    <div id="qb-review" class="qb-review"><div class="qb-empty">Sau khi AI nhận diện, câu hỏi sẽ xuất hiện tại đây để giáo viên chỉnh sửa và duyệt.</div></div>
+                </div>
+            </div>
         </div>
 
         <!-- ===== ADMIN DASHBOARD SECTION ===== -->
@@ -1713,6 +1770,179 @@
         window.filterCourses = function() {
             const text = document.getElementById('global-search').value;
             renderCourses(text);
+        };
+
+
+        // ============================================================
+        // QUESTION BANK: AI INGESTION + REVIEW
+        // ============================================================
+        const QUESTION_BANK_AI_ENDPOINT = '/api/question-bank/analyze';
+        let qbFiles = [];
+        let qbQuestions = [];
+        let qbSelectedIndex = -1;
+        let qbApprovedQuestions = [];
+        let unsubscribeQuestionBank = null;
+
+        const qbEsc = (v='') => String(v).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+        const qbLevelName = {A:'Nhận biết',B:'Thông hiểu',C:'Vận dụng',D:'Vận dụng cao'};
+
+        function qbIsAdmin(){
+            if (!currentUser || !isAdmin) {
+                alert('⚠️ Chức năng nhập và duyệt câu hỏi chỉ dành cho Admin.');
+                openModal('login-modal');
+                return false;
+            }
+            return true;
+        }
+
+        function setupQuestionBankUpload(){
+            const input=document.getElementById('qb-file-input'), drop=document.getElementById('qb-dropzone');
+            if(!input || !drop || drop.dataset.ready) return;
+            drop.dataset.ready='1';
+            drop.addEventListener('click',()=>input.click());
+            input.addEventListener('change',()=>setQuestionFiles([...input.files]));
+            ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('dragover')}));
+            ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('dragover')}));
+            drop.addEventListener('drop',e=>setQuestionFiles([...e.dataTransfer.files]));
+        }
+
+        function setQuestionFiles(files){
+            const valid=files.filter(f=>/^(image\/(jpeg|png|webp)|application\/pdf)$/i.test(f.type));
+            if(valid.length!==files.length) alert('⚠️ Chỉ nhận JPG, PNG, WEBP và PDF.');
+            qbFiles=valid;
+            renderQuestionFiles();
+        }
+        function renderQuestionFiles(){
+            const el=document.getElementById('qb-file-list');
+            if(!qbFiles.length){el.innerHTML='<div class="qb-empty" style="padding:20px">Chưa có file được chọn.</div>';return;}
+            el.innerHTML=qbFiles.map((f,i)=>`<div class="qb-file"><div><strong>${qbEsc(f.name)}</strong><div class="meta">${(f.size/1024/1024).toFixed(2)} MB · ${f.type==='application/pdf'?'PDF':'Ảnh'}</div></div><button class="btn-sm delete-btn" onclick="removeQuestionFile(${i})">×</button></div>`).join('');
+        }
+        window.removeQuestionFile=function(i){qbFiles.splice(i,1);renderQuestionFiles()};
+        window.clearQuestionFiles=function(){qbFiles=[];document.getElementById('qb-file-input').value='';renderQuestionFiles()};
+
+        async function uploadQuestionSource(file){
+            const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+            const path=`question-bank/sources/${Date.now()}_${Math.random().toString(36).slice(2,8)}_${safe}`;
+            const task=uploadBytesResumable(storageRef(storage,path),file,{contentType:file.type});
+            return await new Promise((resolve,reject)=>task.on('state_changed',()=>{},reject,async()=>{
+                try{resolve({path,url:await getDownloadURL(storageRef(storage,path))})}catch(e){reject(e)}
+            }));
+        }
+
+        function qbSetProgress(pct,text){
+            document.getElementById('qb-progress').classList.remove('hidden');
+            document.getElementById('qb-progress-fill').style.width=pct+'%';
+            document.getElementById('qb-status').textContent=text;
+        }
+
+        window.analyzeQuestionFiles=async function(){
+            if(!qbIsAdmin() || !qbFiles.length) { if(!qbFiles.length) alert('📁 Hãy chọn ít nhất một ảnh hoặc PDF.'); return; }
+            const btn=document.getElementById('qb-analyze-btn'); btn.disabled=true;
+            try{
+                qbSetProgress(10,'Đang chuẩn bị file...');
+                const sources=[];
+                for(let i=0;i<qbFiles.length;i++){
+                    qbSetProgress(10+Math.round((i/qbFiles.length)*30),`Đang tải nguồn ${i+1}/${qbFiles.length}...`);
+                    sources.push({file:qbFiles[i],...(await uploadQuestionSource(qbFiles[i]))});
+                }
+                qbSetProgress(50,'Đang gửi ảnh/PDF cho AI nhận diện...');
+                const form=new FormData();
+                sources.forEach(x=>form.append('files',x.file,x.file.name));
+                form.append('sourceMetadata',JSON.stringify(sources.map(x=>({name:x.file.name,type:x.file.type,size:x.file.size,storagePath:x.path,storageUrl:x.url}))));
+                form.append('task','ocr_normalize_split_classify_math12');
+                form.append('taxonomy',JSON.stringify({grade:'12',levels:qbLevelName,order:['chapter','topic','problemType','skill','level','format']}));
+                const response=await fetch(QUESTION_BANK_AI_ENDPOINT,{method:'POST',body:form});
+                if(!response.ok){let detail='';try{detail=await response.text()}catch(e){};throw new Error(`API AI chưa sẵn sàng (${response.status}). ${detail.slice(0,180)}`)}
+                const data=await response.json();
+                qbQuestions=(data.questions||[]).map((q,i)=>normalizeAIQuestion(q,i,sources));
+                qbSetProgress(100,`AI đã nhận diện ${qbQuestions.length} câu. Đang chờ giáo viên kiểm tra.`);
+                if(!qbQuestions.length) throw new Error('AI không trả về câu hỏi.');
+                qbSelectedIndex=0; renderQBReview();
+                alert(`✅ AI đã nhận diện ${qbQuestions.length} câu. Hãy kiểm tra từng câu trước khi duyệt.`);
+            }catch(err){
+                console.error('Question bank AI:',err);
+                qbSetProgress(100,'Chưa hoàn tất.');
+                alert('❌ Không thể nhận diện: '+err.message+'\n\nGiao diện đã sẵn sàng; cần triển khai API AI tại '+QUESTION_BANK_AI_ENDPOINT+'.');
+            }finally{btn.disabled=false}
+        };
+
+        function normalizeAIQuestion(q,i,sources){
+            const src=sources[Math.min(Number(q.sourceIndex||0),sources.length-1)]||sources[0]||{};
+            return {
+                code:q.code||`12-01-${q.level||'B'}-${String(i+1).padStart(4,'0')}`,
+                grade:'12',subject:'Toán',chapter:q.chapter||'01',topic:q.topic||'',problemType:q.problemType||'',skill:q.skill||'',level:q.level||'B',format:q.format||'Trắc nghiệm 4 lựa chọn',
+                questionText:q.questionText||q.text||'',questionLatex:q.questionLatex||'',options:Array.isArray(q.options)?q.options:[],correctAnswer:q.correctAnswer||'',solution:q.solution||'',
+                sourceFile:q.sourceFile||src.file?.name||'',sourcePage:q.sourcePage||q.page||'',originalImageUrl:q.originalImageUrl||src.url||'',sourceStoragePath:src.path||'',
+                ocrConfidence:q.ocrConfidence??null,classificationConfidence:q.classificationConfidence??null,status:'draft',createdAt:new Date()
+            };
+        }
+
+        function renderQBReview(){
+            const review=document.getElementById('qb-review');
+            if(qbSelectedIndex<0 || !qbQuestions[qbSelectedIndex]){review.innerHTML='<div class="qb-empty">Chưa có câu hỏi chờ duyệt.</div>';return}
+            const q=qbQuestions[qbSelectedIndex];
+            document.getElementById('qb-review-status').textContent=`Câu ${qbSelectedIndex+1}/${qbQuestions.length} · ${q.status==='approved'?'Đã duyệt':'Chờ duyệt'}`;
+            const options=(q.options||[]).map((o,i)=>`<div class="form-group"><label>Phương án ${String.fromCharCode(65+i)}</label><input data-qb-field="option${i}" value="${qbEsc(o)}"></div>`).join('');
+            const preview=q.originalImageUrl ? (String(q.originalImageUrl).toLowerCase().includes('.pdf')?`<iframe src="${qbEsc(q.originalImageUrl)}"></iframe>`:`<img src="${qbEsc(q.originalImageUrl)}" alt="Nguồn câu hỏi">`) : '<div class="qb-source-placeholder">📄 Chưa có ảnh nguồn</div>';
+            review.innerHTML=`<div class="qb-review-layout"><div><div class="qb-source-preview">${preview}</div><div class="qb-source-info" style="padding:10px 0 0">Nguồn: <strong>${qbEsc(q.sourceFile||'Không rõ')}</strong>${q.sourcePage?` · Trang ${qbEsc(q.sourcePage)}`:''}</div></div><div><div class="qb-fields">
+                <div class="form-group"><label>Mã câu</label><input data-qb-field="code" value="${qbEsc(q.code)}"></div>
+                <div class="form-group"><label>Lớp</label><input value="12" disabled></div>
+                <div class="form-group"><label>Chương</label><select data-qb-field="chapter">${['01','02','03','04','05','06'].map(x=>`<option ${q.chapter===x?'selected':''} value="${x}">${x}</option>`).join('')}</select></div>
+                <div class="form-group"><label>Chủ đề</label><input data-qb-field="topic" value="${qbEsc(q.topic)}"></div>
+                <div class="form-group"><label>Dạng bài</label><input data-qb-field="problemType" value="${qbEsc(q.problemType)}"></div>
+                <div class="form-group"><label>Kỹ năng</label><input data-qb-field="skill" value="${qbEsc(q.skill)}"></div>
+                <div class="form-group"><label>Mức độ</label><select data-qb-field="level">${Object.keys(qbLevelName).map(x=>`<option ${q.level===x?'selected':''} value="${x}">${x} · ${qbLevelName[x]}</option>`).join('')}</select></div>
+                <div class="form-group"><label>Loại câu</label><select data-qb-field="format">${['Trắc nghiệm 4 lựa chọn','Đúng/Sai','Trả lời ngắn','Tự luận'].map(x=>`<option ${q.format===x?'selected':''}>${x}</option>`).join('')}</select></div>
+                <div class="form-group full"><label>Nội dung chuẩn hóa</label><textarea data-qb-field="questionText">${qbEsc(q.questionText)}</textarea></div>
+                <div class="form-group full"><label>LaTeX / biểu thức toán học</label><textarea data-qb-field="questionLatex">${qbEsc(q.questionLatex)}</textarea></div>
+                ${options}
+                <div class="form-group"><label>Đáp án</label><input data-qb-field="correctAnswer" value="${qbEsc(q.correctAnswer)}"></div>
+                <div class="form-group full"><label>Lời giải</label><textarea data-qb-field="solution">${qbEsc(q.solution)}</textarea></div>
+            </div><div class="qb-actions" style="padding:12px 0 0"><button class="btn-outline" onclick="qbSaveCurrentDraft()">💾 Lưu nháp</button><button class="btn-primary" onclick="qbApproveCurrent()">✅ Duyệt & lưu Firestore</button><button class="btn-outline" onclick="qbNextQuestion()">Câu tiếp theo →</button></div></div></div>`;
+        }
+
+        function collectQBReview(){
+            const q=qbQuestions[qbSelectedIndex]; if(!q)return;
+            document.querySelectorAll('#qb-review [data-qb-field]').forEach(el=>{
+                const key=el.dataset.qbField;
+                if(key.startsWith('option')) q.options[Number(key.replace('option',''))]=el.value;
+                else q[key]=el.value;
+            });
+        }
+        window.qbSaveCurrentDraft=function(){collectQBReview();alert('💾 Đã lưu thay đổi vào bản nháp hiện tại. Bạn có thể duyệt sau.');renderQBReview()};
+        window.qbApproveCurrent=async function(){
+            if(!qbIsAdmin())return; collectQBReview(); const q=qbQuestions[qbSelectedIndex];
+            if(!q.questionText.trim()){alert('⚠️ Nội dung câu hỏi đang trống.');return}
+            try{q.status='approved';q.reviewedAt=new Date();q.reviewedBy=currentUser.uid;await addDoc(collection(db,'questionBank'),q);qbApprovedQuestions.push(q);renderQBReview();alert('✅ Đã duyệt và lưu câu hỏi vào Firestore.');}catch(e){console.error(e);alert('❌ Không thể lưu questionBank: '+e.message)}
+        };
+        window.qbNextQuestion=function(){collectQBReview();if(qbSelectedIndex<qbQuestions.length-1){qbSelectedIndex++;renderQBReview()}else alert('🎉 Đã đến câu cuối.');};
+
+        function startQuestionBankListener(){
+            if(unsubscribeQuestionBank)return;
+            unsubscribeQuestionBank=onSnapshot(collection(db,'questionBank'),snap=>{
+                qbApprovedQuestions=[];snap.forEach(d=>qbApprovedQuestions.push({id:d.id,...d.data()}));renderQuestionBank();
+            },err=>{console.warn('questionBank listener:',err);renderQuestionBank()});
+        }
+        function renderQuestionBank(){
+            const list=document.getElementById('qb-list'), count=document.getElementById('qb-count'); if(!list)return;
+            const search=(document.getElementById('qb-search')?.value||'').toLowerCase();
+            const ch=document.getElementById('qb-filter-chapter')?.value||'', topic=document.getElementById('qb-filter-topic')?.value||'', type=document.getElementById('qb-filter-type')?.value||'', skill=document.getElementById('qb-filter-skill')?.value||'', level=document.getElementById('qb-filter-level')?.value||'', format=document.getElementById('qb-filter-format')?.value||'';
+            const arr=qbApprovedQuestions.filter(q=>(!search||[q.questionText,q.code,q.topic,q.problemType].join(' ').toLowerCase().includes(search))&&(!ch||q.chapter===ch)&&(!topic||q.topic===topic)&&(!type||q.problemType===type)&&(!skill||q.skill===skill)&&(!level||q.level===level)&&(!format||q.format===format));
+            count.textContent=`${arr.length} câu`;
+            list.innerHTML=arr.length?arr.map(q=>`<div class="qb-question-item"><div class="title">${qbEsc(q.code||'')} · ${qbEsc((q.questionText||'').slice(0,180))}${(q.questionText||'').length>180?'…':''}</div><div class="tags"><span class="qb-badge">Chương ${qbEsc(q.chapter||'')}</span><span class="qb-badge">${qbEsc(q.topic||'Chưa phân loại')}</span><span class="qb-badge">${qbEsc(q.problemType||'Chưa phân loại')}</span><span class="qb-badge">${qbEsc(q.level||'')}</span></div></div>`).join(''):'<div class="qb-empty">Chưa có câu hỏi phù hợp bộ lọc.</div>';
+        }
+
+        // Navigation hook for the new section.
+        const originalShowSection=window.showSection;
+        window.showSection=function(section){
+            if(section==='question-bank'){
+                if(!currentUser || !isAdmin){alert('⚠️ Ngân hàng câu hỏi hiện chỉ mở cho Admin để xây dựng dữ liệu.');openModal('login-modal');return;}
+                homeSection.classList.add('hidden');adminSection.classList.add('hidden');document.getElementById('section-question-bank').classList.remove('hidden');
+                document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));document.querySelector('.nav a[onclick*="question-bank"]')?.classList.add('active');
+                setupQuestionBankUpload();startQuestionBankListener();renderQuestionBank();renderQBReview();window.scrollTo({top:0,behavior:'smooth'});return;
+            }
+            document.getElementById('section-question-bank')?.classList.add('hidden');
+            originalShowSection(section);
         };
 
         // ============================================================
